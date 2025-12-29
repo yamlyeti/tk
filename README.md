@@ -208,7 +208,9 @@ The app is fully responsive and works great in mobile browsers:
 
 ## Documentation
 
+- **[Testing Guide](./TESTING_GUIDE.md)** - How to test and view the application
 - **[Setup Guide](./SETUP_GUIDE.md)** - Quick setup instructions
+- **[Screenshots](./SCREENSHOTS.md)** - Visual overview of the UI
 - **[Features](./FEATURES.md)** - Detailed feature documentation
 - **[Contributing](./CONTRIBUTING.md)** - How to contribute to this project
 
