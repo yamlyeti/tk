@@ -11,6 +11,7 @@ export const TimeTracker = () => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     if (!user) return;
@@ -83,6 +84,7 @@ export const TimeTracker = () => {
     if (!user || !description.trim()) return;
 
     setLoading(true);
+    setError('');
     const { data, error } = await supabase
       .from('time_entries')
       .insert({
@@ -95,7 +97,7 @@ export const TimeTracker = () => {
 
     if (error) {
       console.error('Error starting timer:', error);
-      alert('Error starting timer. Please make sure the database is set up correctly.');
+      setError('Error starting timer. Please make sure the database is set up correctly.');
     } else {
       setActiveEntry(data);
       setDescription('');
@@ -199,6 +201,12 @@ export const TimeTracker = () => {
             </button>
           )}
         </div>
+        {error && (
+          <div className="error-banner">
+            {error}
+            <button onClick={() => setError('')} className="error-close">×</button>
+          </div>
+        )}
         {activeEntry && (
           <div className="active-description">
             <strong>Working on:</strong> {activeEntry.description}
