@@ -12,6 +12,38 @@ A modern time tracking application built with React, TypeScript, and Supabase. T
 - 📱 Responsive design for web and Android (via browser)
 - 🔐 Secure authentication via Supabase
 
+## Architecture
+
+```
+┌─────────────────────────────────────────┐
+│          React Frontend (Vite)          │
+│  ┌─────────────────────────────────┐   │
+│  │  Components                      │   │
+│  │  • Auth (Login/Signup)          │   │
+│  │  • TimeTracker (Main UI)        │   │
+│  └─────────────────────────────────┘   │
+│  ┌─────────────────────────────────┐   │
+│  │  Contexts                        │   │
+│  │  • AuthContext (User state)     │   │
+│  └─────────────────────────────────┘   │
+└─────────────────────────────────────────┘
+                   │
+                   ↓ Supabase Client
+┌─────────────────────────────────────────┐
+│         Supabase (Backend)              │
+│  ┌─────────────────────────────────┐   │
+│  │  PostgreSQL Database             │   │
+│  │  • time_entries table            │   │
+│  │  • Row Level Security (RLS)      │   │
+│  └─────────────────────────────────┘   │
+│  ┌─────────────────────────────────┐   │
+│  │  Authentication                  │   │
+│  │  • Email/Password auth           │   │
+│  │  • Session management            │   │
+│  └─────────────────────────────────┘   │
+└─────────────────────────────────────────┘
+```
+
 ## Tech Stack
 
 - **Frontend**: React 19 + TypeScript
@@ -24,6 +56,22 @@ A modern time tracking application built with React, TypeScript, and Supabase. T
 
 - Node.js (v18+) or Bun
 - A Supabase account and project
+
+## Quick Start
+
+See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed setup instructions.
+
+```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your Supabase credentials
+
+# Run development server
+npm run dev
+```
 
 ## Setup Instructions
 
@@ -157,6 +205,33 @@ The app is fully responsive and works great in mobile browsers:
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Lint the code
+
+## Documentation
+
+- **[Setup Guide](./SETUP_GUIDE.md)** - Quick setup instructions
+- **[Features](./FEATURES.md)** - Detailed feature documentation
+- **[Contributing](./CONTRIBUTING.md)** - How to contribute to this project
+
+## Project Structure
+
+```
+tk/
+├── src/
+│   ├── components/      # React components (Auth, TimeTracker)
+│   ├── contexts/        # React contexts (Auth)
+│   ├── lib/            # Third-party configs (Supabase)
+│   ├── types/          # TypeScript type definitions
+│   └── App.tsx         # Main app component
+├── public/             # Static assets
+├── supabase-setup.sql  # Database schema and RLS policies
+└── README.md          # You are here
+```
+
+## Support & Contributing
+
+- 🐛 Found a bug? [Open an issue](https://github.com/yamlyeti/tk/issues)
+- 💡 Have an idea? [Open a discussion](https://github.com/yamlyeti/tk/discussions)
+- 🤝 Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## License
 
