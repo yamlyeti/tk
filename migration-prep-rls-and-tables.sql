@@ -32,6 +32,61 @@ AS $$
 $$;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
 
+-- 2b) Helpers to check organization/project membership without causing RLS recursion
+-- These SECURITY DEFINER functions run with definer rights and therefore do not trigger
+-- RLS checks on the tables they query.
+CREATE OR REPLACE FUNCTION public.is_org_member(org_id uuid)
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.organization_members
+    WHERE organization_id = org_id AND user_id = auth.uid()
+  );
+$$;
+GRANT EXECUTE ON FUNCTION public.is_org_member(uuid) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.is_org_admin(org_id uuid)
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.organization_members
+    WHERE organization_id = org_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
+  );
+$$;
+GRANT EXECUTE ON FUNCTION public.is_org_admin(uuid) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.is_project_member(project_id uuid)
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.project_members
+    WHERE project_id = project_id AND user_id = auth.uid()
+  );
+$$;
+GRANT EXECUTE ON FUNCTION public.is_project_member(uuid) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.is_project_admin(project_id uuid)
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.project_members
+    WHERE project_id = project_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
+  );
+$$;
+GRANT EXECUTE ON FUNCTION public.is_project_admin(uuid) TO authenticated;
+
 -- 3) Replace user_profiles policies with safe, non-recursive versions
 DROP POLICY IF EXISTS "Allow profile creation on signup" ON public.user_profiles;
 DROP POLICY IF EXISTS "Users can view own profile" ON public.user_profiles;

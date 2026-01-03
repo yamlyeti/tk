@@ -1,0 +1,170 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { User, Mail, X, Save } from 'lucide-react';
+import { useAuth } from '../contexts/useAuth';
+
+interface UserProfile {
+  id: string;
+  email: string;
+  full_name: string | null;
+  avatar_url: string | null;
+  role: 'admin' | 'member';
+}
+
+export function UserProfile() {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadProfile();
+  }, [user]);
+
+  async function loadProfile() {
+    if (!user) return;
+    
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.error('Error loading profile:', error);
+    } else if (data) {
+      setProfile(data);
+      setFullName(data.full_name || '');
+    }
+    setLoading(false);
+  }
+
+  async function saveProfile() {
+    if (!user || !profile) return;
+
+    const { error } = await supabase
+      .from('user_profiles')
+      .update({ full_name: fullName })
+      .eq('id', user.id);
+
+    if (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile');
+    } else {
+      await loadProfile();
+      setEditing(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600 dark:text-gray-400">Profile not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 animate-fadeIn">
+      <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 p-8 rounded-2xl shadow-2xl">
+        <h2 className="text-4xl font-bold text-white drop-shadow-lg">
+          My Profile
+        </h2>
+        <p className="text-purple-100 mt-2 text-lg">
+          Manage your personal information
+        </p>
+      </div>
+
+      <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/40 dark:to-pink-900/40 rounded-2xl shadow-2xl p-8 border-2 border-purple-300 dark:border-purple-700 backdrop-blur-sm">
+        <div className="flex items-start justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="h-24 w-24 bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-purple-300 dark:ring-purple-700 animate-pulse-slow">
+              <User className="h-12 w-12 text-white" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                {profile.full_name || 'No name set'}
+              </h3>
+              <p className="text-base text-gray-600 dark:text-gray-300 flex items-center mt-2">
+                <Mail className="h-5 w-5 mr-2 text-purple-500" />
+                {profile.email}
+              </p>
+            </div>
+          </div>
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="px-6 py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 font-medium"
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
+
+        {editing ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setEditing(false);
+                  setFullName(profile.full_name || '');
+                }}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <X className="h-5 w-5 inline mr-2" />
+                Cancel
+              </button>
+              <button
+                onClick={saveProfile}
+                className="px-6 py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 font-medium"
+              >
+                <Save className="h-5 w-5 inline mr-2" />
+                Save Changes
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4 mt-8">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 p-6 rounded-2xl shadow-xl border-2 border-purple-300 dark:border-purple-600 transform hover:scale-105 transition-all duration-300">
+                <p className="text-sm font-bold text-white uppercase tracking-wider">Role</p>
+                <p className="text-3xl font-extrabold text-white capitalize mt-2 drop-shadow-lg">
+                  {profile.role}
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 p-6 rounded-2xl shadow-xl border-2 border-green-300 dark:border-green-600 transform hover:scale-105 transition-all duration-300">
+                <p className="text-sm font-bold text-white uppercase tracking-wider">Status</p>
+                <p className="text-3xl font-extrabold text-white mt-2 drop-shadow-lg">
+                  Active
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

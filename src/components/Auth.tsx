@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useAuth } from '../contexts/useAuth';
+import { supabase } from '../lib/supabase';
 import './Auth.css';
 
 export const Auth = () => {
@@ -9,7 +10,30 @@ export const Auth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
+
+  useEffect(() => {
+    const checkApprovalStatus = async () => {
+      if (user) {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select('approval_status')
+          .eq('id', user.id)
+          .single();
+        
+        if (data) {
+          if (data.approval_status === 'denied') {
+            setError('Your account has been denied by an administrator. Please contact support.');
+            await supabase.auth.signOut();
+          } else if (data.approval_status === 'pending') {
+            setError('Your account is pending approval. An administrator will review your registration shortly.');
+            await supabase.auth.signOut();
+          }
+        }
+      }
+    };
+    checkApprovalStatus();
+  }, [user]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -19,9 +43,28 @@ export const Auth = () => {
     try {
       if (isLogin) {
         await signIn(email, password);
+        // Check approval status after login
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (sessionData.session?.user) {
+          const { data: profileData } = await supabase
+            .from('user_profiles')
+            .select('approval_status')
+            .eq('id', sessionData.session.user.id)
+            .single();
+          
+          if (profileData) {
+            if (profileData.approval_status === 'pending') {
+              setError('Your account is pending approval. An administrator will review your registration shortly.');
+              await supabase.auth.signOut();
+            } else if (profileData.approval_status === 'denied') {
+              setError('Your account has been denied. Please contact support for more information.');
+              await supabase.auth.signOut();
+            }
+          }
+        }
       } else {
         await signUp(email, password);
-        setError('Check your email for the confirmation link!');
+        setError('Registration successful! Please check your email for the confirmation link. Your account will be pending admin approval.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
