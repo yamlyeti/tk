@@ -61,7 +61,7 @@ AS $$
 $$;
 GRANT EXECUTE ON FUNCTION public.is_org_admin(uuid) TO authenticated;
 
-CREATE OR REPLACE FUNCTION public.is_project_member(project_id uuid)
+CREATE OR REPLACE FUNCTION public.is_project_member(p_project_id uuid)
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
@@ -69,12 +69,12 @@ STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.project_members
-    WHERE project_id = project_id AND user_id = auth.uid()
+    WHERE project_id = p_project_id AND user_id = auth.uid()
   );
 $$;
 GRANT EXECUTE ON FUNCTION public.is_project_member(uuid) TO authenticated;
 
-CREATE OR REPLACE FUNCTION public.is_project_admin(project_id uuid)
+CREATE OR REPLACE FUNCTION public.is_project_admin(p_project_id uuid)
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
@@ -82,7 +82,7 @@ STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.project_members
-    WHERE project_id = project_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
+    WHERE project_id = p_project_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
   );
 $$;
 GRANT EXECUTE ON FUNCTION public.is_project_admin(uuid) TO authenticated;
