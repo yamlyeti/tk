@@ -8,11 +8,9 @@ LANGUAGE sql
 SECURITY DEFINER
 STABLE
 AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.user_profiles
-    WHERE id = auth.uid()
-    AND role = 'admin'
-    AND approval_status = 'approved'
+  SELECT COALESCE(
+    (SELECT (raw_user_meta_data->>'is_admin')::boolean FROM auth.users WHERE id = auth.uid()),
+    false
   );
 $$;
 
@@ -40,7 +38,7 @@ AS $$
   );
 $$;
 
-CREATE OR REPLACE FUNCTION public.is_project_member(project_id uuid)
+CREATE OR REPLACE FUNCTION public.is_project_member(p_project_id uuid)
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
@@ -48,11 +46,11 @@ STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.project_members
-    WHERE project_id = project_id AND user_id = auth.uid()
+    WHERE project_id = p_project_id AND user_id = auth.uid()
   );
 $$;
 
-CREATE OR REPLACE FUNCTION public.is_project_admin(project_id uuid)
+CREATE OR REPLACE FUNCTION public.is_project_admin(p_project_id uuid)
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
@@ -60,7 +58,7 @@ STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.project_members
-    WHERE project_id = project_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
+    WHERE project_id = p_project_id AND user_id = auth.uid() AND role = ANY (ARRAY['owner'::text,'admin'::text])
   );
 $$;
 

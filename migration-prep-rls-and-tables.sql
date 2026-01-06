@@ -23,11 +23,9 @@ LANGUAGE sql
 SECURITY DEFINER
 STABLE
 AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.user_profiles
-    WHERE id = auth.uid()
-    AND role = 'admin'
-    AND approval_status = 'approved'
+  SELECT COALESCE(
+    (SELECT (raw_user_meta_data->>'is_admin')::boolean FROM auth.users WHERE id = auth.uid()),
+    false
   );
 $$;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
@@ -144,34 +142,24 @@ CREATE TABLE IF NOT EXISTS public.project_members (
 );
 ALTER TABLE public.project_members ENABLE ROW LEVEL SECURITY;
 
--- 5) Basic non-recursive policies for project_members (safe defaults)
+-- 5) Non-recursive policies for project_members (using SECURITY DEFINER helpers)
 DROP POLICY IF EXISTS "Users can view project members" ON public.project_members;
 DROP POLICY IF EXISTS "Project owners can manage members" ON public.project_members;
 DROP POLICY IF EXISTS "Users can view own memberships" ON public.project_members;
 
 CREATE POLICY "Users can view project members"
   ON public.project_members FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.project_members pm
-      WHERE pm.project_id = project_members.project_id
-      AND pm.user_id = auth.uid()
-    )
-  );
+  TO authenticated
+  USING (is_project_member(project_id) OR is_admin());
 
 CREATE POLICY "Project owners can manage members"
   ON public.project_members FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.project_members pm
-      WHERE pm.project_id = project_members.project_id
-      AND pm.user_id = auth.uid()
-      AND pm.role IN ('owner','admin')
-    )
-  );
+  TO authenticated
+  USING (is_project_admin(project_id) OR is_admin());
 
 CREATE POLICY "Users can view own memberships"
   ON public.project_members FOR SELECT
+  TO authenticated
   USING (auth.uid() = user_id);
 
 -- 6) Indexes to speed up checks

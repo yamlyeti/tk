@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import type { Project, Organization } from '../types';
+import type { Project } from '../types';
 import './EditProjectModal.css';
 
 interface EditProjectModalProps {
@@ -22,7 +22,7 @@ export const EditProjectModal = ({ project, onSave, onClose }: EditProjectModalP
   const [description, setDescription] = useState(project.description || '');
   const [githubLink, setGithubLink] = useState(project.github_link || '');
   const [organizationId, setOrganizationId] = useState<string | null>(project.organization_id || null);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [organizations, setOrganizations] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

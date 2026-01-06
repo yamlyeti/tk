@@ -11,6 +11,10 @@ DROP POLICY IF EXISTS "Admins can manage users" ON user_profiles;
 DROP POLICY IF EXISTS "Users can insert own profile" ON user_profiles;
 DROP POLICY IF EXISTS "Users can view all profiles" ON user_profiles;
 DROP POLICY IF EXISTS "Admins can update user profiles" ON user_profiles;
+-- Ensure any alternate-named policies are also removed to avoid conflicts
+DROP POLICY IF EXISTS "Users can view profiles" ON user_profiles;
+DROP POLICY IF EXISTS "Users can update profiles" ON user_profiles;
+DROP POLICY IF EXISTS "Admins can delete profiles" ON user_profiles;
 
 -- Create a simple, non-recursive security definer function to check if user is admin
 CREATE OR REPLACE FUNCTION public.is_admin()
@@ -19,11 +23,9 @@ LANGUAGE sql
 SECURITY DEFINER
 STABLE
 AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.user_profiles
-    WHERE id = auth.uid() 
-    AND role = 'admin'
-    AND approval_status = 'approved'
+  SELECT COALESCE(
+    (SELECT (raw_user_meta_data->>'is_admin')::boolean FROM auth.users WHERE id = auth.uid()),
+    false
   );
 $$;
 
