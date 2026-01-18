@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Users, UserPlus, Trash2 } from 'lucide-react';
+import { Users, UserPlus, Trash2, DollarSign, ChevronUp, History } from 'lucide-react';
+import type { ProjectRate, CurrentProjectRate } from '../types';
+import './ProjectTeamManagement.css';
 
 interface ProjectMember {
   id: string;
@@ -33,12 +35,35 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
   const [selectedRole, setSelectedRole] = useState<'admin' | 'member'>('member');
   const [loading, setLoading] = useState(true);
 
+  // Rate management state
+  const [memberRates, setMemberRates] = useState<Map<string, CurrentProjectRate>>(new Map());
+  const [editingRateFor, setEditingRateFor] = useState<string | null>(null);
+  const [rateForm, setRateForm] = useState({
+    hourly_rate: '',
+    currency: 'USD',
+    effective_date: new Date().toISOString().split('T')[0],
+    notes: ''
+  });
+  const [showRateHistory, setShowRateHistory] = useState<string | null>(null);
+  const [rateHistory, setRateHistory] = useState<ProjectRate[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
   useEffect(() => {
     loadMembers();
     loadAllUsers();
+    loadMemberRates();
+    getCurrentUser();
   }, [projectId]);
 
+  async function getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setCurrentUserId(user.id);
+    }
+  }
+
   async function loadMembers() {
+    // Use LEFT JOIN instead of INNER JOIN to show members even if user_profiles is missing
     const { data, error } = await supabase
       .from('project_members')
       .select(`
@@ -54,7 +79,16 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
     if (error) {
       console.error('Error loading members:', error);
     } else {
-      setMembers(data || []);
+      // Filter out any members where user_profiles is completely null
+      // and log them for debugging
+      const validMembers = (data || []).filter(member => {
+        if (!member.user_profiles) {
+          console.warn('Member missing user_profiles:', member.user_id);
+          return false;
+        }
+        return true;
+      });
+      setMembers(validMembers);
     }
     setLoading(false);
   }
@@ -127,6 +161,92 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
     }
   }
 
+  async function loadMemberRates() {
+    const { data, error } = await supabase
+      .from('current_project_rates')
+      .select('*')
+      .eq('project_id', projectId);
+
+    if (error) {
+      console.error('Error loading rates:', error);
+    } else {
+      const ratesMap = new Map<string, CurrentProjectRate>();
+      data?.forEach(rate => {
+        ratesMap.set(rate.user_id, rate);
+      });
+      setMemberRates(ratesMap);
+    }
+  }
+
+  async function startEditingRate(userId: string) {
+    const existingRate = memberRates.get(userId);
+    if (existingRate) {
+      setRateForm({
+        hourly_rate: existingRate.hourly_rate.toString(),
+        currency: existingRate.currency,
+        effective_date: new Date().toISOString().split('T')[0],
+        notes: ''
+      });
+    } else {
+      setRateForm({
+        hourly_rate: '',
+        currency: 'USD',
+        effective_date: new Date().toISOString().split('T')[0],
+        notes: ''
+      });
+    }
+    setEditingRateFor(userId);
+  }
+
+  async function saveRate(userId: string) {
+    if (!rateForm.hourly_rate || !currentUserId) {
+      alert('Please enter a valid hourly rate');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('project_rates')
+      .insert({
+        project_id: projectId,
+        user_id: userId,
+        hourly_rate: parseFloat(rateForm.hourly_rate),
+        currency: rateForm.currency,
+        effective_date: rateForm.effective_date,
+        notes: rateForm.notes || null,
+        set_by: currentUserId
+      });
+
+    if (error) {
+      console.error('Error setting rate:', error);
+      alert('Failed to set rate. You may not have permission.');
+    } else {
+      await loadMemberRates();
+      setEditingRateFor(null);
+      setRateForm({
+        hourly_rate: '',
+        currency: 'USD',
+        effective_date: new Date().toISOString().split('T')[0],
+        notes: ''
+      });
+    }
+  }
+
+  async function loadRateHistory(userId: string) {
+    const { data, error } = await supabase
+      .from('project_rates')
+      .select('*')
+      .eq('project_id', projectId)
+      .eq('user_id', userId)
+      .order('effective_date', { ascending: false });
+
+    if (error) {
+      console.error('Error loading rate history:', error);
+    } else {
+      setRateHistory(data || []);
+      setShowRateHistory(userId);
+    }
+  }
+
   const availableUsers = allUsers.filter(
     (user) => !members.some((m) => m.user_id === user.id)
   );
@@ -139,69 +259,63 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+      <div className="team-modal-overlay">
+        <div className="team-loading">
+          <div className="team-spinner"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden">
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold flex items-center">
-                <Users className="mr-3" />
-                Team Management
-              </h2>
-              <p className="text-purple-100 mt-1">{projectName}</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-gray-200 transition-colors"
-            >
-              <span className="text-2xl">&times;</span>
-            </button>
+    <div className="team-modal-overlay">
+      <div className="team-modal">
+        <div className="team-modal-header">
+          <div>
+            <h2>
+              <Users size={24} />
+              Team Management
+            </h2>
+            <p className="team-modal-subtitle">{projectName}</p>
           </div>
+          <button onClick={onClose} className="team-close-button">
+            &times;
+          </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+        <div className="team-modal-content">
           {/* Add Member Section */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-700 p-6 rounded-xl mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-              <UserPlus className="mr-2 h-5 w-5" />
-              Add Team Member
-            </h3>
-            <div className="space-y-3">
+          <div className="team-section">
+            <div className="team-add-section">
+              <h3 className="team-section-title">
+                <UserPlus size={20} />
+                Add Team Member
+              </h3>
               <input
                 type="text"
                 placeholder="Search users by email or name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                className="team-search-input"
               />
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <select
-                    value={selectedUser}
-                    onChange={(e) => setSelectedUser(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    <option value="">Select a user...</option>
-                    {filteredUsers.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.full_name || user.email} ({user.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <div className="team-add-controls">
+                <select
+                  value={selectedUser}
+                  onChange={(e) => setSelectedUser(e.target.value)}
+                  className="team-select"
+                >
+                  <option value="">Select a user...</option>
+                  {filteredUsers.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.full_name || user.email} ({user.email})
+                    </option>
+                  ))}
+                </select>
                 <select
                   value={selectedRole}
                   onChange={(e) => setSelectedRole(e.target.value as 'admin' | 'member')}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  className="team-select"
+                  style={{ flex: '0 0 auto', width: '120px' }}
                 >
                   <option value="member">Member</option>
                   <option value="admin">Admin</option>
@@ -209,7 +323,7 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
                 <button
                   onClick={addMember}
                   disabled={!selectedUser}
-                  className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                  className="team-button team-button-primary"
                 >
                   Add
                 </button>
@@ -218,72 +332,245 @@ export function ProjectTeamManagement({ projectId, projectName, onClose }: Proje
           </div>
 
           {/* Current Members */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="team-section">
+            <h3 className="team-section-title">
               Current Team Members ({members.length})
             </h3>
-            <div className="space-y-3">
-              {members.map((member) => (
-                <div
-                  key={member.id}
-                  className="flex items-center justify-between p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold">
-                        {(member.user_profiles.full_name || member.user_profiles.email)[0].toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {member.user_profiles.full_name || 'No name'}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {member.user_profiles.email}
-                      </p>
+            {members.length === 0 ? (
+              <div className="team-no-data">
+                <Users size={48} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+                <h4 style={{ margin: '0 0 8px 0' }}>No team members</h4>
+                <p style={{ margin: 0 }}>Add team members to collaborate on this project.</p>
+              </div>
+            ) : (
+              <div className="team-members-list">
+                {members.map((member) => (
+                  <div key={member.id} className="team-member-card">
+                    <div className="team-member-header">
+                      <div className="team-member-info">
+                        <div className="team-member-avatar purple">
+                          {(member.user_profiles.full_name || member.user_profiles.email)[0].toUpperCase()}
+                        </div>
+                        <div className="team-member-details">
+                          <p className="team-member-name">
+                            {member.user_profiles.full_name || 'No name'}
+                          </p>
+                          <p className="team-member-email">
+                            {member.user_profiles.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="team-member-actions">
+                        <select
+                          value={member.role}
+                          onChange={(e) => updateMemberRole(member.id, e.target.value as 'admin' | 'member' | 'owner')}
+                          disabled={member.role === 'owner'}
+                          className="team-select"
+                          style={{ width: '120px' }}
+                        >
+                          <option value="member">Member</option>
+                          <option value="admin">Admin</option>
+                          <option value="owner">Owner</option>
+                        </select>
+                        {member.role !== 'owner' && (
+                          <button
+                            onClick={() => removeMember(member.id)}
+                            className="team-icon-button danger"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <select
-                      value={member.role}
-                      onChange={(e) => updateMemberRole(member.id, e.target.value as 'admin' | 'member' | 'owner')}
-                      disabled={member.role === 'owner'}
-                      className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <option value="member">Member</option>
-                      <option value="admin">Admin</option>
-                      <option value="owner">Owner</option>
-                    </select>
-                    {member.role !== 'owner' && (
-                      <button
-                        onClick={() => removeMember(member.id)}
-                        className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {members.length === 0 && (
-            <div className="text-center py-12">
-              <Users className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No team members</h3>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Add team members to collaborate on this project.
-              </p>
+          {/* Billable Rates Section */}
+          {members.length > 0 && (
+            <div className="team-section">
+              <h3 className="team-section-title">
+                <DollarSign size={20} />
+                Billable Rates
+              </h3>
+              <div className="team-members-list">
+                {members.map((member) => {
+                  const rate = memberRates.get(member.user_id);
+                  const isEditing = editingRateFor === member.user_id;
+                  const showingHistory = showRateHistory === member.user_id;
+
+                  return (
+                    <div key={`rate-${member.id}`} className="team-member-card">
+                      <div className="team-member-header">
+                        <div className="team-member-info">
+                          <div className="team-member-avatar green">
+                            {(member.user_profiles.full_name || member.user_profiles.email)[0].toUpperCase()}
+                          </div>
+                          <div className="team-member-details">
+                            <p className="team-member-name">
+                              {member.user_profiles.full_name || 'No name'}
+                            </p>
+                            {rate ? (
+                              <div className="team-member-rate">
+                                {rate.currency} {rate.hourly_rate.toFixed(2)}/hr
+                                <span className={`team-rate-badge ${rate.rate_source === 'project' ? 'project' : 'org'}`}>
+                                  {rate.rate_source === 'project' ? 'Project' : 'Org Default'}
+                                </span>
+                              </div>
+                            ) : (
+                              <p className="team-no-rate">No rate set</p>
+                            )}
+                          </div>
+                        </div>
+                        {!isEditing && (
+                          <div className="team-member-actions">
+                            <button
+                              onClick={() => startEditingRate(member.user_id)}
+                              className="team-button team-button-primary"
+                              style={{ padding: '8px 16px', fontSize: '13px' }}
+                            >
+                              {rate ? 'Update Rate' : 'Set Rate'}
+                            </button>
+                            {rate && (
+                              <button
+                                onClick={() => loadRateHistory(member.user_id)}
+                                className="team-icon-button"
+                                title="View rate history"
+                              >
+                                <History size={18} />
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Edit Rate Form */}
+                      {isEditing && (
+                        <div className="team-rate-form">
+                          <h4 className="team-rate-form-title">
+                            Set Billable Rate for {member.user_profiles.full_name || member.user_profiles.email}
+                          </h4>
+                          <div className="team-form-grid">
+                            <div className="team-form-group">
+                              <label className="team-form-label">Hourly Rate</label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                value={rateForm.hourly_rate}
+                                onChange={(e) => setRateForm({ ...rateForm, hourly_rate: e.target.value })}
+                                className="team-form-input"
+                                placeholder="150.00"
+                              />
+                            </div>
+                            <div className="team-form-group">
+                              <label className="team-form-label">Currency</label>
+                              <select
+                                value={rateForm.currency}
+                                onChange={(e) => setRateForm({ ...rateForm, currency: e.target.value })}
+                                className="team-form-select"
+                              >
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CAD">CAD</option>
+                                <option value="AUD">AUD</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="team-form-group">
+                            <label className="team-form-label">Effective Date</label>
+                            <input
+                              type="date"
+                              value={rateForm.effective_date}
+                              onChange={(e) => setRateForm({ ...rateForm, effective_date: e.target.value })}
+                              className="team-form-input"
+                            />
+                          </div>
+                          <div className="team-form-group">
+                            <label className="team-form-label">Notes (optional)</label>
+                            <textarea
+                              value={rateForm.notes}
+                              onChange={(e) => setRateForm({ ...rateForm, notes: e.target.value })}
+                              className="team-form-textarea"
+                              placeholder="Rate change reason or additional context..."
+                            />
+                          </div>
+                          <div className="team-form-actions">
+                            <button
+                              onClick={() => saveRate(member.user_id)}
+                              className="team-button team-button-primary"
+                            >
+                              Save Rate
+                            </button>
+                            <button
+                              onClick={() => setEditingRateFor(null)}
+                              className="team-button team-button-secondary"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Rate History */}
+                      {showingHistory && (
+                        <div className="team-rate-history">
+                          <div className="team-history-header">
+                            <h4 className="team-history-title">
+                              <History size={16} />
+                              Rate History
+                            </h4>
+                            <button
+                              onClick={() => setShowRateHistory(null)}
+                              className="team-icon-button"
+                            >
+                              <ChevronUp size={18} />
+                            </button>
+                          </div>
+                          <div className="team-history-list">
+                            {rateHistory.length > 0 ? (
+                              rateHistory.map((historyRate) => (
+                                <div key={historyRate.id} className="team-history-item">
+                                  <div className="team-history-item-header">
+                                    <div>
+                                      <p className="team-history-rate">
+                                        {historyRate.currency} {historyRate.hourly_rate.toFixed(2)}/hr
+                                      </p>
+                                      <p className="team-history-dates">
+                                        Effective: {new Date(historyRate.effective_date).toLocaleDateString()}
+                                        {historyRate.end_date && (
+                                          <> · Ended: {new Date(historyRate.end_date).toLocaleDateString()}</>
+                                        )}
+                                      </p>
+                                      {historyRate.notes && (
+                                        <p className="team-history-notes">{historyRate.notes}</p>
+                                      )}
+                                    </div>
+                                    {!historyRate.end_date && (
+                                      <span className="team-current-badge">Current</span>
+                                    )}
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <p className="team-no-data">No rate history available</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
 
-        <div className="border-t border-gray-200 dark:border-gray-700 p-6 bg-gray-50 dark:bg-gray-800">
-          <button
-            onClick={onClose}
-            className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
+        <div className="team-modal-footer">
+          <button onClick={onClose} className="team-button team-button-secondary" style={{ width: '100%' }}>
             Close
           </button>
         </div>

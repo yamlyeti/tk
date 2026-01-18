@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import type { TimeEntry, Project } from '../types';
+import type { TimeEntry, Project, BillableTimeEntry } from '../types';
+import { ProjectBillingReport } from './ProjectBillingReport';
 import './Dashboard.css';
 
 interface TagStats {
@@ -31,11 +32,16 @@ export const Dashboard = () => {
   const [filterTag, setFilterTag] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportType, setReportType] = useState<'overview' | 'projects' | 'tags' | 'daily' | 'export'>('overview');
+  const [reportType, setReportType] = useState<'overview' | 'projects' | 'tags' | 'daily' | 'billing' | 'export'>('overview');
+
+  // Billing state
+  const [billableEntries, setBillableEntries] = useState<BillableTimeEntry[]>([]);
+  const [showBillingReport, setShowBillingReport] = useState(false);
 
   useEffect(() => {
     fetchEntries();
     fetchProjects();
+    fetchBillableEntries();
   }, []);
 
   const fetchEntries = async () => {
@@ -52,6 +58,17 @@ export const Dashboard = () => {
       .select('*')
       .order('name');
     setProjects(data || []);
+  };
+
+  const fetchBillableEntries = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const { data } = await supabase
+      .from('billable_time_entries')
+      .select('*')
+      .gte('start_time', today.toISOString())
+      .order('start_time', { ascending: false });
+    setBillableEntries(data || []);
   };
 
   const filteredEntries = entries.filter((e) => {
@@ -150,6 +167,11 @@ export const Dashboard = () => {
       duration: stats.duration,
     }))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  // Calculate today's billing stats
+  const todayBillableHours = billableEntries.reduce((sum, e) => sum + (e.hours || 0), 0);
+  const todayBillableAmount = billableEntries.reduce((sum, e) => sum + (e.billable_amount || 0), 0);
+  const todayEntriesWithoutRate = billableEntries.filter(e => e.hourly_rate === null).length;
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -301,29 +323,35 @@ export const Dashboard = () => {
 
       {/* Report Type Selector */}
       <div className="report-selector">
-        <button 
-          className={reportType === 'overview' ? 'active' : ''} 
+        <button
+          className={reportType === 'overview' ? 'active' : ''}
           onClick={() => setReportType('overview')}
         >
           📊 Overview
         </button>
-        <button 
-          className={reportType === 'projects' ? 'active' : ''} 
+        <button
+          className={reportType === 'projects' ? 'active' : ''}
           onClick={() => setReportType('projects')}
         >
           📁 By Project
         </button>
-        <button 
-          className={reportType === 'tags' ? 'active' : ''} 
+        <button
+          className={reportType === 'tags' ? 'active' : ''}
           onClick={() => setReportType('tags')}
         >
           🏷️ By Tag
         </button>
-        <button 
-          className={reportType === 'daily' ? 'active' : ''} 
+        <button
+          className={reportType === 'daily' ? 'active' : ''}
           onClick={() => setReportType('daily')}
         >
           📅 By Day
+        </button>
+        <button
+          className={reportType === 'billing' ? 'active' : ''}
+          onClick={() => setReportType('billing')}
+        >
+          💰 Billing
         </button>
       </div>
 
@@ -331,8 +359,7 @@ export const Dashboard = () => {
       {reportType === 'overview' && (
         <>
           <div className="dashboard-summary">
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('daily')} title="Click to view daily breakdown">
               <div className="summary-icon">⏱️</div>
               <div className="summary-content">
                 <div className="summary-label">Total Time</div>
@@ -340,8 +367,7 @@ export const Dashboard = () => {
               </div>
             </div>
             
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('daily')} title="Click to view all entries">
               <div className="summary-icon">📊</div>
               <div className="summary-content">
                 <div className="summary-label">Total Entries</div>
@@ -349,8 +375,7 @@ export const Dashboard = () => {
               </div>
             </div>
             
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('daily')} title="Click to view daily breakdown">
               <div className="summary-icon">📅</div>
               <div className="summary-content">
                 <div className="summary-label">Days Tracked</div>
@@ -358,8 +383,7 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('daily')} title="Click to view daily averages">
               <div className="summary-icon">⏳</div>
               <div className="summary-content">
                 <div className="summary-label">Avg Per Day</div>
@@ -367,8 +391,7 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('daily')} title="Click to view entry details">
               <div className="summary-icon">📈</div>
               <div className="summary-content">
                 <div className="summary-label">Avg Per Entry</div>
@@ -376,15 +399,51 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            <div className="summary-card">
-              <div className="drag-handle">⋮⋮</div>
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setReportType('projects')} title="Click to view projects breakdown">
               <div className="summary-icon">📁</div>
               <div className="summary-content">
                 <div className="summary-label">Active Projects</div>
                 <div className="summary-value">{projectStats.length}</div>
               </div>
             </div>
+
+            <div className="summary-card" style={{ cursor: 'pointer' }} onClick={() => setShowBillingReport(true)} title="Click to open billing report">
+              <div className="summary-icon">💰</div>
+              <div className="summary-content">
+                <div className="summary-label">Today's Billing</div>
+                <div className="summary-value">${todayBillableAmount.toFixed(2)}</div>
+                <div className="summary-sublabel">{todayBillableHours.toFixed(2)} hrs</div>
+              </div>
+            </div>
           </div>
+
+          {/* Billing Alert */}
+          {todayEntriesWithoutRate > 0 && (
+            <div style={{
+              marginTop: '20px',
+              padding: '16px',
+              backgroundColor: '#fff3cd',
+              border: '1px solid #ffc107',
+              borderRadius: '8px',
+              color: '#856404'
+            }}>
+              <strong>⚠️ Missing Rates:</strong> {todayEntriesWithoutRate} time {todayEntriesWithoutRate === 1 ? 'entry' : 'entries'} from today without billable rates.
+              <button
+                onClick={() => setShowBillingReport(true)}
+                style={{
+                  marginLeft: '10px',
+                  padding: '4px 12px',
+                  backgroundColor: '#ffc107',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: '500'
+                }}
+              >
+                View Billing Report
+              </button>
+            </div>
+          )}
 
           {/* Top Projects Preview */}
           {projectStats.length > 0 && (
@@ -551,10 +610,10 @@ export const Dashboard = () => {
                       <td className="time-cell">{formatTimeDetailed(stat.duration)}</td>
                       <td>
                         <div className="daily-bar">
-                          <div 
-                            className="daily-bar-fill" 
-                            style={{ 
-                              width: `${(stat.duration / Math.max(...dailyStats.map(s => s.duration))) * 100}%` 
+                          <div
+                            className="daily-bar-fill"
+                            style={{
+                              width: `${(stat.duration / Math.max(...dailyStats.map(s => s.duration))) * 100}%`
                             }}
                           ></div>
                         </div>
@@ -566,6 +625,108 @@ export const Dashboard = () => {
             </div>
           )}
         </div>
+      )}
+
+      {/* Billing Report */}
+      {reportType === 'billing' && (
+        <div className="report-section">
+          <h3>Billing Overview</h3>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
+            marginBottom: '24px'
+          }}>
+            <div style={{
+              padding: '20px',
+              backgroundColor: '#e8f4f8',
+              borderRadius: '8px',
+              border: '1px solid #b8dae6'
+            }}>
+              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Today's Hours</div>
+              <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#0066cc' }}>
+                {todayBillableHours.toFixed(2)}
+              </div>
+            </div>
+            <div style={{
+              padding: '20px',
+              backgroundColor: '#e8f5e9',
+              borderRadius: '8px',
+              border: '1px solid #a5d6a7'
+            }}>
+              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Today's Amount</div>
+              <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#2e7d32' }}>
+                ${todayBillableAmount.toFixed(2)}
+              </div>
+            </div>
+            <div style={{
+              padding: '20px',
+              backgroundColor: todayEntriesWithoutRate > 0 ? '#fff3e0' : '#e8f5e9',
+              borderRadius: '8px',
+              border: todayEntriesWithoutRate > 0 ? '1px solid #ffb74d' : '1px solid #a5d6a7'
+            }}>
+              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Entries Without Rate</div>
+              <div style={{ fontSize: '28px', fontWeight: 'bold', color: todayEntriesWithoutRate > 0 ? '#f57c00' : '#2e7d32' }}>
+                {todayEntriesWithoutRate}
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            padding: '24px',
+            backgroundColor: '#f5f5f5',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            <h4 style={{ marginBottom: '16px' }}>Full Billing Report</h4>
+            <p style={{ color: '#666', marginBottom: '20px' }}>
+              View detailed billing reports with date range filters, user breakdowns, and export options.
+            </p>
+            <button
+              onClick={() => setShowBillingReport(true)}
+              style={{
+                padding: '12px 24px',
+                backgroundColor: '#4caf50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}
+            >
+              Open Billing Report
+            </button>
+          </div>
+
+          {todayEntriesWithoutRate > 0 && (
+            <div style={{
+              marginTop: '24px',
+              padding: '16px',
+              backgroundColor: '#fff3cd',
+              border: '1px solid #ffc107',
+              borderRadius: '8px',
+              color: '#856404'
+            }}>
+              <h4 style={{ marginTop: 0 }}>⚠️ Action Required</h4>
+              <p>
+                {todayEntriesWithoutRate} time {todayEntriesWithoutRate === 1 ? 'entry' : 'entries'} from today {todayEntriesWithoutRate === 1 ? 'is' : 'are'} missing billable rates.
+                Set rates in Project Team Management to ensure accurate billing calculations.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Billing Report Modal */}
+      {showBillingReport && (
+        <ProjectBillingReport 
+          onClose={() => setShowBillingReport(false)}
+          initialProjectId={filterProject}
+          initialStartDate={startDate}
+          initialEndDate={endDate}
+        />
       )}
     </div>
   );
