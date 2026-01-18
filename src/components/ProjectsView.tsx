@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/useAuth';
 import { supabase } from '../lib/supabase';
 import { ProjectTeamManagement } from './ProjectTeamManagement';
-import { DiagnosticPanel } from './DiagnosticPanel';
 import { EditProjectModal } from './EditProjectModal';
 import type { Project, TimeEntry, Organization } from '../types';
 import './ProjectsView.css';
@@ -176,7 +175,6 @@ export const ProjectsView = () => {
 
   return (
     <div className="projects-container">
-      <DiagnosticPanel />
       <h2>Projects</h2>
       
       <div className="add-project-section">
