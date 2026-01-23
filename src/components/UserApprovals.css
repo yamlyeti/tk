@@ -270,6 +270,16 @@
   transform: scale(1.05);
 }
 
+.action-btn.reset-password {
+  background: #3b82f6;
+  color: white;
+}
+
+.action-btn.reset-password:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;

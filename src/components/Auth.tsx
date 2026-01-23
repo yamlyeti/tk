@@ -10,30 +10,7 @@ export const Auth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp, user } = useAuth();
-
-  useEffect(() => {
-    const checkApprovalStatus = async () => {
-      if (user) {
-        const { data } = await supabase
-          .from('user_profiles')
-          .select('approval_status')
-          .eq('id', user.id)
-          .single();
-        
-        if (data) {
-          if (data.approval_status === 'denied') {
-            setError('Your account has been denied by an administrator. Please contact support.');
-            await supabase.auth.signOut();
-          } else if (data.approval_status === 'pending') {
-            setError('Your account is pending approval. An administrator will review your registration shortly.');
-            await supabase.auth.signOut();
-          }
-        }
-      }
-    };
-    checkApprovalStatus();
-  }, [user]);
+  const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

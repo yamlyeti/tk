@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { User, Shield, Mail, Calendar, UserPlus, Trash2, Search } from 'lucide-react';
+import { User, Shield, Mail, Calendar, UserPlus, Trash2, Search, KeyRound } from 'lucide-react';
 import { useAuth } from '../contexts/useAuth';
 
 interface UserProfile {
@@ -261,6 +261,40 @@ export function UserManagement() {
       alert('Failed to delete user');
     } else {
       await loadUsers();
+    }
+  }
+
+  async function sendPasswordReset(userId: string, userEmail: string) {
+    try {
+      // First check if current user has permission to manage this user
+      const { data: canManage, error: permError } = await supabase
+        .rpc('can_manage_user', { target_user_id: userId });
+
+      if (permError) {
+        console.error('Error checking permissions:', permError);
+        alert('Error checking permissions. Please try again.');
+        return;
+      }
+
+      if (!canManage) {
+        alert('You do not have permission to reset this user\'s password.');
+        return;
+      }
+
+      // Send password reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(userEmail, {
+        redirectTo: `${window.location.origin}`,
+      });
+
+      if (error) {
+        console.error('Error sending password reset:', error);
+        alert('Failed to send password reset email');
+      } else {
+        alert(`Password reset email sent to ${userEmail}`);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert('An unexpected error occurred');
     }
   }
 
@@ -584,6 +618,25 @@ export function UserManagement() {
                       </button>
                       {user.id !== currentUser?.id && (
                         <>
+                          <button
+                            onClick={() => sendPasswordReset(user.id, user.email)}
+                            style={{
+                              padding: '8px 16px',
+                              background: '#dbeafe',
+                              color: '#1e40af',
+                              border: 'none',
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                            title="Send password reset email"
+                          >
+                            <KeyRound style={{ width: '16px', height: '16px' }} />
+                          </button>
                           <button
                             onClick={() => toggleUserStatus(user.id, user.is_active)}
                             style={{

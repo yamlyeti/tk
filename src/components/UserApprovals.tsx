@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { UserCheck, Clock, Mail, Calendar, CheckCircle, XCircle } from 'lucide-react';
+import { UserCheck, Clock, Mail, Calendar, CheckCircle, XCircle, KeyRound } from 'lucide-react';
 import { useAuth } from '../contexts/useAuth';
 import './UserApprovals.css';
 
@@ -89,6 +89,24 @@ export function UserApprovals() {
     } else {
       alert('User denied');
       loadPendingUsers();
+    }
+  }
+
+  async function sendPasswordReset(userEmail: string) {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(userEmail, {
+        redirectTo: `${window.location.origin}`,
+      });
+
+      if (error) {
+        console.error('Error sending password reset:', error);
+        alert('Failed to send password reset email');
+      } else {
+        alert(`Password reset email sent to ${userEmail}`);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert('An unexpected error occurred');
     }
   }
 
@@ -230,6 +248,18 @@ export function UserApprovals() {
                   >
                     <XCircle size={18} />
                     Deny
+                  </button>
+                </div>
+              )}
+              {user.approval_status === 'approved' && (
+                <div className="user-actions">
+                  <button
+                    className="action-btn reset-password"
+                    onClick={() => sendPasswordReset(user.email)}
+                    title="Send Password Reset Email"
+                  >
+                    <KeyRound size={18} />
+                    Reset Password
                   </button>
                 </div>
               )}

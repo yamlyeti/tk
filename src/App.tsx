@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './contexts/useAuth';
@@ -11,20 +11,88 @@ import { UserProfile } from './components/UserProfile';
 import { UserApprovals } from './components/UserApprovals';
 import { OrganizationManagement } from './components/OrganizationManagement';
 import { DarkModeToggle } from './components/DarkModeToggle';
+import { supabase } from './lib/supabase';
 import './App.css';
 import './dark-mode.css';
+
+interface UserProfile {
+  approval_status: 'pending' | 'approved' | 'denied';
+  is_active: boolean;
+}
 
 function AppContent() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations'>('tracker');
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [approvalError, setApprovalError] = useState<string>('');
 
-  if (loading) {
+  useEffect(() => {
+    async function checkUserApproval() {
+      if (!user) {
+        setProfileLoading(false);
+        setUserProfile(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .select('approval_status, is_active')
+          .eq('id', user.id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching user profile:', error);
+          setApprovalError('Error checking account status. Please try signing in again.');
+          await signOut();
+          return;
+        }
+
+        if (!data) {
+          setApprovalError('User profile not found. Please contact support.');
+          await signOut();
+          return;
+        }
+
+        if (data.approval_status === 'denied') {
+          setApprovalError('Your account has been denied by an administrator. Please contact support.');
+          await signOut();
+          return;
+        }
+
+        if (data.approval_status === 'pending') {
+          setApprovalError('Your account is pending approval. An administrator will review your registration shortly.');
+          await signOut();
+          return;
+        }
+
+        if (!data.is_active) {
+          setApprovalError('Your account is inactive. Please contact support.');
+          await signOut();
+          return;
+        }
+
+        setUserProfile(data);
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        setApprovalError('An unexpected error occurred. Please try again.');
+        await signOut();
+      } finally {
+        setProfileLoading(false);
+      }
+    }
+
+    checkUserApproval();
+  }, [user, signOut]);
+
+  if (loading || profileLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh' 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh'
       }}>
         <div>Loading...</div>
       </div>
@@ -32,6 +100,27 @@ function AppContent() {
   }
 
   if (!user) return <Auth />;
+
+  if (approvalError) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        flexDirection: 'column',
+        gap: '16px'
+      }}>
+        <div style={{ color: 'var(--error-color, #dc2626)', fontSize: '18px', textAlign: 'center', maxWidth: '500px' }}>
+          {approvalError}
+        </div>
+      </div>
+    );
+  }
+
+  if (!userProfile || userProfile.approval_status !== 'approved') {
+    return null;
+  }
 
   return (
     <div className="app-container">
