@@ -45,6 +45,9 @@ Deno.serve(async (req) => {
 
     const gmailUser = Deno.env.get('GMAIL_USER');
     const gmailAppPassword = Deno.env.get('GMAIL_APP_PASSWORD');
+    // GMAIL_FROM lets you send from an alias without changing the authenticating account.
+    // Must be configured as a "Send As" alias on the GMAIL_USER account in Gmail settings.
+    const gmailFrom = Deno.env.get('GMAIL_FROM') || gmailUser;
 
     if (!gmailUser || !gmailAppPassword) {
       return new Response(
@@ -53,7 +56,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const html = buildInvoiceHtml(payload, gmailUser);
+    const html = buildInvoiceHtml(payload, gmailFrom!);
 
     const client = new SmtpClient();
     await client.connectTLS({
@@ -64,7 +67,7 @@ Deno.serve(async (req) => {
     });
 
     await client.send({
-      from: gmailUser,
+      from: gmailFrom!,
       to: payload.recipientEmail,
       subject: `Invoice – ${payload.startDate} to ${payload.endDate}${payload.projectName ? ` – ${payload.projectName}` : ''}`,
       html,
