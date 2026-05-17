@@ -17,9 +17,8 @@ import './dark-mode.css';
 
 function AppContent() {
   const { user, loading, signOut } = useAuth();
-  const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations'>('tracker');
+  const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations' | 'billing'>('tracker');
   const [showManualEntry, setShowManualEntry] = useState(false);
-  const [showBilling, setShowBilling] = useState(false);
 
   if (loading) {
     return (
@@ -50,7 +49,7 @@ function AppContent() {
           <button className={view === 'users' ? 'active' : ''} onClick={() => setView('users')}>👥 Users</button>
           <button className={view === 'approvals' ? 'active' : ''} onClick={() => setView('approvals')}>✅ Approvals</button>
           <button className={view === 'profile' ? 'active' : ''} onClick={() => setView('profile')}>👤 Profile</button>
-          <button onClick={() => setShowBilling(true)}>💰 Billing</button>
+          <button className={view === 'billing' ? 'active' : ''} onClick={() => setView('billing')}>💰 Billing</button>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           {view === 'tracker' && (
@@ -70,7 +69,7 @@ function AppContent() {
       {view === 'users' && <UserManagement />}
       {view === 'approvals' && <UserApprovals />}
       {view === 'profile' && <UserProfile />}
-      {showBilling && <ProjectBillingReport onClose={() => setShowBilling(false)} />}
+      {view === 'billing' && <ProjectBillingReport asPage onClose={() => setView('tracker')} />}
     </div>
   );
 }

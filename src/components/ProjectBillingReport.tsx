@@ -26,6 +26,7 @@ interface InvoiceLineItem {
 
 interface ProjectBillingReportProps {
   onClose: () => void;
+  asPage?: boolean;
   initialProjectId?: string;
   initialStartDate?: string;
   initialEndDate?: string;
@@ -42,7 +43,7 @@ interface UserSummary {
   currency: string;
 }
 
-export function ProjectBillingReport({ onClose, initialProjectId, initialStartDate, initialEndDate }: ProjectBillingReportProps) {
+export function ProjectBillingReport({ onClose, asPage, initialProjectId, initialStartDate, initialEndDate }: ProjectBillingReportProps) {
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<BillableTimeEntry[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<BillableTimeEntry[]>([]);
@@ -430,25 +431,7 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
     );
   }
 
-  return (
-    <div className="billing-modal-overlay">
-      <div className="billing-modal">
-        {/* Header */}
-        <div className="billing-modal-header">
-          <div>
-            <h2>
-              <DollarSign size={24} />
-              Billing Report
-            </h2>
-            <p className="billing-modal-subtitle">
-              {startDate} to {endDate}
-            </p>
-          </div>
-          <button onClick={onClose} className="billing-close-button">
-            <X size={20} />
-          </button>
-        </div>
-
+  const pageContent = (
         <div className="billing-modal-content">
           {/* Active Filters Indicator */}
           {(initialProjectId || initialStartDate || initialEndDate) && (
@@ -1284,14 +1267,60 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
           </div>
         )}
 
+  );
+
+  if (asPage) {
+    return (
+      <div className="billing-page">
+        <div className="billing-page-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <DollarSign size={22} />
+            <div>
+              <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 700 }}>Billing</h2>
+              <p style={{ margin: 0, fontSize: '13px', opacity: 0.75 }}>{startDate} — {endDate}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Project Quick-Select */}
+        {projects.length > 0 && (
+          <div className="billing-project-strip">
+            <button
+              className={`billing-project-chip ${!selectedProject ? 'active' : ''}`}
+              onClick={() => setSelectedProject('')}
+            >
+              All Projects
+            </button>
+            {projects.map(p => (
+              <button
+                key={p.id}
+                className={`billing-project-chip ${selectedProject === p.id ? 'active' : ''}`}
+                onClick={() => setSelectedProject(p.id)}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {pageContent}
+      </div>
+    );
+  }
+
+  return (
+    <div className="billing-modal-overlay">
+      <div className="billing-modal">
+        <div className="billing-modal-header">
+          <div>
+            <h2><DollarSign size={24} /> Billing Report</h2>
+            <p className="billing-modal-subtitle">{startDate} to {endDate}</p>
+          </div>
+          <button onClick={onClose} className="billing-close-button"><X size={20} /></button>
+        </div>
+        {pageContent}
         <div className="billing-modal-footer">
-          <button
-            onClick={onClose}
-            className="billing-button billing-button-secondary"
-            style={{ width: '100%' }}
-          >
-            Close
-          </button>
+          <button onClick={onClose} className="billing-button billing-button-secondary" style={{ width: '100%' }}>Close</button>
         </div>
       </div>
     </div>

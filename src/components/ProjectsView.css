@@ -6,7 +6,7 @@
 
 .projects-container h2 {
   font-size: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -14,7 +14,7 @@
 }
 
 html.dark-mode .projects-container h2 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -27,17 +27,17 @@ html.dark-mode .projects-container h2 {
   margin-bottom: 40px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 html.dark-mode .add-project-section {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .add-project-section h3 {
   font-size: 1.3rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -45,7 +45,7 @@ html.dark-mode .add-project-section {
 }
 
 html.dark-mode .add-project-section h3 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -71,7 +71,7 @@ html.dark-mode .add-project-section h3 {
 .form-group input,
 .form-group textarea {
   padding: 12px 16px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(212, 175, 55, 0.2);
   border-radius: 10px;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -80,23 +80,23 @@ html.dark-mode .add-project-section h3 {
 
 html.dark-mode .form-group input,
 html.dark-mode .form-group textarea {
-  background: rgba(15, 23, 42, 0.6);
-  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(28, 25, 20, 0.6);
+  border-color: rgba(212, 175, 55, 0.3);
   color: #e2e8f0;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 4px 12px rgba(102, 126, 234, 0.2);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15), 0 4px 12px rgba(212, 175, 55, 0.2);
   transform: translateY(-1px);
 }
 
 html.dark-mode .form-group input:focus,
 html.dark-mode .form-group textarea:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2), 0 4px 12px rgba(96, 165, 250, 0.3);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2), 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 .form-group textarea {
@@ -105,7 +105,7 @@ html.dark-mode .form-group textarea:focus {
 }
 
 .add-project-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   color: white;
   border: none;
   padding: 14px 32px;
@@ -115,13 +115,13 @@ html.dark-mode .form-group textarea:focus {
   cursor: pointer;
   transition: all 0.3s;
   margin-top: 8px;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
 .add-project-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: linear-gradient(135deg, #C8960A 0%, #D4AF37 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5);
 }
 
 .add-project-button:disabled {
@@ -154,7 +154,7 @@ html.dark-mode .form-group textarea:focus {
 
 .project-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -163,19 +163,19 @@ html.dark-mode .form-group textarea:focus {
 }
 
 .project-card:hover {
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.25);
   transform: translateY(-4px);
 }
 
 html.dark-mode .project-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 html.dark-mode .project-card:hover {
-  border-color: rgba(96, 165, 250, 0.5);
-  box-shadow: 0 8px 32px rgba(96, 165, 250, 0.3);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
 }
 
 .project-header {
@@ -187,7 +187,7 @@ html.dark-mode .project-card:hover {
 
 .project-header h4 {
   font-size: 1.3rem;
-  color: #1976d2;
+  color: #D4AF37;
   margin: 0;
   flex: 1;
 }
@@ -239,7 +239,7 @@ html.dark-mode .project-card:hover {
 
 .project-tags-display .tag {
   background: #e3f2fd;
-  color: #1976d2;
+  color: #D4AF37;
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -248,7 +248,7 @@ html.dark-mode .project-card:hover {
 
 .github-link {
   display: inline-block;
-  color: #1976d2;
+  color: #D4AF37;
   text-decoration: none;
   margin-bottom: 16px;
   font-size: 0.95rem;
@@ -282,7 +282,7 @@ html.dark-mode .project-card:hover {
 
 .stat-value {
   font-size: 1.2rem;
-  color: #1976d2;
+  color: #D4AF37;
   font-weight: 600;
 }
 

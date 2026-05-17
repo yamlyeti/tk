@@ -36,7 +36,7 @@
 }
 
 html.dark-mode .manual-entry-modal {
-  background: #17150F;
+  background: #211d15;
   border: 1px solid rgba(212, 175, 55, 0.2);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(212,175,55,0.08);
 }
@@ -138,8 +138,8 @@ html.dark-mode .form-group select {
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 .form-group small {
@@ -186,7 +186,7 @@ html.dark-mode .entry-mode-toggle button {
 
 .entry-mode-toggle button.active {
   background: var(--card-bg, #ffffff);
-  color: var(--primary-color, #3b82f6);
+  color: #B8860B;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -303,7 +303,7 @@ html.dark-mode .modal-actions button:not(.primary):hover:not(:disabled) {
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
   --hover-bg: #f3f4f6;
-  --primary-color: #3b82f6;
+  --primary-color: #C8960A;
 }
 
 html.dark-mode {

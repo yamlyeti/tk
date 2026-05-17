@@ -14,7 +14,7 @@
 
 .autocomplete-input:focus {
   outline: none;
-  border-color: #1976d2;
+  border-color: #D4AF37;
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
 }
 
@@ -32,7 +32,7 @@
   max-height: 250px;
   overflow-y: auto;
   background: white;
-  border: 1.5px solid #1976d2;
+  border: 1.5px solid #D4AF37;
   border-top: none;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -72,7 +72,7 @@
 }
 
 .autocomplete-suggestions::-webkit-scrollbar-thumb {
-  background: #1976d2;
+  background: #D4AF37;
   border-radius: 4px;
 }
 

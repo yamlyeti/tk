@@ -50,7 +50,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   color: white;
 }
 
@@ -146,12 +146,12 @@
 }
 
 .shortcuts-list::-webkit-scrollbar-thumb {
-  background: #6366f1;
+  background: #D4AF37;
   border-radius: 4px;
 }
 
 .shortcuts-list::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
+  background: #C8960A;
 }
 
 @media (max-width: 768px) {

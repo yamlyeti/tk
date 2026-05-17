@@ -18,7 +18,7 @@
   gap: 0.75rem;
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 50%, #D4AF37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -125,7 +125,7 @@
 }
 
 .action-btn.edit {
-  color: #3b82f6;
+  color: #D4AF37;
 }
 
 .action-btn.edit:hover {

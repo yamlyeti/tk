@@ -45,17 +45,17 @@
 
 /* SmartAgent Brand — Dark mode (full palette) */
 html.dark-mode {
-  --bg-primary: #080807;
-  --bg-secondary: #100F0C;
-  --bg-tertiary: #171510;
-  --bg-accent: #2A2618;
+  --bg-primary: #1c1914;
+  --bg-secondary: #221e16;
+  --bg-tertiary: #2a2419;
+  --bg-accent: #302a1e;
 
-  --text-primary: #f5f0e8;
-  --text-secondary: #c8bfa8;
-  --text-tertiary: #8a7e68;
+  --text-primary: #f0ead8;
+  --text-secondary: #c4b896;
+  --text-tertiary: #8a7e65;
 
-  --border-primary: #2A2618;
-  --border-secondary: #1a1710;
+  --border-primary: #35301f;
+  --border-secondary: #28231a;
 
   --primary-color: #D4AF37;
   --primary-hover: #F0D060;
