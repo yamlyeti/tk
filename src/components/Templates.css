@@ -68,8 +68,8 @@
 }
 
 .save-template-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -77,12 +77,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .save-template-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
 .templates-section {
@@ -184,8 +184,8 @@
 }
 
 .template-start-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
@@ -194,12 +194,12 @@
   cursor: pointer;
   transition: all 0.3s;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .template-start-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
 .no-templates {

@@ -86,15 +86,15 @@
 }
 
 .idle-keep-btn {
-  background: #4caf50;
-  color: white;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
   flex: 1;
 }
 
 .idle-keep-btn:hover {
-  background: #45a049;
+  background: linear-gradient(135deg, #C8960A 0%, #B8860B 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 .idle-discard-btn {
@@ -111,7 +111,7 @@
 .idle-note {
   margin-top: 20px;
   padding: 12px;
-  background: #f5f9ff;
+  background: rgba(212, 175, 55, 0.06);
   border-radius: 8px;
   font-size: 0.9rem;
   color: #666;
@@ -120,14 +120,14 @@
 .idle-detection-settings {
   margin-top: 16px;
   padding: 16px;
-  background: #f5f9ff;
+  background: rgba(212, 175, 55, 0.06);
   border-radius: 8px;
-  border: 1px solid #e3f2fd;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .idle-detection-settings h4 {
   margin: 0 0 12px 0;
-  color: #1976d2;
+  color: #D4AF37;
   font-size: 1rem;
 }
 
@@ -158,7 +158,7 @@
 
 .setting-row input[type="number"]:focus {
   outline: none;
-  border-color: #1976d2;
+  border-color: #D4AF37;
 }
 
 .setting-row small {

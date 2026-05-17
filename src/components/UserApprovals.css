@@ -18,7 +18,7 @@
   gap: 0.75rem;
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 50%, #D4AF37 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 50%, #B8860B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -28,7 +28,7 @@
 .header-icon {
   width: 32px;
   height: 32px;
-  color: #9333ea;
+  color: #D4AF37;
   -webkit-text-fill-color: initial;
 }
 
@@ -69,7 +69,7 @@
 
 .filter-tab.active {
   background: white;
-  color: #9333ea;
+  color: #D4AF37;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -101,7 +101,7 @@
 }
 
 .stat-card.approved svg {
-  color: #10b981;
+  color: #D4AF37;
 }
 
 .stat-card.denied svg {
@@ -153,7 +153,7 @@
 }
 
 .user-card.approved {
-  border-left-color: #10b981;
+  border-left-color: #D4AF37;
 }
 
 .user-card.denied {
@@ -165,7 +165,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,8 +222,8 @@
 }
 
 .status-badge.approved {
-  background: #d1fae5;
-  color: #059669;
+  background: rgba(212, 175, 55, 0.15);
+  color: #C8960A;
 }
 
 .status-badge.denied {
@@ -251,12 +251,12 @@
 }
 
 .action-btn.approve {
-  background: #10b981;
+  background: #D4AF37;
   color: white;
 }
 
 .action-btn.approve:hover {
-  background: #059669;
+  background: #C8960A;
   transform: scale(1.05);
 }
 

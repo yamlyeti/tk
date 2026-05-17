@@ -157,7 +157,7 @@ html.dark-mode .nav-signout:hover {
 .editable-field input:focus,
 .editable-field select:focus {
   outline: none;
-  border-color: #1976d2;
+  border-color: #D4AF37;
 }
 
 .editable-field button {
@@ -170,12 +170,12 @@ html.dark-mode .nav-signout:hover {
 }
 
 .save-btn {
-  background: #4caf50;
+  background: #D4AF37;
   color: white;
 }
 
 .save-btn:hover {
-  background: #45a049;
+  background: #C8960A;
 }
 
 .cancel-btn {
@@ -195,12 +195,12 @@ html.dark-mode .nav-signout:hover {
 }
 
 .clickable:hover {
-  background: #e3f2fd;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .entry-tags {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: rgba(212, 175, 55, 0.1);
+  color: #D4AF37;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -208,8 +208,8 @@ html.dark-mode .nav-signout:hover {
 }
 
 .entry-project {
-  background: #fff3e0;
-  color: #f57c00;
+  background: rgba(212,175,55,0.12);
+  color: #C8960A;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.9rem;

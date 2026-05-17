@@ -28,7 +28,7 @@ html.dark-mode .dashboard-header h2 {
 }
 
 .export-button {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   color: white;
   border: none;
   padding: 12px 28px;
@@ -37,13 +37,13 @@ html.dark-mode .dashboard-header h2 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
 .export-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
+  background: linear-gradient(135deg, #C8960A 0%, #B8860B 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5);
 }
 
 .export-button:disabled {
@@ -270,7 +270,7 @@ html.dark-mode .report-selector button.active {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #10b981, #D4AF37, #C8960A);
+  background: linear-gradient(90deg, #B8860B, #D4AF37, #C8960A);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -286,20 +286,20 @@ html.dark-mode .summary-card {
 }
 
 .summary-card:hover {
-  border-color: #10b981;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+  border-color: #D4AF37;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
   transform: translateY(-4px);
   cursor: pointer;
 }
 
 html.dark-mode .summary-card:hover {
-  border-color: #10b981;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  border-color: #D4AF37;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
 }
 
 .summary-card[style*="cursor: pointer"]:hover {
-  border-color: #10b981;
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
+  border-color: #D4AF37;
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.3);
   transform: translateY(-6px) scale(1.02);
 }
 
@@ -314,14 +314,14 @@ html.dark-mode .summary-card:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.15) 100%);
   border-radius: 12px;
   flex-shrink: 0;
   transition: transform 0.3s;
 }
 
 html.dark-mode .summary-icon {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #17150F 0%, #1a1000 100%);
 }
 
 .summary-card:hover .summary-icon {
@@ -454,7 +454,7 @@ html.dark-mode .preview-section h3 {
 
 .preview-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #D4AF37, #C8960A, #f093fb);
+  background: linear-gradient(90deg, #D4AF37, #C8960A, #B8860B);
   transition: width 0.3s ease;
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
@@ -547,7 +547,7 @@ html.dark-mode .report-section h3 {
 }
 
 .tag-badge {
-  background: #e3f2fd;
+  background: rgba(212, 175, 55, 0.08);
   color: #D4AF37;
   padding: 4px 12px;
   border-radius: 6px;
@@ -558,7 +558,7 @@ html.dark-mode .report-section h3 {
 .time-cell {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  color: #4caf50;
+  color: #D4AF37;
 }
 
 .percentage-cell {
@@ -584,7 +584,7 @@ html.dark-mode .report-section h3 {
 
 .mini-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #D4AF37, #C8960A, #f093fb);
+  background: linear-gradient(90deg, #D4AF37, #C8960A, #B8860B);
   transition: width 0.3s ease;
   box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
@@ -600,9 +600,9 @@ html.dark-mode .report-section h3 {
 
 .daily-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4facfe, #00f2fe, #43e97b);
+  background: linear-gradient(90deg, #D4AF37, #B8860B, #C8960A);
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 @media (max-width: 768px) {

@@ -17,7 +17,7 @@
 .project-select:focus {
   outline: none;
   border-color: #D4AF37;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .project-select:disabled {

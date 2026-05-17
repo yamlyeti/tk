@@ -212,8 +212,8 @@ html.dark-mode .entry-mode-toggle button:hover:not(.active) {
 
 .duration-preview {
   padding: 16px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 2px solid #22c55e;
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid #D4AF37;
   border-radius: 10px;
   margin-bottom: 20px;
   text-align: center;
@@ -223,11 +223,11 @@ html.dark-mode .entry-mode-toggle button:hover:not(.active) {
 
 html.dark-mode .duration-preview {
   color: var(--text-color, #f1f5f9);
-  background: rgba(34, 197, 94, 0.15);
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .duration-preview strong {
-  color: #22c55e;
+  color: #D4AF37;
   font-size: 16px;
 }
 

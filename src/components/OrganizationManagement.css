@@ -18,7 +18,7 @@
   gap: 0.75rem;
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 50%, #D4AF37 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 50%, #B8860B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -28,7 +28,7 @@
 .header-icon {
   width: 32px;
   height: 32px;
-  color: #9333ea;
+  color: #D4AF37;
   -webkit-text-fill-color: initial;
 }
 
@@ -54,9 +54,9 @@
 }
 
 .org-card:hover {
-  box-shadow: 0 4px 6px rgba(147, 51, 234, 0.1);
+  box-shadow: 0 4px 6px rgba(212, 175, 55, 0.1);
   transform: translateY(-2px);
-  border-color: #9333ea;
+  border-color: #D4AF37;
 }
 
 .org-card-header {
@@ -69,7 +69,7 @@
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,7 +129,7 @@
 }
 
 .action-btn.edit:hover {
-  background: #dbeafe;
+  background: rgba(212, 175, 55, 0.08);
 }
 
 .action-btn.delete {
@@ -155,7 +155,7 @@
 }
 
 .stat-item svg {
-  color: #9333ea;
+  color: #D4AF37;
   flex-shrink: 0;
 }
 
@@ -208,7 +208,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -216,12 +216,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(147, 51, 234, 0.2);
+  box-shadow: 0 2px 4px rgba(212, 175, 55, 0.2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(147, 51, 234, 0.3);
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
 }
 
 .btn-secondary {
@@ -341,8 +341,8 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #9333ea;
-  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .form-group textarea {

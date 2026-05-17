@@ -36,7 +36,16 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
   const [error, setError] = useState<string>('');
   const [entryOrder, setEntryOrder] = useState<string[]>([]);
   const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'goals', 'pomodoro']);
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set(['goals', 'pomodoro']));
   const [entriesExpanded, setEntriesExpanded] = useState(false);
+
+  const cardLabels: Record<string, string> = { goals: '🎯 Goals', pomodoro: '🍅 Pomodoro Timer' };
+  const toggleCard = (cardId: string) =>
+    setCollapsedCards(prev => {
+      const next = new Set(prev);
+      next.has(cardId) ? next.delete(cardId) : next.add(cardId);
+      return next;
+    });
   const [internalShowManualEntry, setInternalShowManualEntry] = useState(false);
   const showManualEntry = externalShowManualEntry ?? internalShowManualEntry;
   const setShowManualEntry = (val: boolean) => {
@@ -474,14 +483,25 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
                       {...provided.draggableProps}
                       className={`draggable-card-wrapper ${snapshot.isDragging ? 'dragging' : ''}`}
                     >
-                      <div 
+                      <div
                         {...provided.dragHandleProps}
                         className="card-drag-handle"
                         title="Drag to reorder"
                       >
                         ⋮⋮
                       </div>
-                      {renderCard(cardId)}
+                      {cardLabels[cardId] ? (
+                        <>
+                          <button
+                            className="entries-toggle-header card-collapse-header"
+                            onClick={() => toggleCard(cardId)}
+                          >
+                            <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{cardLabels[cardId]}</h2>
+                            <span className="entries-toggle-chevron">{collapsedCards.has(cardId) ? '▼' : '▲'}</span>
+                          </button>
+                          {!collapsedCards.has(cardId) && renderCard(cardId)}
+                        </>
+                      ) : renderCard(cardId)}
                     </div>
                   )}
                 </Draggable>

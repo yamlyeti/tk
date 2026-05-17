@@ -15,7 +15,7 @@
 .autocomplete-input:focus {
   outline: none;
   border-color: #D4AF37;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .autocomplete-input:disabled {
@@ -54,11 +54,11 @@
 }
 
 .autocomplete-suggestions li:hover {
-  background: #e3f2fd;
+  background: rgba(212, 175, 55, 0.08);
 }
 
 .autocomplete-suggestions li.active {
-  background: #bbdefb;
+  background: rgba(212, 175, 55, 0.15);
 }
 
 /* Scrollbar styling */
@@ -77,5 +77,5 @@
 }
 
 .autocomplete-suggestions::-webkit-scrollbar-thumb:hover {
-  background: #1565c0;
+  background: #C8960A;
 }
