@@ -13,95 +13,64 @@
 
 .nav-bar {
   display: flex;
-  gap: 16px;
-  margin-bottom: 32px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  padding: 24px 40px;
-  border-radius: 24px;
   align-items: center;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  gap: 4px;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  padding: 10px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(180, 130, 10, 0.3), 0 1px 0 rgba(255,255,255,0.15) inset;
 }
 
 html.dark-mode .nav-bar {
-  background: rgba(23, 21, 16, 0.85) !important;
-  border: 1px solid rgba(212, 175, 55, 0.2) !important;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(212, 175, 55, 0.08),
-    0 0 40px rgba(212, 175, 55, 0.05);
-}
-
-.nav-bar::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, 
-    transparent 30%, 
-    rgba(255, 255, 255, 0.1) 50%, 
-    transparent 70%);
-  animation: shimmer 6s infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  background: #17150F !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212,175,55,0.1) !important;
 }
 
 .nav-bar button {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
-  color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-size: 1rem;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.65);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 1;
-  backdrop-filter: blur(10px);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.01em;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
 html.dark-mode .nav-bar button {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
-  color: #e2e8f0;
+  color: rgba(212, 175, 55, 0.55);
 }
 
 .nav-bar button:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
-  border-color: rgba(255, 255, 255, 0.6);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.9);
+  transform: none;
+  box-shadow: none;
+}
+
+html.dark-mode .nav-bar button:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #D4AF37;
 }
 
 .nav-bar button.active {
-  background: linear-gradient(135deg, #fff, #f0f0f0);
-  color: #667eea;
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 
-    0 4px 16px rgba(255, 255, 255, 0.4),
-    0 0 20px rgba(102, 126, 234, 0.3);
+  background: rgba(255, 255, 255, 0.3);
+  color: #1a1000;
   font-weight: 700;
-  transform: translateY(-2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transform: none;
+  border: none;
 }
 
 html.dark-mode .nav-bar button.active {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.9));
-  color: #1e3a8a;
+  background: rgba(212, 175, 55, 0.15);
+  color: #D4AF37;
+  box-shadow: none;
 }
 
 /* Global Editable Fields Styling */

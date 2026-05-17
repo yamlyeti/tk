@@ -89,17 +89,14 @@ html.dark-mode {
 
 /* Apply dark mode globally */
 html.dark-mode {
-  background: #080807;
   color: var(--text-primary);
 }
 
 html.dark-mode body {
-  background: transparent;
   color: var(--text-primary);
 }
 
 html.dark-mode #root {
-  background: transparent;
   color: var(--text-primary);
 }
 
@@ -191,10 +188,7 @@ textarea::placeholder {
   color: var(--text-primary) !important;
 }
 
-/* Navigation */
-.nav-bar {
-  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%) !important;
-}
+/* Navigation handled in App.css */
 
 /* Active timer - keep bright */
 .active-timer {

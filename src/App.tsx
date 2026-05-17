@@ -39,7 +39,7 @@ function AppContent() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '24px' }}>
           <img src="/sa-logo.png" alt="SmartAgent" style={{ height: '32px', width: 'auto', filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.5))' }} />
         </div>
-        <div style={{ display: 'flex', gap: '16px', flex: 1 }}>
+        <div style={{ display: 'flex', gap: '2px', flex: 1 }}>
           <button className={view === 'tracker' ? 'active' : ''} onClick={() => setView('tracker')}>⏱️ Time Tracker</button>
           <button className={view === 'projects' ? 'active' : ''} onClick={() => setView('projects')}>📁 Projects</button>
           <button className={view === 'organizations' ? 'active' : ''} onClick={() => setView('organizations')}>🏢 Organizations</button>
@@ -48,15 +48,8 @@ function AppContent() {
           <button className={view === 'approvals' ? 'active' : ''} onClick={() => setView('approvals')}>✅ Approvals</button>
           <button className={view === 'profile' ? 'active' : ''} onClick={() => setView('profile')}>👤 Profile</button>
         </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <DarkModeToggle />
-          <button 
-            onClick={() => signOut()} 
-            className="logout-btn"
-            title="Logout"
-          >
-            🚪 Logout
-          </button>
         </div>
       </nav>
       {view === 'tracker' && <TimeTracker />}
