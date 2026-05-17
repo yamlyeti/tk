@@ -3,32 +3,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1c1914;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
   padding: 20px;
 }
 
 .auth-card {
-  background: white;
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: #211d15;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 48px 40px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.08);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
 .auth-card h1 {
-  margin: 0 0 10px 0;
-  font-size: 24px;
-  color: #333;
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 700;
   text-align: center;
+  background: linear-gradient(135deg, #D4AF37 0%, #F0D060 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .auth-card h2 {
-  margin: 0 0 30px 0;
-  font-size: 20px;
-  color: #666;
+  margin: 0 0 36px 0;
+  font-size: 14px;
+  color: #8a7e68;
   text-align: center;
-  font-weight: normal;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .auth-form {
@@ -44,65 +54,76 @@
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c8bfa8;
+  letter-spacing: 0.02em;
 }
 
 .form-group input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  padding: 12px 14px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+  font-size: 15px;
+  background: #1a1610;
+  color: #f5f0e8;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input::placeholder {
+  color: #5a5040;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .error-message {
   padding: 12px;
-  background-color: #fee;
-  border: 1px solid #fcc;
-  border-radius: 6px;
-  color: #c33;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #f87171;
   font-size: 14px;
 }
 
 .submit-button {
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  padding: 13px;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  color: #1a1000;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: opacity 0.3s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+  letter-spacing: 0.02em;
 }
 
-.submit-button:hover {
-  opacity: 0.9;
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.45);
 }
 
 .submit-button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .toggle-button {
-  margin-top: 20px;
+  margin-top: 16px;
   padding: 10px;
   background: transparent;
-  color: #667eea;
+  color: #8a7e68;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
-  text-decoration: underline;
+  transition: color 0.2s;
 }
 
 .toggle-button:hover {
-  opacity: 0.8;
+  color: #D4AF37;
 }

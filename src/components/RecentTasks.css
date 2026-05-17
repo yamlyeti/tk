@@ -1,14 +1,14 @@
 .recent-tasks {
-  background: linear-gradient(135deg, #f5f9ff 0%, #e3f2fd 100%);
+  background: rgba(212, 175, 55, 0.05);
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 24px;
-  border: 2px solid #bbdefb;
+  border: 2px solid rgba(212, 175, 55, 0.2);
 }
 
 .recent-tasks h3 {
   margin: 0 0 16px 0;
-  color: #1976d2;
+  color: #D4AF37;
   font-size: 1.1rem;
 }
 
@@ -31,8 +31,8 @@
 }
 
 .recent-task-item:hover {
-  border-color: #1976d2;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+  border-color: #D4AF37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
   transform: translateX(4px);
 }
 
@@ -64,8 +64,8 @@
 }
 
 .recent-task-start {
-  background: #4caf50;
-  color: white;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -77,9 +77,9 @@
 }
 
 .recent-task-start:hover {
-  background: #45a049;
+  background: linear-gradient(135deg, #C8960A 0%, #B8860B 100%);
   transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 @media (max-width: 768px) {

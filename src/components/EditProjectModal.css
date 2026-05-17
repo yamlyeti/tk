@@ -45,8 +45,8 @@
 }
 
 html.dark-mode .modal-header {
-  background: var(--header-bg, #1e293b);
-  border-bottom-color: var(--border-color, #334155);
+  background: var(--header-bg, #221e16);
+  border-bottom-color: var(--border-color, #2a2419);
 }
 
 .modal-header h2 {
@@ -83,7 +83,7 @@ html.dark-mode .modal-header h2 {
 }
 
 html.dark-mode .close-button:hover {
-  background: var(--hover-bg, #334155);
+  background: var(--hover-bg, #2a2419);
   color: var(--text-color, #f1f5f9);
 }
 
@@ -123,16 +123,16 @@ html.dark-mode .form-group label {
 
 html.dark-mode .form-group input,
 html.dark-mode .form-group textarea {
-  background: var(--input-bg, #1e293b);
+  background: var(--input-bg, #221e16);
   color: var(--text-color, #f1f5f9);
-  border-color: var(--border-color, #334155);
+  border-color: var(--border-color, #2a2419);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: var(--primary-color, #D4AF37);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 .form-group textarea {
@@ -161,7 +161,7 @@ html.dark-mode .form-group small {
 }
 
 html.dark-mode .modal-actions {
-  border-top-color: var(--border-color, #334155);
+  border-top-color: var(--border-color, #2a2419);
 }
 
 .modal-actions button {
@@ -186,7 +186,7 @@ html.dark-mode .modal-actions {
 }
 
 html.dark-mode .modal-actions button:not(.primary) {
-  background: var(--hover-bg, #334155);
+  background: var(--hover-bg, #2a2419);
   color: var(--text-color, #e2e8f0);
 }
 
@@ -199,14 +199,14 @@ html.dark-mode .modal-actions button:not(.primary):hover:not(:disabled) {
 }
 
 .modal-actions button.primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
 .modal-actions button.primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
 }
 
 .modal-actions button.primary:active:not(:disabled) {
@@ -215,7 +215,7 @@ html.dark-mode .modal-actions button:not(.primary):hover:not(:disabled) {
 
 /* Dark mode adjustments */
 html.dark-mode .edit-project-modal {
-  background: var(--card-bg, #0f172a);
+  background: var(--card-bg, #1c1914);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
@@ -228,16 +228,16 @@ html.dark-mode .edit-project-modal {
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
   --hover-bg: #f3f4f6;
-  --primary-color: #3b82f6;
+  --primary-color: #D4AF37;
 }
 
 html.dark-mode {
-  --card-bg: #0f172a;
-  --header-bg: #1e293b;
-  --input-bg: #1e293b;
+  --card-bg: #1c1914;
+  --header-bg: #221e16;
+  --input-bg: #221e16;
   --text-color: #f1f5f9;
   --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --hover-bg: #334155;
-  --primary-color: #3b82f6;
+  --border-color: #2a2419;
+  --hover-bg: #2a2419;
+  --primary-color: #D4AF37;
 }

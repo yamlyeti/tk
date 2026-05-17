@@ -1,9 +1,9 @@
 .time-editor {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: rgba(212, 175, 55, 0.06);
   padding: 20px;
   border-radius: 12px;
   margin-top: 12px;
-  border: 2px solid #93c5fd;
+  border: 2px solid #F0D060;
 }
 
 .time-editor-fields {
@@ -34,8 +34,8 @@
 
 .time-field input:focus {
   outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .time-editor-error {

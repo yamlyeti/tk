@@ -9,13 +9,24 @@ import {
   AlertCircle,
   X,
   BarChart3,
-  PieChart
+  PieChart,
+  Plus,
+  Trash2,
+  Send,
+  Mail
 } from 'lucide-react';
 import type { BillableTimeEntry, Project, Organization } from '../types';
 import './ProjectBillingReport.css';
 
+interface InvoiceLineItem {
+  id: string;
+  description: string;
+  amount: number;
+}
+
 interface ProjectBillingReportProps {
   onClose: () => void;
+  asPage?: boolean;
   initialProjectId?: string;
   initialStartDate?: string;
   initialEndDate?: string;
@@ -32,7 +43,7 @@ interface UserSummary {
   currency: string;
 }
 
-export function ProjectBillingReport({ onClose, initialProjectId, initialStartDate, initialEndDate }: ProjectBillingReportProps) {
+export function ProjectBillingReport({ onClose, asPage, initialProjectId, initialStartDate, initialEndDate }: ProjectBillingReportProps) {
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<BillableTimeEntry[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<BillableTimeEntry[]>([]);
@@ -59,6 +70,14 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
   const [showInvoice, setShowInvoice] = useState(false);
   const [billableFilter, setBillableFilter] = useState<'all' | 'billable' | 'non-billable'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Invoice line items & email
+  const [invoiceLineItems, setInvoiceLineItems] = useState<InvoiceLineItem[]>([]);
+  const [invoiceNote, setInvoiceNote] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [recipientName, setRecipientName] = useState('');
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
     loadData();
@@ -306,19 +325,20 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
     });
 
     csv += '\nDetailed Entries\n';
-    csv += 'Date,User,Project,Organization,Description,Hours,Rate,Currency,Rate Source,Amount\n';
+    csv += 'Date,User,Project,Organization,Description,Notes,Hours,Rate,Currency,Rate Source,Amount\n';
     filteredEntries.forEach(entry => {
       const date = new Date(entry.start_time).toLocaleDateString();
       const name = entry.full_name || 'N/A';
       const project = entry.project_name || 'N/A';
       const org = entry.organization_name || 'N/A';
       const desc = (entry.description || 'N/A').replace(/"/g, '""');
+      const notes = (entry.notes || '').replace(/"/g, '""');
       const rate = entry.hourly_rate?.toFixed(2) || 'N/A';
       const currency = entry.currency || 'N/A';
       const source = entry.rate_source || 'N/A';
       const amount = entry.billable_amount?.toFixed(2) || '0.00';
 
-      csv += `"${date}","${name}","${project}","${org}","${desc}",${entry.hours.toFixed(2)},"${rate}","${currency}","${source}",${amount}\n`;
+      csv += `"${date}","${name}","${project}","${org}","${desc}","${notes}",${entry.hours.toFixed(2)},"${rate}","${currency}","${source}",${amount}\n`;
     });
 
     // Download CSV
@@ -333,9 +353,72 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
     document.body.removeChild(link);
   }
 
+  function addLineItem() {
+    setInvoiceLineItems(prev => [...prev, { id: crypto.randomUUID(), description: '', amount: 0 }]);
+  }
+
+  function updateLineItem(id: string, field: 'description' | 'amount', value: string | number) {
+    setInvoiceLineItems(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+  }
+
+  function removeLineItem(id: string) {
+    setInvoiceLineItems(prev => prev.filter(item => item.id !== id));
+  }
+
+  function addDiscountItem() {
+    setInvoiceLineItems(prev => [...prev, { id: crypto.randomUUID(), description: 'Friend discount', amount: 0 }]);
+  }
+
+  async function sendInvoice() {
+    if (!recipientEmail) return;
+    setEmailStatus('sending');
+    setEmailError('');
+
+    const subtotal = summary.totalAmount;
+    const lineItemsTotal = invoiceLineItems.reduce((sum, item) => sum + item.amount, 0);
+    const invoiceTotal = subtotal + lineItemsTotal;
+
+    const project = selectedProject ? projects.find(p => p.id === selectedProject) : null;
+    const org = selectedOrg ? organizations.find(o => o.id === selectedOrg) : null;
+
+    try {
+      const { error } = await supabase.functions.invoke('send-invoice', {
+        body: {
+          recipientEmail,
+          recipientName: recipientName || undefined,
+          startDate,
+          endDate,
+          projectName: project?.name,
+          orgName: org?.name,
+          userSummaries: userSummaries.map(u => ({
+            fullName: u.fullName,
+            email: u.email,
+            totalHours: u.totalHours,
+            averageRate: u.averageRate,
+            totalAmount: u.totalAmount,
+            currency: u.currency,
+          })),
+          lineItems: invoiceLineItems,
+          subtotal,
+          lineItemsTotal,
+          invoiceTotal,
+          note: invoiceNote || undefined,
+        },
+      });
+
+      if (error) throw new Error(error.message);
+      setEmailStatus('sent');
+    } catch (err) {
+      setEmailStatus('error');
+      setEmailError(err instanceof Error ? err.message : 'Failed to send email');
+    }
+  }
+
   const summary = calculateSummary();
   const userSummaries = calculateUserSummaries();
   const projectBreakdown = calculateProjectBreakdown();
+  const invoiceLineItemsTotal = invoiceLineItems.reduce((sum, item) => sum + item.amount, 0);
+  const invoiceTotal = summary.totalAmount + invoiceLineItemsTotal;
   const uniqueUsers = Array.from(new Set(entries.map(e => ({ id: e.user_id, email: e.email, name: e.full_name }))))
     .filter((user, index, self) => self.findIndex(u => u.id === user.id) === index);
 
@@ -349,25 +432,8 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
     );
   }
 
-  return (
-    <div className="billing-modal-overlay">
-      <div className="billing-modal">
-        {/* Header */}
-        <div className="billing-modal-header">
-          <div>
-            <h2>
-              <DollarSign size={24} />
-              Billing Report
-            </h2>
-            <p className="billing-modal-subtitle">
-              {startDate} to {endDate}
-            </p>
-          </div>
-          <button onClick={onClose} className="billing-close-button">
-            <X size={20} />
-          </button>
-        </div>
-
+  const pageContent = (
+    <>
         <div className="billing-modal-content">
           {/* Active Filters Indicator */}
           {(initialProjectId || initialStartDate || initialEndDate) && (
@@ -811,6 +877,7 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                           <th>Project</th>
                           <th>Organization</th>
                           <th>Description</th>
+                          <th>Notes</th>
                           <th className="align-right">Hours</th>
                           <th className="align-right">Rate</th>
                           <th className="align-right">Amount</th>
@@ -832,6 +899,9 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                             <td>{entry.organization_name || 'N/A'}</td>
                             <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {entry.description || '-'}
+                            </td>
+                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)', fontSize: '13px' }}>
+                              {entry.notes || '-'}
                             </td>
                             <td className="align-right">{entry.hours.toFixed(2)}</td>
                             <td className="align-right">
@@ -908,6 +978,7 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                           <th>Project</th>
                           <th>Organization</th>
                           <th>Description</th>
+                          <th>Notes</th>
                           <th className="align-right">Hours</th>
                           <th>Rate Source</th>
                         </tr>
@@ -929,6 +1000,9 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                             <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {entry.description || '-'}
                             </td>
+                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)', fontSize: '13px' }}>
+                              {entry.notes || '-'}
+                            </td>
                             <td className="align-right">{entry.hours.toFixed(2)}</td>
                             <td>
                               <span className="billing-badge warning">
@@ -949,14 +1023,15 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
         {/* Invoice Modal */}
         {showInvoice && (
           <div className="billing-entries-modal">
-            <div className="billing-entries-content" style={{ maxWidth: '900px' }}>
+            <div className="billing-entries-content" style={{ maxWidth: '960px' }}>
               <div className="billing-modal-header" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}>
-                <h3>Invoice Preview</h3>
+                <h3>Invoice</h3>
                 <button onClick={() => setShowInvoice(false)} className="billing-close-button">
                   <X size={20} />
                 </button>
               </div>
               <div className="billing-invoice-content">
+
                 {/* Invoice Header */}
                 <div className="billing-invoice-header">
                   <div>
@@ -964,36 +1039,58 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                     <p style={{ margin: '8px 0 0 0', color: 'var(--text-secondary)' }}>
                       Invoice Date: {new Date().toLocaleDateString()}
                     </p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <h2 style={{ margin: 0, fontSize: '36px', color: '#10b981' }}>
-                      ${summary.totalAmount.toFixed(2)}
-                    </h2>
                     <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
                       Period: {startDate} to {endDate}
                     </p>
                   </div>
-                </div>
-
-                {/* Client/Project Info */}
-                <div className="billing-invoice-section">
-                  <div style={{ marginBottom: '24px' }}>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
-                      Bill To
-                    </h3>
-                    <p style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--text-color)' }}>
-                      {selectedProject && projects.find(p => p.id === selectedProject)?.name || 'Client Name'}
-                    </p>
-                    {selectedOrg && organizations.find(o => o.id === selectedOrg) && (
-                      <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>
-                        {organizations.find(o => o.id === selectedOrg)?.name}
-                      </p>
-                    )}
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Due</p>
+                    <h2 style={{ margin: '4px 0 0 0', fontSize: '40px', color: '#10b981', fontWeight: 800 }}>
+                      ${invoiceTotal.toFixed(2)}
+                    </h2>
                   </div>
                 </div>
 
-                {/* Summary */}
+                {/* Recipient */}
                 <div className="billing-invoice-section">
+                  <h3 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)' }}>
+                    Bill To
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Recipient Name</label>
+                      <input
+                        type="text"
+                        value={recipientName}
+                        onChange={e => setRecipientName(e.target.value)}
+                        placeholder="Friend's name"
+                        className="billing-input"
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Recipient Email</label>
+                      <input
+                        type="email"
+                        value={recipientEmail}
+                        onChange={e => setRecipientEmail(e.target.value)}
+                        placeholder="friend@example.com"
+                        className="billing-input"
+                      />
+                    </div>
+                  </div>
+                  {(selectedProject || selectedOrg) && (
+                    <p style={{ margin: '10px 0 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+                      {selectedProject && projects.find(p => p.id === selectedProject)?.name}
+                      {selectedOrg && organizations.find(o => o.id === selectedOrg) && ` · ${organizations.find(o => o.id === selectedOrg)?.name}`}
+                    </p>
+                  )}
+                </div>
+
+                {/* Time Entries Summary */}
+                <div className="billing-invoice-section">
+                  <h3 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)' }}>
+                    Services
+                  </h3>
                   <table className="billing-invoice-table">
                     <thead>
                       <tr>
@@ -1008,13 +1105,11 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                         <tr key={user.userId}>
                           <td>
                             <strong>{user.fullName || 'Team Member'}</strong>
-                            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                              {user.email}
-                            </div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{user.email}</div>
                           </td>
                           <td style={{ textAlign: 'right' }}>{user.totalHours.toFixed(2)}</td>
                           <td style={{ textAlign: 'right' }}>
-                            {user.averageRate > 0 ? `${user.currency} ${user.averageRate.toFixed(2)}` : '-'}
+                            {user.averageRate > 0 ? `${user.currency} ${user.averageRate.toFixed(2)}/hr` : '—'}
                           </td>
                           <td style={{ textAlign: 'right', fontWeight: 600 }}>
                             {user.currency} {user.totalAmount.toFixed(2)}
@@ -1022,52 +1117,220 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
                         </tr>
                       ))}
                     </tbody>
+                  </table>
+                </div>
+
+                {/* Additional Line Items */}
+                <div className="billing-invoice-section">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)' }}>
+                      Additional Line Items
+                    </h3>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button onClick={addDiscountItem} className="billing-button billing-button-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>
+                        <DollarSign size={13} /> Add Discount
+                      </button>
+                      <button onClick={addLineItem} className="billing-button billing-button-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>
+                        <Plus size={13} /> Add Line Item
+                      </button>
+                    </div>
+                  </div>
+
+                  {invoiceLineItems.length === 0 ? (
+                    <p style={{ fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic', margin: 0 }}>
+                      No additional line items. Use "Add Discount" to apply a friend discount.
+                    </p>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {invoiceLineItems.map(item => (
+                        <div key={item.id} className="invoice-line-item-row">
+                          <input
+                            type="text"
+                            value={item.description}
+                            onChange={e => updateLineItem(item.id, 'description', e.target.value)}
+                            placeholder="Description (e.g. Friend discount)"
+                            className="billing-input"
+                            style={{ flex: 1 }}
+                          />
+                          <div style={{ position: 'relative', width: '140px' }}>
+                            <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', fontSize: '14px' }}>$</span>
+                            <input
+                              type="number"
+                              value={item.amount}
+                              onChange={e => updateLineItem(item.id, 'amount', parseFloat(e.target.value) || 0)}
+                              placeholder="0.00"
+                              step="0.01"
+                              className="billing-input"
+                              style={{ paddingLeft: '24px', width: '100%' }}
+                            />
+                          </div>
+                          <span style={{ fontSize: '12px', color: item.amount < 0 ? '#ef4444' : item.amount > 0 ? '#10b981' : 'var(--text-secondary)', minWidth: '80px', textAlign: 'right', fontWeight: 600 }}>
+                            {item.amount < 0 ? '-' : item.amount > 0 ? '+' : ''}${Math.abs(item.amount).toFixed(2)}
+                          </span>
+                          <button onClick={() => removeLineItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '4px', display: 'flex', alignItems: 'center' }}>
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Totals */}
+                <div className="billing-invoice-section">
+                  <table className="billing-invoice-table">
+                    <tbody>
+                      {invoiceLineItems.length > 0 && (
+                        <tr>
+                          <td colSpan={3} style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '14px', padding: '8px' }}>Subtotal:</td>
+                          <td style={{ textAlign: 'right', padding: '8px', color: 'var(--text-secondary)' }}>${summary.totalAmount.toFixed(2)}</td>
+                        </tr>
+                      )}
+                      {invoiceLineItems.map(item => item.description && (
+                        <tr key={item.id}>
+                          <td colSpan={3} style={{ textAlign: 'right', color: item.amount < 0 ? '#ef4444' : 'var(--text-color)', fontSize: '14px', padding: '8px' }}>{item.description}:</td>
+                          <td style={{ textAlign: 'right', padding: '8px', color: item.amount < 0 ? '#ef4444' : '#10b981', fontWeight: 600 }}>
+                            {item.amount < 0 ? '-' : '+'}${Math.abs(item.amount).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                     <tfoot>
                       <tr style={{ borderTop: '2px solid var(--border-color)' }}>
-                        <td colSpan={3} style={{ textAlign: 'right', fontWeight: 700, fontSize: '16px', padding: '16px 8px' }}>
-                          Total:
+                        <td colSpan={3} style={{ textAlign: 'right', fontWeight: 700, fontSize: '18px', padding: '16px 8px' }}>
+                          Total Due:
                         </td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, fontSize: '18px', color: '#10b981', padding: '16px 8px' }}>
-                          ${summary.totalAmount.toFixed(2)}
+                        <td style={{ textAlign: 'right', fontWeight: 800, fontSize: '22px', color: '#10b981', padding: '16px 8px' }}>
+                          ${invoiceTotal.toFixed(2)}
                         </td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
 
-                {/* Notes */}
+                {/* Note */}
                 <div className="billing-invoice-section">
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
-                    Total Hours: {summary.totalHours.toFixed(2)} | Average Rate: ${summary.averageRate.toFixed(2)}/hr
-                  </p>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                    Note / Memo (optional)
+                  </label>
+                  <textarea
+                    value={invoiceNote}
+                    onChange={e => setInvoiceNote(e.target.value)}
+                    placeholder="e.g. Thanks for being an awesome friend! Payment due within 30 days."
+                    rows={2}
+                    className="billing-input"
+                    style={{ width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
+                  />
                 </div>
 
-                {/* Print Button */}
-                <div style={{ textAlign: 'center', marginTop: '32px', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap' }}>
                   <button
                     onClick={() => window.print()}
-                    className="billing-button billing-button-primary"
-                    style={{ minWidth: '200px' }}
+                    className="billing-button billing-button-secondary"
+                    style={{ minWidth: '160px' }}
                   >
-                    🖨️ Print Invoice
+                    🖨️ Print / Save PDF
                   </button>
-                  <p style={{ marginTop: '16px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    Tip: Use your browser's print function to save as PDF
-                  </p>
+
+                  <div style={{ display: 'flex', gap: '8px', flex: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+                      <Mail size={15} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                      <input
+                        type="email"
+                        value={recipientEmail}
+                        onChange={e => { setRecipientEmail(e.target.value); setEmailStatus('idle'); }}
+                        placeholder="Send to email..."
+                        className="billing-input"
+                        style={{ paddingLeft: '32px', width: '100%' }}
+                      />
+                    </div>
+                    <button
+                      onClick={sendInvoice}
+                      disabled={!recipientEmail || emailStatus === 'sending' || emailStatus === 'sent'}
+                      className="billing-button billing-button-primary"
+                      style={{ minWidth: '160px', opacity: (!recipientEmail || emailStatus === 'sending' || emailStatus === 'sent') ? 0.6 : 1 }}
+                    >
+                      {emailStatus === 'sending' ? (
+                        <><div className="billing-spinner" style={{ width: '14px', height: '14px', borderWidth: '2px' }} /> Sending…</>
+                      ) : emailStatus === 'sent' ? (
+                        '✓ Invoice Sent!'
+                      ) : (
+                        <><Send size={15} /> Send Invoice</>
+                      )}
+                    </button>
+                  </div>
                 </div>
+                {emailStatus === 'error' && (
+                  <p style={{ marginTop: '8px', fontSize: '13px', color: '#ef4444' }}>
+                    <AlertCircle size={13} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                    {emailError}
+                  </p>
+                )}
+                {emailStatus === 'sent' && (
+                  <p style={{ marginTop: '8px', fontSize: '13px', color: '#10b981' }}>
+                    Invoice emailed to {recipientEmail}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         )}
+    </>
+  );
 
+  if (asPage) {
+    return (
+      <div className="billing-page">
+        <div className="billing-page-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <DollarSign size={22} />
+            <div>
+              <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 700 }}>Billing</h2>
+              <p style={{ margin: 0, fontSize: '13px', opacity: 0.75 }}>{startDate} — {endDate}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Project Quick-Select */}
+        {projects.length > 0 && (
+          <div className="billing-project-strip">
+            <button
+              className={`billing-project-chip ${!selectedProject ? 'active' : ''}`}
+              onClick={() => setSelectedProject('')}
+            >
+              All Projects
+            </button>
+            {projects.map(p => (
+              <button
+                key={p.id}
+                className={`billing-project-chip ${selectedProject === p.id ? 'active' : ''}`}
+                onClick={() => setSelectedProject(p.id)}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {pageContent}
+      </div>
+    );
+  }
+
+  return (
+    <div className="billing-modal-overlay">
+      <div className="billing-modal">
+        <div className="billing-modal-header">
+          <div>
+            <h2><DollarSign size={24} /> Billing Report</h2>
+            <p className="billing-modal-subtitle">{startDate} to {endDate}</p>
+          </div>
+          <button onClick={onClose} className="billing-close-button"><X size={20} /></button>
+        </div>
+        {pageContent}
         <div className="billing-modal-footer">
-          <button
-            onClick={onClose}
-            className="billing-button billing-button-secondary"
-            style={{ width: '100%' }}
-          >
-            Close
-          </button>
+          <button onClick={onClose} className="billing-button billing-button-secondary" style={{ width: '100%' }}>Close</button>
         </div>
       </div>
     </div>

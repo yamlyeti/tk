@@ -13,7 +13,7 @@
 
 .dashboard-header h2 {
   font-size: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -21,14 +21,14 @@
 }
 
 html.dark-mode .dashboard-header h2 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .export-button {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   color: white;
   border: none;
   padding: 12px 28px;
@@ -37,13 +37,13 @@ html.dark-mode .dashboard-header h2 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
 .export-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
+  background: linear-gradient(135deg, #C8960A 0%, #B8860B 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5);
 }
 
 .export-button:disabled {
@@ -58,17 +58,17 @@ html.dark-mode .dashboard-header h2 {
   margin-bottom: 32px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 html.dark-mode .dashboard-filters {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .dashboard-filters h3 {
   font-size: 1.3rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,7 +76,7 @@ html.dark-mode .dashboard-filters {
 }
 
 html.dark-mode .dashboard-filters h3 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -104,7 +104,7 @@ html.dark-mode .dashboard-filters h3 {
 .filter-group input,
 .filter-group select {
   padding: 12px 16px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(212, 175, 55, 0.2);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -113,23 +113,23 @@ html.dark-mode .dashboard-filters h3 {
 
 html.dark-mode .filter-group input,
 html.dark-mode .filter-group select {
-  background: rgba(15, 23, 42, 0.6);
-  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(28, 25, 20, 0.6);
+  border-color: rgba(212, 175, 55, 0.3);
   color: #e2e8f0;
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
   transform: translateY(-1px);
 }
 
 html.dark-mode .filter-group input:focus,
 html.dark-mode .filter-group select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
 }
 
 .quick-filters {
@@ -142,8 +142,8 @@ html.dark-mode .filter-group select:focus {
 .quick-filters button {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  color: #667eea;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  color: #D4AF37;
   padding: 10px 20px;
   border-radius: 10px;
   font-size: 0.95rem;
@@ -154,22 +154,22 @@ html.dark-mode .filter-group select:focus {
 }
 
 html.dark-mode .quick-filters button {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
-  border-color: rgba(96, 165, 250, 0.3);
-  color: #60a5fa;
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.9), rgba(33, 29, 21, 0.7));
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #D4AF37;
 }
 
 .quick-filters button:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   border-color: transparent;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
 }
 
 html.dark-mode .quick-filters button:hover {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
 }
 
 .clear-filters-button {
@@ -199,7 +199,7 @@ html.dark-mode .quick-filters button:hover {
 .report-selector button {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(212, 175, 55, 0.2);
   color: #666;
   padding: 14px 28px;
   border-radius: 12px;
@@ -211,34 +211,34 @@ html.dark-mode .quick-filters button:hover {
 }
 
 html.dark-mode .report-selector button {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
-  border: 2px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95), rgba(33, 29, 21, 0.85));
+  border: 2px solid rgba(212, 175, 55, 0.2);
   color: #94a3b8;
 }
 
 .report-selector button:hover {
-  border-color: rgba(102, 126, 234, 0.6);
-  color: #667eea;
+  border-color: rgba(212, 175, 55, 0.6);
+  color: #D4AF37;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
 }
 
 html.dark-mode .report-selector button:hover {
-  border-color: rgba(96, 165, 250, 0.6);
-  color: #60a5fa;
+  border-color: rgba(212, 175, 55, 0.6);
+  color: #D4AF37;
 }
 
 .report-selector button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   border-color: transparent;
   color: white;
-  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
   transform: translateY(-2px);
 }
 
 html.dark-mode .report-selector button.active {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.5);
 }
 
 .dashboard-summary {
@@ -270,7 +270,7 @@ html.dark-mode .report-selector button.active {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #B8860B, #D4AF37, #C8960A);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -280,26 +280,26 @@ html.dark-mode .report-selector button.active {
 }
 
 html.dark-mode .summary-card {
-  background: var(--card-bg, #1e293b);
-  border: 2px solid var(--border-color, #334155);
+  background: var(--card-bg, #221e16);
+  border: 2px solid var(--border-color, #2a2419);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .summary-card:hover {
-  border-color: #10b981;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+  border-color: #D4AF37;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
   transform: translateY(-4px);
   cursor: pointer;
 }
 
 html.dark-mode .summary-card:hover {
-  border-color: #10b981;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  border-color: #D4AF37;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
 }
 
 .summary-card[style*="cursor: pointer"]:hover {
-  border-color: #10b981;
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
+  border-color: #D4AF37;
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.3);
   transform: translateY(-6px) scale(1.02);
 }
 
@@ -314,14 +314,14 @@ html.dark-mode .summary-card:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.15) 100%);
   border-radius: 12px;
   flex-shrink: 0;
   transition: transform 0.3s;
 }
 
 html.dark-mode .summary-icon {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #17150F 0%, #1a1000 100%);
 }
 
 .summary-card:hover .summary-icon {
@@ -382,25 +382,25 @@ html.dark-mode .summary-sublabel {
   border-radius: 16px;
   padding: 28px;
   margin-bottom: 24px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(212, 175, 55, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s;
 }
 
 html.dark-mode .preview-section {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
-  border: 2px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95), rgba(33, 29, 21, 0.85));
+  border: 2px solid rgba(212, 175, 55, 0.2);
 }
 
 .preview-section:hover {
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.15);
   transform: translateY(-2px);
 }
 
 .preview-section h3 {
   margin: 0 0 24px 0;
   font-size: 1.4rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -408,7 +408,7 @@ html.dark-mode .preview-section {
 }
 
 html.dark-mode .preview-section h3 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -439,7 +439,7 @@ html.dark-mode .preview-section h3 {
 }
 
 .preview-time {
-  color: #1976d2;
+  color: #D4AF37;
   font-weight: 600;
   margin-left: 16px;
 }
@@ -454,9 +454,9 @@ html.dark-mode .preview-section h3 {
 
 .preview-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  background: linear-gradient(90deg, #D4AF37, #C8960A, #B8860B);
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 .preview-percentage {
@@ -471,19 +471,19 @@ html.dark-mode .preview-section h3 {
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 28px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(212, 175, 55, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 html.dark-mode .report-section {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
-  border: 2px solid rgba(96, 165, 250, 0.2);
+  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95), rgba(33, 29, 21, 0.85));
+  border: 2px solid rgba(212, 175, 55, 0.2);
 }
 
 .report-section h3 {
   margin: 0 0 28px 0;
   font-size: 1.6rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -491,7 +491,7 @@ html.dark-mode .report-section {
 }
 
 html.dark-mode .report-section h3 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -539,7 +539,7 @@ html.dark-mode .report-section h3 {
 .project-name,
 .date-cell {
   font-weight: 600;
-  color: #1976d2;
+  color: #D4AF37;
 }
 
 .tag-name {
@@ -547,8 +547,8 @@ html.dark-mode .report-section h3 {
 }
 
 .tag-badge {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: rgba(212, 175, 55, 0.08);
+  color: #D4AF37;
   padding: 4px 12px;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -558,7 +558,7 @@ html.dark-mode .report-section h3 {
 .time-cell {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  color: #4caf50;
+  color: #D4AF37;
 }
 
 .percentage-cell {
@@ -570,7 +570,7 @@ html.dark-mode .report-section h3 {
 .percentage-cell span {
   min-width: 50px;
   font-weight: 600;
-  color: #1976d2;
+  color: #D4AF37;
 }
 
 .mini-bar {
@@ -584,9 +584,9 @@ html.dark-mode .report-section h3 {
 
 .mini-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  background: linear-gradient(90deg, #D4AF37, #C8960A, #B8860B);
   transition: width 0.3s ease;
-  box-shadow: 0 0 8px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
 .daily-bar {
@@ -600,9 +600,9 @@ html.dark-mode .report-section h3 {
 
 .daily-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4facfe, #00f2fe, #43e97b);
+  background: linear-gradient(90deg, #D4AF37, #B8860B, #C8960A);
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 @media (max-width: 768px) {

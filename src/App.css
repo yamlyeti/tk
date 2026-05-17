@@ -13,94 +13,129 @@
 
 .nav-bar {
   display: flex;
-  gap: 16px;
-  margin-bottom: 32px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  padding: 24px 40px;
-  border-radius: 24px;
   align-items: center;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  gap: 4px;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  padding: 10px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(180, 130, 10, 0.3), 0 1px 0 rgba(255,255,255,0.15) inset;
+  position: sticky;
+  top: 20px;
+  z-index: 100;
 }
 
 html.dark-mode .nav-bar {
-  background: rgba(15, 23, 42, 0.6);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.nav-bar::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, 
-    transparent 30%, 
-    rgba(255, 255, 255, 0.1) 50%, 
-    transparent 70%);
-  animation: shimmer 6s infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  background: #17150F !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212,175,55,0.1) !important;
 }
 
 .nav-bar button {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
-  color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-size: 1rem;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.65);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 1;
-  backdrop-filter: blur(10px);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.01em;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
 html.dark-mode .nav-bar button {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
-  color: #e2e8f0;
+  color: rgba(212, 175, 55, 0.55);
 }
 
 .nav-bar button:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
-  border-color: rgba(255, 255, 255, 0.6);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.9);
+  transform: none;
+  box-shadow: none;
+}
+
+html.dark-mode .nav-bar button:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #D4AF37;
 }
 
 .nav-bar button.active {
-  background: linear-gradient(135deg, #fff, #f0f0f0);
-  color: #667eea;
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 
-    0 4px 16px rgba(255, 255, 255, 0.4),
-    0 0 20px rgba(102, 126, 234, 0.3);
+  background: rgba(255, 255, 255, 0.3);
+  color: #1a1000;
   font-weight: 700;
-  transform: translateY(-2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transform: none;
+  border: none;
 }
 
 html.dark-mode .nav-bar button.active {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.9));
-  color: #1e3a8a;
+  background: rgba(212, 175, 55, 0.15);
+  color: #D4AF37;
+  box-shadow: none;
+}
+
+.nav-user-email {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html.dark-mode .nav-user-email {
+  color: rgba(212, 175, 55, 0.45);
+}
+
+.nav-add-time {
+  background: rgba(0, 0, 0, 0.12) !important;
+  color: rgba(0, 0, 0, 0.75) !important;
+  border: none !important;
+  padding: 7px 14px !important;
+  border-radius: 8px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: background 0.15s !important;
+}
+
+.nav-add-time:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+  transform: none !important;
+}
+
+html.dark-mode .nav-add-time {
+  background: rgba(212, 175, 55, 0.12) !important;
+  color: #D4AF37 !important;
+}
+
+html.dark-mode .nav-add-time:hover {
+  background: rgba(212, 175, 55, 0.2) !important;
+}
+
+.nav-signout {
+  background: transparent !important;
+  border: none !important;
+  font-size: 1rem !important;
+  cursor: pointer;
+  padding: 6px 8px !important;
+  border-radius: 8px !important;
+  opacity: 0.6;
+  transition: opacity 0.15s !important;
+  line-height: 1;
+}
+
+.nav-signout:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1) !important;
+  transform: none !important;
+}
+
+html.dark-mode .nav-signout:hover {
+  background: rgba(212, 175, 55, 0.1) !important;
 }
 
 /* Global Editable Fields Styling */
@@ -122,7 +157,7 @@ html.dark-mode .nav-bar button.active {
 .editable-field input:focus,
 .editable-field select:focus {
   outline: none;
-  border-color: #1976d2;
+  border-color: #D4AF37;
 }
 
 .editable-field button {
@@ -135,12 +170,12 @@ html.dark-mode .nav-bar button.active {
 }
 
 .save-btn {
-  background: #4caf50;
+  background: #D4AF37;
   color: white;
 }
 
 .save-btn:hover {
-  background: #45a049;
+  background: #C8960A;
 }
 
 .cancel-btn {
@@ -160,12 +195,12 @@ html.dark-mode .nav-bar button.active {
 }
 
 .clickable:hover {
-  background: #e3f2fd;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .entry-tags {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: rgba(212, 175, 55, 0.1);
+  color: #D4AF37;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -173,8 +208,8 @@ html.dark-mode .nav-bar button.active {
 }
 
 .entry-project {
-  background: #fff3e0;
-  color: #f57c00;
+  background: rgba(212,175,55,0.12);
+  color: #C8960A;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.9rem;

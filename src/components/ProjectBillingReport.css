@@ -1,3 +1,79 @@
+/* ── Billing Page (full-page view) ── */
+.billing-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.billing-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 16px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  border-radius: 16px;
+  padding: 20px 28px;
+  margin-bottom: 20px;
+  color: #1a1000;
+  box-shadow: 0 4px 20px rgba(180, 130, 10, 0.25);
+}
+
+.billing-page .billing-modal-content {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+.billing-project-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.billing-project-chip {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(212, 175, 55, 0.25);
+  color: #4a3800;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+html.dark-mode .billing-project-chip {
+  background: #211d15;
+  border-color: rgba(212, 175, 55, 0.2);
+  color: #c4b896;
+}
+
+.billing-project-chip:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.1);
+  color: #B8860B;
+}
+
+html.dark-mode .billing-project-chip:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: #D4AF37;
+}
+
+.billing-project-chip.active {
+  background: linear-gradient(135deg, #D4AF37, #B8860B);
+  border-color: #D4AF37;
+  color: #1a1000;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.35);
+}
+
+html.dark-mode .billing-project-chip.active {
+  background: linear-gradient(135deg, #D4AF37, #B8860B);
+  color: #1a1000;
+}
+
+/* ── Modal overlay (kept for Dashboard use) ── */
 .billing-modal-overlay {
   position: fixed;
   top: 0;
@@ -42,8 +118,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 28px;
-  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
-  color: white;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  
 }
 
 .billing-modal-header h2 {
@@ -65,7 +141,7 @@
   background: rgba(255, 255, 255, 0.2);
   border: none;
   cursor: pointer;
-  color: white;
+  
   padding: 8px;
   width: 36px;
   height: 36px;
@@ -96,8 +172,8 @@
 }
 
 html.dark-mode .billing-filters {
-  background: var(--hover-bg, #1e293b);
-  border-color: var(--border-color, #334155);
+  background: var(--hover-bg, #221e16);
+  border-color: var(--border-color, #2a2419);
 }
 
 .billing-filters-grid {
@@ -137,16 +213,16 @@ html.dark-mode .billing-filter-label {
 
 html.dark-mode .billing-filter-input,
 html.dark-mode .billing-filter-select {
-  background: var(--input-bg, #0f172a);
+  background: var(--input-bg, #1c1914);
   color: var(--text-color, #f1f5f9);
-  border-color: var(--border-color, #1e293b);
+  border-color: var(--border-color, #221e16);
 }
 
 .billing-filter-input:focus,
 .billing-filter-select:focus {
   outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  border-color: rgba(212,175,55,0.4);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 .billing-filter-actions {
@@ -171,14 +247,14 @@ html.dark-mode .billing-filter-select {
 }
 
 .billing-button-primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
 }
 
 .billing-button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
 }
 
 .billing-button-secondary {
@@ -187,7 +263,7 @@ html.dark-mode .billing-filter-select {
 }
 
 html.dark-mode .billing-button-secondary {
-  background: var(--hover-bg, #334155);
+  background: var(--hover-bg, #2a2419);
   color: var(--text-color, #e2e8f0);
 }
 
@@ -235,33 +311,33 @@ html.dark-mode .billing-button-secondary:hover {
 }
 
 .billing-summary-card.hours {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border-color: #93c5fd;
+  background: linear-gradient(135deg, #2a2419 0%, #302a1e 100%);
+  border-color: #F0D060;
 }
 
 html.dark-mode .billing-summary-card.hours {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #211d15 0%, #2a2419 100%);
+  border-color: #D4AF37;
 }
 
 .billing-summary-card.amount {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  border-color: #6ee7b7;
+  background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.15) 100%);
+  border-color: rgba(212,175,55,0.3);
 }
 
 html.dark-mode .billing-summary-card.amount {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
-  border-color: #10b981;
+  background: linear-gradient(135deg, #17150F 0%, #211d15 100%);
+  border-color: rgba(212,175,55,0.4);
 }
 
 .billing-summary-card.rate {
-  background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
-  border-color: #c084fc;
+  background: linear-gradient(135deg, #302a1e 0%, #2a2419 100%);
+  border-color: rgba(212,175,55,0.3);
 }
 
 html.dark-mode .billing-summary-card.rate {
-  background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
-  border-color: #a855f7;
+  background: linear-gradient(135deg, #211d15 0%, #2a2419 100%);
+  border-color: rgba(212,175,55,0.25);
 }
 
 .billing-summary-card.missing {
@@ -336,8 +412,8 @@ html.dark-mode .billing-section-title {
 }
 
 html.dark-mode .billing-table-container {
-  background: var(--input-bg, #1e293b);
-  border-color: var(--border-color, #334155);
+  background: var(--input-bg, #221e16);
+  border-color: var(--border-color, #2a2419);
 }
 
 .billing-table {
@@ -350,7 +426,7 @@ html.dark-mode .billing-table-container {
 }
 
 html.dark-mode .billing-table thead {
-  background: var(--hover-bg, #0f172a);
+  background: var(--hover-bg, #1c1914);
 }
 
 .billing-table th {
@@ -381,7 +457,7 @@ html.dark-mode .billing-table th {
 }
 
 html.dark-mode .billing-table tbody tr {
-  border-top-color: var(--border-color, #334155);
+  border-top-color: var(--border-color, #2a2419);
 }
 
 .billing-table tbody tr:hover {
@@ -389,7 +465,7 @@ html.dark-mode .billing-table tbody tr {
 }
 
 html.dark-mode .billing-table tbody tr:hover {
-  background: var(--hover-bg, #1e293b);
+  background: var(--hover-bg, #221e16);
 }
 
 .billing-table td {
@@ -504,8 +580,8 @@ html.dark-mode .billing-alert-message {
 }
 
 html.dark-mode .billing-modal-footer {
-  background: var(--header-bg, #1e293b);
-  border-top-color: var(--border-color, #334155);
+  background: var(--header-bg, #221e16);
+  border-top-color: var(--border-color, #2a2419);
 }
 
 .billing-collapsible-section {
@@ -524,7 +600,7 @@ html.dark-mode .billing-modal-footer {
 }
 
 html.dark-mode .billing-collapsible-header {
-  background: var(--hover-bg, #334155);
+  background: var(--hover-bg, #2a2419);
 }
 
 .billing-collapsible-header:hover {
@@ -546,7 +622,7 @@ html.dark-mode .billing-collapsible-header:hover {
   width: 40px;
   height: 40px;
   border: 4px solid var(--border-color, #e5e7eb);
-  border-top-color: #10b981;
+  border-top-color: #D4AF37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -596,7 +672,7 @@ html.dark-mode .billing-collapsible-header:hover {
 }
 
 html.dark-mode .billing-entries-content {
-  background: var(--card-bg, #1e293b);
+  background: var(--card-bg, #221e16);
 }
 
 .billing-entries-list {
@@ -615,7 +691,7 @@ html.dark-mode .billing-entries-content {
 }
 
 html.dark-mode .billing-entries-list::-webkit-scrollbar-track {
-  background: var(--hover-bg, #334155);
+  background: var(--hover-bg, #2a2419);
 }
 
 .billing-entries-list::-webkit-scrollbar-thumb {
@@ -633,19 +709,19 @@ html.dark-mode .billing-entries-list::-webkit-scrollbar-thumb {
 
 .billing-filter-indicator {
   padding: 12px 16px;
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-  border: 2px solid #0ea5e9;
+  background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.12) 100%);
+  border: 2px solid rgba(212,175,55,0.3);
   border-radius: 8px;
   margin-bottom: 16px;
   font-size: 14px;
-  color: #0c4a6e;
+  color: #C8960A;
   animation: slideDown 0.3s ease-out;
 }
 
 html.dark-mode .billing-filter-indicator {
-  background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
-  border-color: #0ea5e9;
-  color: #e0f2fe;
+  background: linear-gradient(135deg, #17150F 0%, #211d15 100%);
+  border-color: rgba(212,175,55,0.3);
+  color: #F0D060;
 }
 
 @keyframes slideDown {
@@ -680,17 +756,17 @@ html.dark-mode .billing-filter-indicator {
 }
 
 html.dark-mode .billing-preset-button {
-  background: var(--input-bg, #0f172a);
-  border-color: var(--border-color, #334155);
+  background: var(--input-bg, #1c1914);
+  border-color: var(--border-color, #2a2419);
   color: var(--text-color, #e2e8f0);
 }
 
 .billing-preset-button:hover {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  border-color: #10b981;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  
+  border-color: rgba(212,175,55,0.4);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 /* Toggle Group */
@@ -704,7 +780,7 @@ html.dark-mode .billing-preset-button {
 }
 
 html.dark-mode .billing-toggle-group {
-  background: var(--hover-bg, #0f172a);
+  background: var(--hover-bg, #1c1914);
 }
 
 .billing-toggle-button {
@@ -726,14 +802,14 @@ html.dark-mode .billing-toggle-button {
 }
 
 .billing-toggle-button.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .billing-toggle-button:not(.active):hover {
   color: var(--text-color, #111827);
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(212, 175, 55, 0.1);
 }
 
 html.dark-mode .billing-toggle-button:not(.active):hover {
@@ -752,8 +828,8 @@ html.dark-mode .billing-toggle-button:not(.active):hover {
 }
 
 html.dark-mode .billing-chart-container {
-  background: var(--hover-bg, #0f172a);
-  border-color: var(--border-color, #334155);
+  background: var(--hover-bg, #1c1914);
+  border-color: var(--border-color, #2a2419);
 }
 
 .billing-chart-item {
@@ -785,7 +861,7 @@ html.dark-mode .billing-chart-container {
 }
 
 html.dark-mode .billing-chart-bar {
-  background: var(--input-bg, #1e293b);
+  background: var(--input-bg, #221e16);
 }
 
 .billing-chart-fill {
@@ -799,7 +875,7 @@ html.dark-mode .billing-chart-bar {
 }
 
 .billing-chart-percentage {
-  color: white;
+  
   font-size: 12px;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -814,7 +890,7 @@ html.dark-mode .billing-chart-bar {
 }
 
 html.dark-mode .billing-invoice-content {
-  background: var(--card-bg, #1e293b);
+  background: var(--card-bg, #221e16);
 }
 
 .billing-invoice-header {
@@ -869,7 +945,7 @@ html.dark-mode .billing-invoice-table th {
 }
 
 html.dark-mode .billing-invoice-table td {
-  border-bottom-color: var(--border-color, #334155);
+  border-bottom-color: var(--border-color, #2a2419);
   color: var(--text-color, #f1f5f9);
 }
 
@@ -877,13 +953,63 @@ html.dark-mode .billing-invoice-table td {
   border-bottom: none;
 }
 
+.billing-input {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-color, #111827);
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.billing-input:focus {
+  border-color: #C8960A;
+  box-shadow: 0 0 0 3px rgba(200, 150, 10, 0.1);
+}
+
+.billing-input::placeholder {
+  color: var(--text-secondary, #9ca3af);
+}
+
+html.dark-mode .billing-input {
+  background: var(--card-bg, #221e16);
+  border-color: var(--border-color, #475569);
+  color: var(--text-color, #f1f5f9);
+}
+
+.invoice-line-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: var(--hover-bg, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+html.dark-mode .invoice-line-item-row {
+  background: var(--hover-bg, #221e16);
+  border-color: var(--border-color, #475569);
+}
+
 /* Print Styles */
 @media print {
   .billing-modal-header,
   .billing-close-button,
   .billing-button,
-  .billing-modal-overlay {
+  .billing-modal-overlay,
+  .billing-input,
+  .invoice-line-item-row button {
     display: none !important;
+  }
+
+  .invoice-line-item-row {
+    border: none;
+    background: none;
+    padding: 0;
   }
 
   .billing-entries-modal {

@@ -6,19 +6,22 @@ import { EditableTags, EditableProject } from './EditableTagsProject';
 import { ProjectSelect } from './ProjectSelect';
 import { TagsInput } from './TagsInput';
 import { TimeEditor } from './TimeEditor';
-import { RecentTasks } from './RecentTasks';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { Goals } from './Goals';
 import { PomodoroTimer } from './PomodoroTimer';
-import { Templates } from './Templates';
 import { ManualTimeEntry } from './ManualTimeEntry';
 import { useTimerNotifications } from '../hooks/useTimerNotifications';
 import { useIdleDetection, IdleDialog } from '../hooks/useIdleDetection';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './TimeTracker.css';
 
-export const TimeTracker = () => {
-  const { user, signOut } = useAuth();
+interface TimeTrackerProps {
+  showManualEntry?: boolean;
+  onManualEntryClose?: () => void;
+}
+
+export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManualEntryClose }: TimeTrackerProps) => {
+  const { user } = useAuth();
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeEntry, setActiveEntry] = useState<TimeEntry | null>(null);
@@ -32,18 +35,22 @@ export const TimeTracker = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [error, setError] = useState<string>('');
   const [entryOrder, setEntryOrder] = useState<string[]>([]);
-  const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'recent-tasks', 'templates', 'goals', 'pomodoro']);
-  const [showManualEntry, setShowManualEntry] = useState(false);
+  const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'goals', 'pomodoro']);
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set(['goals', 'pomodoro']));
+  const [entriesExpanded, setEntriesExpanded] = useState(false);
 
-  const handleStartFromRecent = (desc: string, taskTags: string, taskProjectId: string) => {
-    setDescription(desc);
-    setTags(taskTags);
-    setProjectId(taskProjectId);
-    // Focus on description field
-    setTimeout(() => {
-      const descInput = document.querySelector('.description-input') as HTMLInputElement;
-      if (descInput) descInput.focus();
-    }, 100);
+  const cardLabels: Record<string, string> = { goals: '🎯 Goals', pomodoro: '🍅 Pomodoro Timer' };
+  const toggleCard = (cardId: string) =>
+    setCollapsedCards(prev => {
+      const next = new Set(prev);
+      next.has(cardId) ? next.delete(cardId) : next.add(cardId);
+      return next;
+    });
+  const [internalShowManualEntry, setInternalShowManualEntry] = useState(false);
+  const showManualEntry = externalShowManualEntry ?? internalShowManualEntry;
+  const setShowManualEntry = (val: boolean) => {
+    setInternalShowManualEntry(val);
+    if (!val) onManualEntryClose?.();
   };
 
   const shortcuts = [
@@ -400,10 +407,6 @@ export const TimeTracker = () => {
             )}
           </div>
         );
-      case 'recent-tasks':
-        return <RecentTasks key={cardId} onStartTask={handleStartFromRecent} />;
-      case 'templates':
-        return <Templates key={cardId} onStartFromTemplate={handleStartFromRecent} />;
       case 'goals':
         return <Goals key={cardId} />;
       case 'pomodoro':
@@ -431,22 +434,6 @@ export const TimeTracker = () => {
       <KeyboardShortcuts shortcuts={shortcuts} />
       
       <div className="tracker-header">
-        <h1>Time Tracker</h1>
-        <div className="header-actions">
-          <button 
-            onClick={() => setShowManualEntry(true)} 
-            className="manual-entry-button"
-            title="Add manual time entry"
-          >
-            ➕ Add Time
-          </button>
-          <div className="user-info">
-            <span className="user-email">{user?.email}</span>
-            <button onClick={signOut} className="signout-button">
-              Sign Out
-            </button>
-          </div>
-        </div>
       </div>
 
       <IdleDialog
@@ -496,14 +483,25 @@ export const TimeTracker = () => {
                       {...provided.draggableProps}
                       className={`draggable-card-wrapper ${snapshot.isDragging ? 'dragging' : ''}`}
                     >
-                      <div 
+                      <div
                         {...provided.dragHandleProps}
                         className="card-drag-handle"
                         title="Drag to reorder"
                       >
                         ⋮⋮
                       </div>
-                      {renderCard(cardId)}
+                      {cardLabels[cardId] ? (
+                        <>
+                          <button
+                            className="entries-toggle-header card-collapse-header"
+                            onClick={() => toggleCard(cardId)}
+                          >
+                            <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{cardLabels[cardId]}</h2>
+                            <span className="entries-toggle-chevron">{collapsedCards.has(cardId) ? '▼' : '▲'}</span>
+                          </button>
+                          {!collapsedCards.has(cardId) && renderCard(cardId)}
+                        </>
+                      ) : renderCard(cardId)}
                     </div>
                   )}
                 </Draggable>
@@ -514,13 +512,19 @@ export const TimeTracker = () => {
         </Droppable>
 
         <div className="entries-section">
-          <h2>Recent Entries</h2>
-          {entries.length === 0 ? (
+          <button
+            className="entries-toggle-header"
+            onClick={() => setEntriesExpanded(prev => !prev)}
+          >
+            <h2 style={{ margin: 0 }}>Recent Entries {entries.length > 0 && `(${entries.length})`}</h2>
+            <span className="entries-toggle-chevron">{entriesExpanded ? '▲' : '▼'}</span>
+          </button>
+          {entriesExpanded && entries.length === 0 ? (
             <p className="no-entries">No time entries yet. Start tracking your time!</p>
-          ) : (
+          ) : entriesExpanded ? (
             <Droppable droppableId="entries-list">
               {(provided) => (
-                <div 
+                <div
                   className="entries-list"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
@@ -580,7 +584,7 @@ export const TimeTracker = () => {
                 </div>
               )}
             </Droppable>
-          )}
+          ) : null}
         </div>
       </DragDropContext>
 
