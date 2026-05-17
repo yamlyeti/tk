@@ -287,7 +287,7 @@ export function UserManagement() {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-        <div style={{ fontSize: '18px', color: '#666' }}>Loading users...</div>
+        <div style={{ fontSize: '18px', color: 'var(--text-secondary, #666)' }}>Loading users...</div>
       </div>
     );
   }
@@ -442,38 +442,38 @@ export function UserManagement() {
       }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>
+            <tr style={{ borderBottom: '2px solid var(--border-color, #e5e7eb)' }}>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <User style={{ width: '18px', height: '18px' }} />
                   User
                 </div>
               </th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Mail style={{ width: '18px', height: '18px' }} />
                   Email
                 </div>
               </th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Shield style={{ width: '18px', height: '18px' }} />
                   Role
                 </div>
               </th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Status</th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: 'var(--text-color, #374151)' }}>Status</th>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Calendar style={{ width: '18px', height: '18px' }} />
                   Joined
                 </div>
               </th>
-              {isAdmin && <th style={{ padding: '16px', textAlign: 'right', fontWeight: '600', color: '#374151' }}>Actions</th>}
+              {isAdmin && <th style={{ padding: '16px', textAlign: 'right', fontWeight: '600', color: 'var(--text-color, #374151)' }}>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {filteredUsers.map(user => (
-              <tr key={user.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
+              <tr key={user.id} style={{ borderBottom: '1px solid var(--border-color, #f3f4f6)' }}>
                 <td style={{ padding: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
@@ -491,12 +491,12 @@ export function UserManagement() {
                       {(user.full_name || user.email)[0].toUpperCase()}
                     </div>
                     <div>
-                      <div style={{ fontWeight: '600', color: '#111' }}>{user.full_name || 'No name'}</div>
-                      {user.id === currentUser?.id && <span style={{ fontSize: '12px', color: '#666' }}>(You)</span>}
+                      <div style={{ fontWeight: '600', color: 'var(--text-color, #111)' }}>{user.full_name || 'No name'}</div>
+                      {user.id === currentUser?.id && <span style={{ fontSize: '12px', color: 'var(--text-secondary, #666)' }}>(You)</span>}
                     </div>
                   </div>
                 </td>
-                <td style={{ padding: '16px', color: '#666' }}>{user.email}</td>
+                <td style={{ padding: '16px', color: 'var(--text-secondary, #666)' }}>{user.email}</td>
                 <td style={{ padding: '16px' }}>
                   {isAdmin && user.id !== currentUser?.id ? (
                     <select
@@ -540,7 +540,7 @@ export function UserManagement() {
                     {user.is_active ? 'Active' : 'Inactive'}
                   </span>
                 </td>
-                <td style={{ padding: '16px', color: '#666' }}>
+                <td style={{ padding: '16px', color: 'var(--text-secondary, #666)' }}>
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
                 {isAdmin && (
@@ -787,7 +787,7 @@ export function UserManagement() {
             <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px' }}>Add New User</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                   Email
                 </label>
                 <input
@@ -806,7 +806,7 @@ export function UserManagement() {
                 />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                   Full Name
                 </label>
                 <input
@@ -825,7 +825,7 @@ export function UserManagement() {
                 />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: 'var(--text-color, #374151)' }}>
                   Role
                 </label>
                 <select
