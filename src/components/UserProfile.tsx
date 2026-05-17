@@ -77,11 +77,11 @@ export function UserProfile() {
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+        background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #C8960A 100%)',
         padding: '32px',
         borderRadius: '16px',
         marginBottom: '24px',
-        boxShadow: '0 20px 60px rgba(102, 126, 234, 0.3)'
+        boxShadow: '0 20px 60px rgba(212, 175, 55, 0.3)'
       }}>
         <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'white', margin: 0 }}>
           My Profile
@@ -92,7 +92,7 @@ export function UserProfile() {
       </div>
 
       <div style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+        background: 'var(--card-bg, #f5f3ef)',
         borderRadius: '16px',
         padding: '32px',
         boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
@@ -102,12 +102,12 @@ export function UserProfile() {
             <div style={{
               width: '96px',
               height: '96px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #C8960A 100%)',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)'
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.4)'
             }}>
               <User style={{ width: '48px', height: '48px', color: 'white' }} />
             </div>
@@ -115,7 +115,7 @@ export function UserProfile() {
               <h3 style={{
                 fontSize: '24px',
                 fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 margin: 0
@@ -133,23 +133,23 @@ export function UserProfile() {
               onClick={() => setEditing(true)}
               style={{
                 padding: '12px 24px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '14px',
                 fontWeight: '600',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)',
                 transition: 'all 0.3s ease'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.4)';
+                e.currentTarget.style.boxShadow = '0 8px 20px rgba(212, 175, 55, 0.4)';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(212, 175, 55, 0.3)';
               }}
             >
               Edit Profile
@@ -206,7 +206,7 @@ export function UserProfile() {
                 onClick={saveProfile}
                 style={{
                   padding: '10px 20px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -216,7 +216,7 @@ export function UserProfile() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)'
                 }}
               >
                 <Save style={{ width: '18px', height: '18px' }} />
@@ -227,10 +227,10 @@ export function UserProfile() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '32px' }}>
             <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
               padding: '24px',
               borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(102, 126, 234, 0.3)',
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.3)',
               transition: 'transform 0.3s ease'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
@@ -242,10 +242,10 @@ export function UserProfile() {
               </p>
             </div>
             <div style={{
-              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+              background: 'linear-gradient(135deg, #C8960A 0%, #B8860B 100%)',
               padding: '24px',
               borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(17, 153, 142, 0.3)',
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.3)',
               transition: 'transform 0.3s ease'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}

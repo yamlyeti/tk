@@ -321,6 +321,63 @@
   font-size: 1rem;
 }
 
+/* Dark mode overrides */
+html.dark-mode .stat-card {
+  background: #211d15;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode .stat-value {
+  color: #f5f0e8;
+}
+
+html.dark-mode .stat-label {
+  color: #c8bfa8;
+}
+
+html.dark-mode .user-card {
+  background: #211d15;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode .user-name {
+  color: #f5f0e8;
+}
+
+html.dark-mode .user-details {
+  color: #c8bfa8;
+}
+
+html.dark-mode .filter-tabs {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+html.dark-mode .filter-tab {
+  color: #c8bfa8;
+}
+
+html.dark-mode .filter-tab:hover {
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.1);
+}
+
+html.dark-mode .filter-tab.active {
+  background: rgba(212, 175, 55, 0.15);
+  color: #D4AF37;
+  box-shadow: none;
+}
+
+html.dark-mode .empty-state h3,
+html.dark-mode .access-denied h2 {
+  color: #f5f0e8;
+}
+
+html.dark-mode .subtitle,
+html.dark-mode .empty-state,
+html.dark-mode .access-denied {
+  color: #c8bfa8;
+}
+
 @media (max-width: 768px) {
   .user-card {
     flex-direction: column;

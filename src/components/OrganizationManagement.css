@@ -358,6 +358,93 @@
   border-top: 1px solid #e5e7eb;
 }
 
+/* Dark mode overrides */
+html.dark-mode .org-card {
+  background: #211d15;
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+html.dark-mode .org-name,
+html.dark-mode .stat-value {
+  color: #f5f0e8;
+}
+
+html.dark-mode .org-description,
+html.dark-mode .stat-label,
+html.dark-mode .subtitle {
+  color: #c8bfa8;
+}
+
+html.dark-mode .org-stats {
+  border-top-color: rgba(212, 175, 55, 0.15);
+}
+
+html.dark-mode .action-btn {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+html.dark-mode .empty-state,
+html.dark-mode .loading {
+  background: transparent;
+  color: #c8bfa8;
+}
+
+html.dark-mode .empty-state h3 {
+  color: #f5f0e8;
+}
+
+html.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+html.dark-mode .modal-content {
+  background: #211d15;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+html.dark-mode .modal-header {
+  border-bottom-color: rgba(212, 175, 55, 0.15);
+}
+
+html.dark-mode .modal-header h2 {
+  color: #f5f0e8;
+}
+
+html.dark-mode .modal-footer {
+  border-top-color: rgba(212, 175, 55, 0.15);
+}
+
+html.dark-mode .form-group label {
+  color: #c8bfa8;
+}
+
+html.dark-mode .form-group input,
+html.dark-mode .form-group textarea {
+  background: #1f1c12;
+  border-color: rgba(212, 175, 55, 0.2);
+  color: #f5f0e8;
+}
+
+html.dark-mode .btn-secondary {
+  background: rgba(212, 175, 55, 0.08);
+  color: #D4AF37;
+  border-color: rgba(212, 175, 55, 0.25);
+}
+
+html.dark-mode .btn-secondary:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+html.dark-mode .close-btn {
+  color: #c8bfa8;
+}
+
+html.dark-mode .close-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #D4AF37;
+}
+
 @media (max-width: 768px) {
   .org-management-container {
     padding: 1rem;

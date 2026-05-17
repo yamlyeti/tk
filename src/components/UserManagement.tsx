@@ -296,11 +296,11 @@ export function UserManagement() {
     <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Header with Stats */}
       <div style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+        background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #C8960A 100%)',
         padding: '32px',
         borderRadius: '16px',
         marginBottom: '24px',
-        boxShadow: '0 20px 60px rgba(102, 126, 234, 0.3)'
+        boxShadow: '0 20px 60px rgba(212, 175, 55, 0.3)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
           <div>
@@ -321,7 +321,7 @@ export function UserManagement() {
                   gap: '8px',
                   padding: '12px 24px',
                   background: 'rgba(255,255,255,0.9)',
-                  color: '#667eea',
+                  color: '#1a1000',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: '16px',
@@ -373,7 +373,7 @@ export function UserManagement() {
 
       {/* Filters */}
       <div style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+        background: 'var(--card-bg, #f5f3ef)',
         borderRadius: '16px',
         padding: '24px',
         marginBottom: '24px',
@@ -435,7 +435,7 @@ export function UserManagement() {
 
       {/* Users Table */}
       <div style={{
-        background: 'white',
+        background: 'var(--card-bg, #ffffff)',
         borderRadius: '16px',
         padding: '24px',
         boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
@@ -479,7 +479,7 @@ export function UserManagement() {
                     <div style={{
                       width: '40px',
                       height: '40px',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
@@ -518,8 +518,8 @@ export function UserManagement() {
                     <span style={{
                       padding: '6px 12px',
                       borderRadius: '8px',
-                      background: user.role === 'admin' ? '#fef3c7' : '#dbeafe',
-                      color: user.role === 'admin' ? '#92400e' : '#1e40af',
+                      background: 'rgba(212, 175, 55, 0.12)',
+                      color: '#C8960A',
                       fontSize: '14px',
                       fontWeight: '600',
                       textTransform: 'capitalize'
@@ -532,8 +532,8 @@ export function UserManagement() {
                   <span style={{
                     padding: '6px 12px',
                     borderRadius: '8px',
-                    background: user.is_active ? '#d1fae5' : '#fee2e2',
-                    color: user.is_active ? '#065f46' : '#991b1b',
+                    background: user.is_active ? 'rgba(212,175,55,0.12)' : '#fee2e2',
+                    color: user.is_active ? '#C8960A' : '#991b1b',
                     fontSize: '14px',
                     fontWeight: '600'
                   }}>
@@ -553,7 +553,7 @@ export function UserManagement() {
                         }}
                         style={{
                           padding: '8px 16px',
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                           color: 'white',
                           border: 'none',
                           borderRadius: '8px',
@@ -571,7 +571,7 @@ export function UserManagement() {
                         }}
                         style={{
                           padding: '8px 16px',
-                          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                          background: 'linear-gradient(135deg, #C8960A 0%, #B8860B 100%)',
                           color: 'white',
                           border: 'none',
                           borderRadius: '8px',
@@ -588,8 +588,8 @@ export function UserManagement() {
                             onClick={() => toggleUserStatus(user.id, user.is_active)}
                             style={{
                               padding: '8px 16px',
-                              background: user.is_active ? '#fee2e2' : '#d1fae5',
-                              color: user.is_active ? '#991b1b' : '#065f46',
+                              background: user.is_active ? '#fee2e2' : 'rgba(212,175,55,0.12)',
+                              color: user.is_active ? '#991b1b' : '#C8960A',
                               border: 'none',
                               borderRadius: '8px',
                               fontSize: '14px',
@@ -680,7 +680,7 @@ export function UserManagement() {
                 marginTop: '24px',
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -747,7 +747,7 @@ export function UserManagement() {
                 marginTop: '24px',
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                background: 'linear-gradient(135deg, #C8960A 0%, #B8860B 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -867,7 +867,7 @@ export function UserManagement() {
                 style={{
                   flex: 1,
                   padding: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
