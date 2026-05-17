@@ -432,6 +432,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
   }
 
   const pageContent = (
+    <>
         <div className="billing-modal-content">
           {/* Active Filters Indicator */}
           {(initialProjectId || initialStartDate || initialEndDate) && (
@@ -1266,7 +1267,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
             </div>
           </div>
         )}
-
+    </>
   );
 
   if (asPage) {
