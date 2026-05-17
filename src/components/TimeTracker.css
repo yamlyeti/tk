@@ -362,20 +362,31 @@ html.dark-mode .form-row select:focus {
   margin-top: 40px;
 }
 
-.entries-section h2 {
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 24px;
+.entries-toggle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  text-align: left;
 }
 
-html.dark-mode .entries-section h2 {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+.entries-toggle-header h2 {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.entries-toggle-chevron {
+  font-size: 0.9rem;
+  color: #D4AF37;
+  opacity: 0.7;
 }
 
 .no-entries {

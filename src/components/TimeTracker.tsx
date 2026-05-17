@@ -6,11 +6,9 @@ import { EditableTags, EditableProject } from './EditableTagsProject';
 import { ProjectSelect } from './ProjectSelect';
 import { TagsInput } from './TagsInput';
 import { TimeEditor } from './TimeEditor';
-import { RecentTasks } from './RecentTasks';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { Goals } from './Goals';
 import { PomodoroTimer } from './PomodoroTimer';
-import { Templates } from './Templates';
 import { ManualTimeEntry } from './ManualTimeEntry';
 import { useTimerNotifications } from '../hooks/useTimerNotifications';
 import { useIdleDetection, IdleDialog } from '../hooks/useIdleDetection';
@@ -37,23 +35,13 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
   const [elapsedTime, setElapsedTime] = useState(0);
   const [error, setError] = useState<string>('');
   const [entryOrder, setEntryOrder] = useState<string[]>([]);
-  const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'recent-tasks', 'templates', 'goals', 'pomodoro']);
+  const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'goals', 'pomodoro']);
+  const [entriesExpanded, setEntriesExpanded] = useState(false);
   const [internalShowManualEntry, setInternalShowManualEntry] = useState(false);
   const showManualEntry = externalShowManualEntry ?? internalShowManualEntry;
   const setShowManualEntry = (val: boolean) => {
     setInternalShowManualEntry(val);
     if (!val) onManualEntryClose?.();
-  };
-
-  const handleStartFromRecent = (desc: string, taskTags: string, taskProjectId: string) => {
-    setDescription(desc);
-    setTags(taskTags);
-    setProjectId(taskProjectId);
-    // Focus on description field
-    setTimeout(() => {
-      const descInput = document.querySelector('.description-input') as HTMLInputElement;
-      if (descInput) descInput.focus();
-    }, 100);
   };
 
   const shortcuts = [
@@ -410,10 +398,6 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
             )}
           </div>
         );
-      case 'recent-tasks':
-        return <RecentTasks key={cardId} onStartTask={handleStartFromRecent} />;
-      case 'templates':
-        return <Templates key={cardId} onStartFromTemplate={handleStartFromRecent} />;
       case 'goals':
         return <Goals key={cardId} />;
       case 'pomodoro':
@@ -508,13 +492,19 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
         </Droppable>
 
         <div className="entries-section">
-          <h2>Recent Entries</h2>
-          {entries.length === 0 ? (
+          <button
+            className="entries-toggle-header"
+            onClick={() => setEntriesExpanded(prev => !prev)}
+          >
+            <h2 style={{ margin: 0 }}>Recent Entries {entries.length > 0 && `(${entries.length})`}</h2>
+            <span className="entries-toggle-chevron">{entriesExpanded ? '▲' : '▼'}</span>
+          </button>
+          {entriesExpanded && entries.length === 0 ? (
             <p className="no-entries">No time entries yet. Start tracking your time!</p>
-          ) : (
+          ) : entriesExpanded ? (
             <Droppable droppableId="entries-list">
               {(provided) => (
-                <div 
+                <div
                   className="entries-list"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
@@ -574,7 +564,7 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
                 </div>
               )}
             </Droppable>
-          )}
+          ) : null}
         </div>
       </DragDropContext>
 

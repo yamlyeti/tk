@@ -20,6 +20,9 @@
   padding: 10px 20px;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(180, 130, 10, 0.3), 0 1px 0 rgba(255,255,255,0.15) inset;
+  position: sticky;
+  top: 20px;
+  z-index: 100;
 }
 
 html.dark-mode .nav-bar {

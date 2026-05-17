@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './contexts/useAuth';
@@ -12,6 +12,9 @@ import { UserApprovals } from './components/UserApprovals';
 import { OrganizationManagement } from './components/OrganizationManagement';
 import { DarkModeToggle } from './components/DarkModeToggle';
 import { ProjectBillingReport } from './components/ProjectBillingReport';
+import { ManualTimeEntry } from './components/ManualTimeEntry';
+import { supabase } from './lib/supabase';
+import type { Project } from './types';
 import './App.css';
 import './dark-mode.css';
 
@@ -19,6 +22,13 @@ function AppContent() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations' | 'billing'>('tracker');
   const [showManualEntry, setShowManualEntry] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    supabase.from('projects').select('*').order('name').then(({ data }) => {
+      if (data) setProjects(data);
+    });
+  }, []);
 
   if (loading) {
     return (
@@ -52,11 +62,9 @@ function AppContent() {
           <button className={view === 'billing' ? 'active' : ''} onClick={() => setView('billing')}>💰 Billing</button>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          {view === 'tracker' && (
-            <button className="nav-add-time" onClick={() => setShowManualEntry(true)}>
-              ➕ Add Time
-            </button>
-          )}
+          <button className="nav-add-time" onClick={() => setShowManualEntry(true)}>
+            ➕ Add Time
+          </button>
           <span className="nav-user-email">{user?.email}</span>
           <DarkModeToggle />
           <button className="nav-signout" onClick={() => signOut()} title="Sign out">🚪</button>
@@ -70,6 +78,13 @@ function AppContent() {
       {view === 'approvals' && <UserApprovals />}
       {view === 'profile' && <UserProfile />}
       {view === 'billing' && <ProjectBillingReport asPage onClose={() => setView('tracker')} />}
+      {showManualEntry && view !== 'tracker' && (
+        <ManualTimeEntry
+          projects={projects}
+          onSuccess={() => setShowManualEntry(false)}
+          onClose={() => setShowManualEntry(false)}
+        />
+      )}
     </div>
   );
 }

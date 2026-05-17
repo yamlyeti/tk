@@ -325,19 +325,20 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
     });
 
     csv += '\nDetailed Entries\n';
-    csv += 'Date,User,Project,Organization,Description,Hours,Rate,Currency,Rate Source,Amount\n';
+    csv += 'Date,User,Project,Organization,Description,Notes,Hours,Rate,Currency,Rate Source,Amount\n';
     filteredEntries.forEach(entry => {
       const date = new Date(entry.start_time).toLocaleDateString();
       const name = entry.full_name || 'N/A';
       const project = entry.project_name || 'N/A';
       const org = entry.organization_name || 'N/A';
       const desc = (entry.description || 'N/A').replace(/"/g, '""');
+      const notes = (entry.notes || '').replace(/"/g, '""');
       const rate = entry.hourly_rate?.toFixed(2) || 'N/A';
       const currency = entry.currency || 'N/A';
       const source = entry.rate_source || 'N/A';
       const amount = entry.billable_amount?.toFixed(2) || '0.00';
 
-      csv += `"${date}","${name}","${project}","${org}","${desc}",${entry.hours.toFixed(2)},"${rate}","${currency}","${source}",${amount}\n`;
+      csv += `"${date}","${name}","${project}","${org}","${desc}","${notes}",${entry.hours.toFixed(2)},"${rate}","${currency}","${source}",${amount}\n`;
     });
 
     // Download CSV
@@ -876,6 +877,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
                           <th>Project</th>
                           <th>Organization</th>
                           <th>Description</th>
+                          <th>Notes</th>
                           <th className="align-right">Hours</th>
                           <th className="align-right">Rate</th>
                           <th className="align-right">Amount</th>
@@ -897,6 +899,9 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
                             <td>{entry.organization_name || 'N/A'}</td>
                             <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {entry.description || '-'}
+                            </td>
+                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)', fontSize: '13px' }}>
+                              {entry.notes || '-'}
                             </td>
                             <td className="align-right">{entry.hours.toFixed(2)}</td>
                             <td className="align-right">
@@ -973,6 +978,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
                           <th>Project</th>
                           <th>Organization</th>
                           <th>Description</th>
+                          <th>Notes</th>
                           <th className="align-right">Hours</th>
                           <th>Rate Source</th>
                         </tr>
@@ -993,6 +999,9 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
                             <td>{entry.organization_name || 'N/A'}</td>
                             <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {entry.description || '-'}
+                            </td>
+                            <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)', fontSize: '13px' }}>
+                              {entry.notes || '-'}
                             </td>
                             <td className="align-right">{entry.hours.toFixed(2)}</td>
                             <td>
