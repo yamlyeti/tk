@@ -73,6 +73,68 @@ html.dark-mode .nav-bar button.active {
   box-shadow: none;
 }
 
+.nav-user-email {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html.dark-mode .nav-user-email {
+  color: rgba(212, 175, 55, 0.45);
+}
+
+.nav-add-time {
+  background: rgba(0, 0, 0, 0.12) !important;
+  color: rgba(0, 0, 0, 0.75) !important;
+  border: none !important;
+  padding: 7px 14px !important;
+  border-radius: 8px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: background 0.15s !important;
+}
+
+.nav-add-time:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+  transform: none !important;
+}
+
+html.dark-mode .nav-add-time {
+  background: rgba(212, 175, 55, 0.12) !important;
+  color: #D4AF37 !important;
+}
+
+html.dark-mode .nav-add-time:hover {
+  background: rgba(212, 175, 55, 0.2) !important;
+}
+
+.nav-signout {
+  background: transparent !important;
+  border: none !important;
+  font-size: 1rem !important;
+  cursor: pointer;
+  padding: 6px 8px !important;
+  border-radius: 8px !important;
+  opacity: 0.6;
+  transition: opacity 0.15s !important;
+  line-height: 1;
+}
+
+.nav-signout:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1) !important;
+  transform: none !important;
+}
+
+html.dark-mode .nav-signout:hover {
+  background: rgba(212, 175, 55, 0.1) !important;
+}
+
 /* Global Editable Fields Styling */
 .editable-field {
   display: inline-flex;

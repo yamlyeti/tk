@@ -17,8 +17,13 @@ import { useIdleDetection, IdleDialog } from '../hooks/useIdleDetection';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './TimeTracker.css';
 
-export const TimeTracker = () => {
-  const { user, signOut } = useAuth();
+interface TimeTrackerProps {
+  showManualEntry?: boolean;
+  onManualEntryClose?: () => void;
+}
+
+export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManualEntryClose }: TimeTrackerProps) => {
+  const { user } = useAuth();
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeEntry, setActiveEntry] = useState<TimeEntry | null>(null);
@@ -33,7 +38,12 @@ export const TimeTracker = () => {
   const [error, setError] = useState<string>('');
   const [entryOrder, setEntryOrder] = useState<string[]>([]);
   const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'recent-tasks', 'templates', 'goals', 'pomodoro']);
-  const [showManualEntry, setShowManualEntry] = useState(false);
+  const [internalShowManualEntry, setInternalShowManualEntry] = useState(false);
+  const showManualEntry = externalShowManualEntry ?? internalShowManualEntry;
+  const setShowManualEntry = (val: boolean) => {
+    setInternalShowManualEntry(val);
+    if (!val) onManualEntryClose?.();
+  };
 
   const handleStartFromRecent = (desc: string, taskTags: string, taskProjectId: string) => {
     setDescription(desc);
@@ -431,22 +441,6 @@ export const TimeTracker = () => {
       <KeyboardShortcuts shortcuts={shortcuts} />
       
       <div className="tracker-header">
-        <h1>Time Tracker</h1>
-        <div className="header-actions">
-          <button 
-            onClick={() => setShowManualEntry(true)} 
-            className="manual-entry-button"
-            title="Add manual time entry"
-          >
-            ➕ Add Time
-          </button>
-          <div className="user-info">
-            <span className="user-email">{user?.email}</span>
-            <button onClick={signOut} className="signout-button">
-              Sign Out
-            </button>
-          </div>
-        </div>
       </div>
 
       <IdleDialog

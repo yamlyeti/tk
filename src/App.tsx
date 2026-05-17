@@ -17,6 +17,7 @@ import './dark-mode.css';
 function AppContent() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations'>('tracker');
+  const [showManualEntry, setShowManualEntry] = useState(false);
 
   if (loading) {
     return (
@@ -49,10 +50,17 @@ function AppContent() {
           <button className={view === 'profile' ? 'active' : ''} onClick={() => setView('profile')}>👤 Profile</button>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {view === 'tracker' && (
+            <button className="nav-add-time" onClick={() => setShowManualEntry(true)}>
+              ➕ Add Time
+            </button>
+          )}
+          <span className="nav-user-email">{user?.email}</span>
           <DarkModeToggle />
+          <button className="nav-signout" onClick={() => signOut()} title="Sign out">🚪</button>
         </div>
       </nav>
-      {view === 'tracker' && <TimeTracker />}
+      {view === 'tracker' && <TimeTracker showManualEntry={showManualEntry} onManualEntryClose={() => setShowManualEntry(false)} />}
       {view === 'projects' && <ProjectsView />}
       {view === 'organizations' && <OrganizationManagement />}
       {view === 'dashboard' && <Dashboard />}
