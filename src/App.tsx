@@ -11,6 +11,7 @@ import { UserProfile } from './components/UserProfile';
 import { UserApprovals } from './components/UserApprovals';
 import { OrganizationManagement } from './components/OrganizationManagement';
 import { DarkModeToggle } from './components/DarkModeToggle';
+import { ProjectBillingReport } from './components/ProjectBillingReport';
 import './App.css';
 import './dark-mode.css';
 
@@ -18,6 +19,7 @@ function AppContent() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations'>('tracker');
   const [showManualEntry, setShowManualEntry] = useState(false);
+  const [showBilling, setShowBilling] = useState(false);
 
   if (loading) {
     return (
@@ -48,6 +50,7 @@ function AppContent() {
           <button className={view === 'users' ? 'active' : ''} onClick={() => setView('users')}>👥 Users</button>
           <button className={view === 'approvals' ? 'active' : ''} onClick={() => setView('approvals')}>✅ Approvals</button>
           <button className={view === 'profile' ? 'active' : ''} onClick={() => setView('profile')}>👤 Profile</button>
+          <button onClick={() => setShowBilling(true)}>💰 Billing</button>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           {view === 'tracker' && (
@@ -67,6 +70,7 @@ function AppContent() {
       {view === 'users' && <UserManagement />}
       {view === 'approvals' && <UserApprovals />}
       {view === 'profile' && <UserProfile />}
+      {showBilling && <ProjectBillingReport onClose={() => setShowBilling(false)} />}
     </div>
   );
 }
