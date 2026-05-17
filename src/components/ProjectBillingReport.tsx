@@ -415,6 +415,8 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
   const summary = calculateSummary();
   const userSummaries = calculateUserSummaries();
   const projectBreakdown = calculateProjectBreakdown();
+  const invoiceLineItemsTotal = invoiceLineItems.reduce((sum, item) => sum + item.amount, 0);
+  const invoiceTotal = summary.totalAmount + invoiceLineItemsTotal;
   const uniqueUsers = Array.from(new Set(entries.map(e => ({ id: e.user_id, email: e.email, name: e.full_name }))))
     .filter((user, index, self) => self.findIndex(u => u.id === user.id) === index);
 
@@ -1026,10 +1028,7 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
         )}
 
         {/* Invoice Modal */}
-        {showInvoice && (() => {
-          const lineItemsTotal = invoiceLineItems.reduce((sum, item) => sum + item.amount, 0);
-          const invoiceTotal = summary.totalAmount + lineItemsTotal;
-          return (
+        {showInvoice && (
           <div className="billing-entries-modal">
             <div className="billing-entries-content" style={{ maxWidth: '960px' }}>
               <div className="billing-modal-header" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}>
@@ -1283,8 +1282,6 @@ export function ProjectBillingReport({ onClose, initialProjectId, initialStartDa
               </div>
             </div>
           </div>
-          );
-        })()}
         )}
 
         <div className="billing-modal-footer">

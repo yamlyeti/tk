@@ -20,14 +20,14 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+  background: linear-gradient(135deg, #080807 0%, #100F0C 40%, #1a1508 70%, #0d0d0a 100%);
   background-size: 400% 400%;
   animation: gradientFlow 20s ease infinite;
   background-attachment: fixed;
 }
 
 html.dark-mode body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #312e81 50%, #1e3a8a 75%, #0c4a6e 100%);
+  background: linear-gradient(135deg, #080807 0%, #100F0C 40%, #1a1508 70%, #0d0d0a 100%);
   background-size: 400% 400%;
   animation: gradientFlow 20s ease infinite;
   background-attachment: fixed;

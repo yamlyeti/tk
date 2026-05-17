@@ -1,104 +1,105 @@
-/* Dark Mode Styles */
+/* SmartAgent Brand — Light mode */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #f0f2f5;
-  --bg-accent: #e8f4fd;
-  
-  --text-primary: #1a1a1a;
-  --text-secondary: #4a5568;
-  --text-tertiary: #718096;
-  
-  --border-primary: #e2e8f0;
-  --border-secondary: #edf2f7;
-  
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
-  --primary-light: #dbeafe;
-  
-  --secondary-color: #8b5cf6;
-  --secondary-hover: #7c3aed;
-  --secondary-light: #ede9fe;
-  
-  --accent-color: #06b6d4;
-  --accent-hover: #0891b2;
-  --accent-light: #cffafe;
-  
+  --bg-primary: #faf9f7;
+  --bg-secondary: #f3f1ec;
+  --bg-tertiary: #e8e4da;
+  --bg-accent: #f0ead8;
+
+  --text-primary: #1a1500;
+  --text-secondary: #4a4030;
+  --text-tertiary: #7a6e58;
+
+  --border-primary: #ddd5c0;
+  --border-secondary: #ede8da;
+
+  /* Gold as primary */
+  --primary-color: #C8960A;
+  --primary-hover: #A67C00;
+  --primary-light: #fef3c7;
+
+  --secondary-color: #D4AF37;
+  --secondary-hover: #F0D060;
+  --secondary-light: #fdf6d8;
+
+  --accent-color: #C8960A;
+  --accent-hover: #A67C00;
+  --accent-light: #fef9e7;
+
   --success-color: #10b981;
   --success-hover: #059669;
   --success-light: #d1fae5;
-  
+
   --error-color: #ef4444;
   --error-hover: #dc2626;
   --error-light: #fee2e2;
-  
-  --warning-color: #f59e0b;
-  --warning-hover: #d97706;
+
+  --warning-color: #D4AF37;
+  --warning-hover: #C8960A;
   --warning-light: #fef3c7;
-  
+
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
-  --shadow-colored: 0 4px 20px rgba(59, 130, 246, 0.25);
+  --shadow-colored: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
-/* Dark mode variables */
+/* SmartAgent Brand — Dark mode (full palette) */
 html.dark-mode {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-accent: #1e3a5f;
-  
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
-  
-  --border-primary: #334155;
-  --border-secondary: #1e293b;
-  
-  --primary-color: #60a5fa;
-  --primary-hover: #93c5fd;
-  --primary-light: #1e3a8a;
-  
-  --secondary-color: #a78bfa;
-  --secondary-hover: #c4b5fd;
-  --secondary-light: #4c1d95;
-  
-  --accent-color: #22d3ee;
-  --accent-hover: #67e8f9;
-  --accent-light: #164e63;
-  
+  --bg-primary: #080807;
+  --bg-secondary: #100F0C;
+  --bg-tertiary: #171510;
+  --bg-accent: #2A2618;
+
+  --text-primary: #f5f0e8;
+  --text-secondary: #c8bfa8;
+  --text-tertiary: #8a7e68;
+
+  --border-primary: #2A2618;
+  --border-secondary: #1a1710;
+
+  --primary-color: #D4AF37;
+  --primary-hover: #F0D060;
+  --primary-light: #2A2618;
+
+  --secondary-color: #C8960A;
+  --secondary-hover: #E8C040;
+  --secondary-light: #3A3525;
+
+  --accent-color: #D4AF37;
+  --accent-hover: #F0D060;
+  --accent-light: #3A3525;
+
   --success-color: #34d399;
   --success-hover: #6ee7b7;
   --success-light: #064e3b;
-  
+
   --error-color: #f87171;
   --error-hover: #fca5a5;
-  --error-light: #7f1d1d;
-  
-  --warning-color: #fbbf24;
-  --warning-hover: #fcd34d;
-  --warning-light: #78350f;
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
-  --shadow-colored: 0 4px 20px rgba(96, 165, 250, 0.4);
+  --error-light: #450a0a;
+
+  --warning-color: #D4AF37;
+  --warning-hover: #F0D060;
+  --warning-light: #3A3525;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7);
+  --shadow-colored: 0 4px 20px rgba(212, 175, 55, 0.35);
 }
 
 /* Apply dark mode globally */
 html.dark-mode {
-  background: var(--bg-primary);
+  background: #080807;
   color: var(--text-primary);
 }
 
 html.dark-mode body {
-  background: var(--bg-primary);
+  background: transparent;
   color: var(--text-primary);
 }
 
 html.dark-mode #root {
-  background: var(--bg-primary);
+  background: transparent;
   color: var(--text-primary);
 }
 
@@ -192,7 +193,7 @@ textarea::placeholder {
 
 /* Navigation */
 .nav-bar {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%) !important;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%) !important;
 }
 
 /* Active timer - keep bright */

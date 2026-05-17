@@ -36,6 +36,9 @@ function AppContent() {
   return (
     <div className="app-container">
       <nav className="nav-bar">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '24px' }}>
+          <img src="/sa-logo.png" alt="SmartAgent" style={{ height: '32px', width: 'auto', filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.5))' }} />
+        </div>
         <div style={{ display: 'flex', gap: '16px', flex: 1 }}>
           <button className={view === 'tracker' ? 'active' : ''} onClick={() => setView('tracker')}>⏱️ Time Tracker</button>
           <button className={view === 'projects' ? 'active' : ''} onClick={() => setView('projects')}>📁 Projects</button>

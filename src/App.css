@@ -31,11 +31,12 @@
 }
 
 html.dark-mode .nav-bar {
-  background: rgba(15, 23, 42, 0.6);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: rgba(23, 21, 16, 0.85) !important;
+  border: 1px solid rgba(212, 175, 55, 0.2) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(212, 175, 55, 0.08),
+    0 0 40px rgba(212, 175, 55, 0.05);
 }
 
 .nav-bar::before {
