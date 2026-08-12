@@ -1,30 +1,42 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { User, Mail, X, Save } from 'lucide-react';
+import { Mail, X, Save } from 'lucide-react';
 import { useAuth } from '../contexts/useAuth';
+import './UserProfile.css';
 
-interface UserProfile {
+interface UserProfileData {
   id: string;
   email: string;
   full_name: string | null;
   avatar_url: string | null;
   role: 'admin' | 'member';
+  is_active: boolean;
+  approval_status: 'pending' | 'approved' | 'denied';
+  created_at: string;
+}
+
+interface Stats {
+  totalSeconds: number;
+  entryCount: number;
+  projectCount: number;
 }
 
 export function UserProfile() {
   const { user } = useAuth();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfileData | null>(null);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadProfile();
+    loadStats();
   }, [user]);
 
   async function loadProfile() {
     if (!user) return;
-    
+
     setLoading(true);
     const { data, error } = await supabase
       .from('user_profiles')
@@ -39,6 +51,21 @@ export function UserProfile() {
       setFullName(data.full_name || '');
     }
     setLoading(false);
+  }
+
+  async function loadStats() {
+    if (!user) return;
+
+    const [{ data: entries }, { data: projectIds }] = await Promise.all([
+      supabase.from('time_entries').select('duration').eq('user_id', user.id).not('end_time', 'is', null),
+      supabase.from('projects').select('id').eq('user_id', user.id),
+    ]);
+
+    setStats({
+      totalSeconds: (entries || []).reduce((sum, e) => sum + (e.duration || 0), 0),
+      entryCount: (entries || []).length,
+      projectCount: (projectIds || []).length,
+    });
   }
 
   async function saveProfile() {
@@ -58,205 +85,117 @@ export function UserProfile() {
     }
   }
 
+  const formatDuration = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+  };
+
+  const formatMemberSince = (iso: string) =>
+    new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const statusLabel = (p: UserProfileData) => {
+    if (!p.is_active) return 'Deactivated';
+    if (p.approval_status === 'pending') return 'Pending approval';
+    if (p.approval_status === 'denied') return 'Denied';
+    return 'Active';
+  };
+
   if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-        <div style={{ fontSize: '18px', color: '#666' }}>Loading profile...</div>
-      </div>
-    );
+    return <div className="profile-loading">Loading profile…</div>;
   }
 
   if (!profile) {
-    return (
-      <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <p style={{ color: '#666' }}>Profile not found</p>
-      </div>
-    );
+    return <div className="profile-loading">Profile not found</div>;
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{
-        background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #C8960A 100%)',
-        padding: '32px',
-        borderRadius: '16px',
-        marginBottom: '24px',
-        boxShadow: '0 20px 60px rgba(212, 175, 55, 0.3)'
-      }}>
-        <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: 'white', margin: 0 }}>
-          My Profile
-        </h2>
-        <p style={{ color: 'rgba(255,255,255,0.9)', marginTop: '8px', fontSize: '16px' }}>
-          Manage your personal information
-        </p>
+    <div className="profile-container">
+      <div className="profile-header">
+        <div className="profile-identity">
+          <div className="profile-avatar">
+            {(profile.full_name || profile.email).charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <h2 className="profile-name">{profile.full_name || 'No name set'}</h2>
+            <p className="profile-email">
+              <Mail size={14} />
+              {profile.email}
+            </p>
+          </div>
+        </div>
+        {!editing && (
+          <button onClick={() => setEditing(true)} className="profile-edit-btn">
+            Edit Profile
+          </button>
+        )}
       </div>
 
-      <div style={{
-        background: 'var(--card-bg, #f5f3ef)',
-        borderRadius: '16px',
-        padding: '32px',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{
-              width: '96px',
-              height: '96px',
-              background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #C8960A 100%)',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.4)'
-            }}>
-              <User style={{ width: '48px', height: '48px', color: 'white' }} />
-            </div>
-            <div>
-              <h3 style={{
-                fontSize: '24px',
-                fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                margin: 0
-              }}>
-                {profile.full_name || 'No name set'}
-              </h3>
-              <p style={{ display: 'flex', alignItems: 'center', color: '#666', marginTop: '8px', gap: '8px' }}>
-                <Mail style={{ width: '20px', height: '20px' }} />
-                {profile.email}
-              </p>
-            </div>
-          </div>
-          {!editing && (
-            <button
-              onClick={() => setEditing(true)}
-              style={{
-                padding: '12px 24px',
-                background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 20px rgba(212, 175, 55, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(212, 175, 55, 0.3)';
-              }}
-            >
-              Edit Profile
-            </button>
-          )}
-        </div>
-
+      <div className="profile-card">
         {editing ? (
-          <div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '8px' }}>
-                Full Name
-              </label>
+          <div className="profile-edit-form">
+            <div className="profile-field">
+              <label>Full Name</label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  boxSizing: 'border-box'
-                }}
                 placeholder="Enter your full name"
               />
             </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+            <div className="profile-edit-actions">
               <button
                 onClick={() => {
                   setEditing(false);
                   setFullName(profile.full_name || '');
                 }}
-                style={{
-                  padding: '10px 20px',
-                  background: 'white',
-                  color: '#374151',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
+                className="profile-cancel-btn"
               >
-                <X style={{ width: '18px', height: '18px' }} />
+                <X size={16} />
                 Cancel
               </button>
-              <button
-                onClick={saveProfile}
-                style={{
-                  padding: '10px 20px',
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)'
-                }}
-              >
-                <Save style={{ width: '18px', height: '18px' }} />
+              <button onClick={saveProfile} className="profile-save-btn">
+                <Save size={16} />
                 Save Changes
               </button>
             </div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '32px' }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-              padding: '24px',
-              borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.3)',
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <p style={{ fontSize: '12px', fontWeight: 'bold', color: 'white', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Role</p>
-              <p style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', textTransform: 'capitalize', marginTop: '8px' }}>
-                {profile.role}
-              </p>
+          <>
+            <div className="profile-meta-grid">
+              <div className="profile-meta-item">
+                <span className="profile-meta-label">Role</span>
+                <span className={`profile-role-badge ${profile.role}`}>{profile.role}</span>
+              </div>
+              <div className="profile-meta-item">
+                <span className="profile-meta-label">Status</span>
+                <span className={`profile-status-badge ${profile.is_active && profile.approval_status === 'approved' ? 'ok' : 'warn'}`}>
+                  {statusLabel(profile)}
+                </span>
+              </div>
+              <div className="profile-meta-item">
+                <span className="profile-meta-label">Member since</span>
+                <span className="profile-meta-value">{formatMemberSince(profile.created_at)}</span>
+              </div>
             </div>
-            <div style={{
-              background: 'linear-gradient(135deg, #C8960A 0%, #B8860B 100%)',
-              padding: '24px',
-              borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.3)',
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <p style={{ fontSize: '12px', fontWeight: 'bold', color: 'white', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Status</p>
-              <p style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', marginTop: '8px' }}>
-                Active
-              </p>
-            </div>
-          </div>
+
+            {stats && (
+              <div className="profile-stats-grid">
+                <div className="profile-stat">
+                  <span className="profile-stat-value">{formatDuration(stats.totalSeconds)}</span>
+                  <span className="profile-stat-label">Time tracked</span>
+                </div>
+                <div className="profile-stat">
+                  <span className="profile-stat-value">{stats.entryCount}</span>
+                  <span className="profile-stat-label">Entries logged</span>
+                </div>
+                <div className="profile-stat">
+                  <span className="profile-stat-value">{stats.projectCount}</span>
+                  <span className="profile-stat-label">Projects</span>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

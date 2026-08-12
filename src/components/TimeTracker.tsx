@@ -9,6 +9,8 @@ import { TimeEditor } from './TimeEditor';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { Goals } from './Goals';
 import { PomodoroTimer } from './PomodoroTimer';
+import { RecentTasks } from './RecentTasks';
+import { Templates } from './Templates';
 import { ManualTimeEntry } from './ManualTimeEntry';
 import { useTimerNotifications } from '../hooks/useTimerNotifications';
 import { useIdleDetection, IdleDialog } from '../hooks/useIdleDetection';
@@ -18,9 +20,11 @@ import './TimeTracker.css';
 interface TimeTrackerProps {
   showManualEntry?: boolean;
   onManualEntryClose?: () => void;
+  focusEntryId?: string;
+  onFocusHandled?: () => void;
 }
 
-export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManualEntryClose }: TimeTrackerProps) => {
+export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManualEntryClose, focusEntryId, onFocusHandled }: TimeTrackerProps) => {
   const { user } = useAuth();
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -35,11 +39,50 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
   const [elapsedTime, setElapsedTime] = useState(0);
   const [error, setError] = useState<string>('');
   const [entryOrder, setEntryOrder] = useState<string[]>([]);
-  const [cardOrder, setCardOrder] = useState<string[]>(['track-time', 'goals', 'pomodoro']);
+  const [cardOrder, setCardOrder] = useState<string[]>(() => {
+    const saved = localStorage.getItem('tk-card-order');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved) as string[];
+        if (Array.isArray(parsed) && parsed.includes('track-time')) return parsed;
+      } catch {
+        // fall through to default order below
+      }
+    }
+    return ['track-time', 'recent-tasks', 'templates', 'goals', 'pomodoro'];
+  });
   const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set(['goals', 'pomodoro']));
   const [entriesExpanded, setEntriesExpanded] = useState(false);
+  const [showAddWidgetMenu, setShowAddWidgetMenu] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('tk-card-order', JSON.stringify(cardOrder));
+  }, [cardOrder]);
 
   const cardLabels: Record<string, string> = { goals: '🎯 Goals', pomodoro: '🍅 Pomodoro Timer' };
+  const ALL_WIDGETS = ['recent-tasks', 'templates', 'goals', 'pomodoro'];
+  const WIDGET_LABELS: Record<string, string> = {
+    'recent-tasks': '⚡ Recent Tasks',
+    templates: '📝 Templates',
+    goals: '🎯 Goals',
+    pomodoro: '🍅 Pomodoro Timer',
+  };
+  const availableWidgets = ALL_WIDGETS.filter((id) => !cardOrder.includes(id));
+  const removeCard = (cardId: string) => setCardOrder((prev) => prev.filter((id) => id !== cardId));
+  const addWidget = (cardId: string) => {
+    setCardOrder((prev) => [...prev, cardId]);
+    setShowAddWidgetMenu(false);
+  };
+
+  const quickStart = (quickDescription: string, quickTags: string, quickProjectId: string) => {
+    if (activeEntry) {
+      setDescription(quickDescription);
+      setTags(quickTags);
+      setProjectId(quickProjectId);
+      return;
+    }
+    startTimer({ description: quickDescription, tags: quickTags, projectId: quickProjectId });
+  };
   const toggleCard = (cardId: string) =>
     setCollapsedCards(prev => {
       const next = new Set(prev);
@@ -148,6 +191,21 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
   }, [user]);
 
   useEffect(() => {
+    if (!focusEntryId) return;
+    setEntriesExpanded(true);
+    const timeout = window.setTimeout(() => {
+      const node = document.querySelector(`[data-entry-id="${focusEntryId}"]`);
+      if (node) {
+        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        node.classList.add('entry-highlight');
+        window.setTimeout(() => node.classList.remove('entry-highlight'), 2000);
+      }
+      onFocusHandled?.();
+    }, 100);
+    return () => window.clearTimeout(timeout);
+  }, [focusEntryId, onFocusHandled]);
+
+  useEffect(() => {
     let interval: number | undefined;
     if (activeEntry && !activeEntry.is_paused) {
       interval = window.setInterval(() => {
@@ -162,15 +220,18 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
     };
   }, [activeEntry]);
 
-  const startTimer = async () => {
-    if (!user || !description.trim()) return;
+  const startTimer = async (overrides?: { description: string; tags?: string; projectId?: string }) => {
+    const startDescription = overrides?.description ?? description;
+    const startTags = overrides?.tags ?? tags;
+    const startProjectId = overrides?.projectId ?? projectId;
+    if (!user || !startDescription.trim()) return;
 
     setLoading(true);
     setError('');
-    
+
     const startTime = customStart ? new Date(customStart).toISOString() : new Date().toISOString();
     const endTime = customEnd ? new Date(customEnd).toISOString() : null;
-    
+
     let duration = null;
     if (customStart && customEnd) {
       const start = new Date(customStart).getTime();
@@ -182,10 +243,10 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
       .from('time_entries')
       .insert({
         user_id: user.id,
-        description: description.trim(),
+        description: startDescription.trim(),
         notes: notes.trim() || null,
-        tags: tags.trim() || null,
-        project_id: projectId || null,
+        tags: startTags.trim() || null,
+        project_id: startProjectId || null,
         start_time: startTime,
         end_time: endTime,
         duration: duration,
@@ -390,7 +451,7 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
               
               {!activeEntry && (
                 <button
-                  onClick={startTimer}
+                  onClick={() => startTimer()}
                   disabled={loading || !description.trim()}
                   className="start-button"
                 >
@@ -407,6 +468,10 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
             )}
           </div>
         );
+      case 'recent-tasks':
+        return <RecentTasks key={cardId} onStartTask={quickStart} />;
+      case 'templates':
+        return <Templates key={cardId} onStartFromTemplate={quickStart} />;
       case 'goals':
         return <Goals key={cardId} />;
       case 'pomodoro':
@@ -490,6 +555,16 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
                       >
                         ⋮⋮
                       </div>
+                      {cardId !== 'track-time' && (
+                        <button
+                          type="button"
+                          className="card-remove-btn"
+                          onClick={() => removeCard(cardId)}
+                          title="Remove widget"
+                        >
+                          ✕
+                        </button>
+                      )}
                       {cardLabels[cardId] ? (
                         <>
                           <button
@@ -510,6 +585,32 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
             </div>
           )}
         </Droppable>
+
+        {availableWidgets.length > 0 && (
+          <div className="add-widget-wrap">
+            <button
+              type="button"
+              className="add-widget-btn"
+              onClick={() => setShowAddWidgetMenu((prev) => !prev)}
+            >
+              + Add Widget
+            </button>
+            {showAddWidgetMenu && (
+              <div className="add-widget-menu">
+                {availableWidgets.map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    className="add-widget-option"
+                    onClick={() => addWidget(id)}
+                  >
+                    {WIDGET_LABELS[id]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="entries-section">
           <button
@@ -535,6 +636,7 @@ export const TimeTracker = ({ showManualEntry: externalShowManualEntry, onManual
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
+                          data-entry-id={entry.id}
                           className={`entry-card ${snapshot.isDragging ? 'dragging' : ''}`}
                         >
                           <div className="entry-content">

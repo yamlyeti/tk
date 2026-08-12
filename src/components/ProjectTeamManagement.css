@@ -118,7 +118,7 @@ html.dark-mode .team-section-title {
 }
 
 html.dark-mode .team-add-section {
-  background: linear-gradient(135deg, #17150F 0%, #211d15 100%);
+  background: linear-gradient(135deg, #17150F 0%, #100e0a 100%);
   border-color: rgba(212,175,55,0.2);
 }
 
@@ -452,7 +452,7 @@ html.dark-mode .team-form-label {
 html.dark-mode .team-form-input,
 html.dark-mode .team-form-select,
 html.dark-mode .team-form-textarea {
-  background: var(--input-bg, #1c1914);
+  background: var(--input-bg, #0a0906);
   color: var(--text-color, #f1f5f9);
   border-color: var(--border-color, #221e16);
 }
@@ -485,7 +485,7 @@ html.dark-mode .team-form-textarea {
 }
 
 html.dark-mode .team-rate-history {
-  background: var(--hover-bg, #1c1914);
+  background: var(--hover-bg, #0a0906);
   border-color: var(--border-color, #221e16);
 }
 
