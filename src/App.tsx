@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthProvider';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './contexts/useAuth';
 import { Auth } from './components/Auth';
@@ -13,6 +13,8 @@ import { OrganizationManagement } from './components/OrganizationManagement';
 import { DarkModeToggle } from './components/DarkModeToggle';
 import { ProjectBillingReport } from './components/ProjectBillingReport';
 import { ManualTimeEntry } from './components/ManualTimeEntry';
+import { Issues } from './components/Issues';
+import { Invoices } from './components/Invoices';
 import { supabase } from './lib/supabase';
 import type { Project } from './types';
 import './App.css';
@@ -20,7 +22,7 @@ import './dark-mode.css';
 
 function AppContent() {
   const { user, loading, signOut } = useAuth();
-  const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations' | 'billing'>('tracker');
+  const [view, setView] = useState<'tracker' | 'projects' | 'dashboard' | 'users' | 'profile' | 'approvals' | 'organizations' | 'billing' | 'issues' | 'invoices'>('tracker');
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -59,7 +61,9 @@ function AppContent() {
           <button className={view === 'users' ? 'active' : ''} onClick={() => setView('users')}>👥 Users</button>
           <button className={view === 'approvals' ? 'active' : ''} onClick={() => setView('approvals')}>✅ Approvals</button>
           <button className={view === 'profile' ? 'active' : ''} onClick={() => setView('profile')}>👤 Profile</button>
-          <button className={view === 'billing' ? 'active' : ''} onClick={() => setView('billing')}>💰 Billing</button>
+          <button className={view === 'issues' ? 'active' : ''} onClick={() => setView('issues')}>🎫 Issues</button>
+          <button className={view === 'invoices' ? 'active' : ''} onClick={() => setView('invoices')}>🧾 Invoices</button>
+          <button className={view === 'billing' ? 'active' : ''} onClick={() => setView('billing')}>💰 Hours Report</button>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="nav-add-time" onClick={() => setShowManualEntry(true)}>
@@ -78,6 +82,8 @@ function AppContent() {
       {view === 'approvals' && <UserApprovals />}
       {view === 'profile' && <UserProfile />}
       {view === 'billing' && <ProjectBillingReport asPage onClose={() => setView('tracker')} />}
+      {view === 'issues' && <Issues />}
+      {view === 'invoices' && <Invoices />}
       {showManualEntry && view !== 'tracker' && (
         <ManualTimeEntry
           projects={projects}

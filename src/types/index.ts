@@ -101,3 +101,68 @@ export interface BillableTimeEntry extends TimeEntry {
   rate_source: 'project' | 'organization' | null;
   billable_amount: number | null;
 }
+
+export type IssueStatus = 'open' | 'in_progress' | 'resolved' | 'billed' | 'closed';
+export type IssuePriority = 'low' | 'medium' | 'high' | 'urgent';
+export type IssueBillingType = 'flat' | 'hourly' | 'unbilled';
+
+export interface Issue {
+  id: string;
+  organization_id: string;
+  project_id?: string | null;
+  title: string;
+  description?: string | null;
+  reported_by?: string | null;
+  status: IssueStatus;
+  priority: IssuePriority;
+  resolution_notes?: string | null;
+  remaining_work?: string | null;
+  quoted_amount: number | null;
+  currency: string;
+  billing_type: IssueBillingType;
+  invoice_id?: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  resolved_at?: string | null;
+}
+
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'void';
+
+export interface Invoice {
+  id: string;
+  invoice_number: string;
+  organization_id: string | null;
+  project_id?: string | null;
+  status: InvoiceStatus;
+  issue_date: string;
+  due_date?: string | null;
+  period_start?: string | null;
+  period_end?: string | null;
+  recipient_name?: string | null;
+  recipient_email?: string | null;
+  subtotal: number;
+  total: number;
+  currency: string;
+  note?: string | null;
+  sent_at?: string | null;
+  paid_at?: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type InvoiceLineItemType = 'time' | 'issue' | 'custom';
+
+export interface InvoiceLineItem {
+  id: string;
+  invoice_id: string;
+  issue_id?: string | null;
+  type: InvoiceLineItemType;
+  description: string;
+  quantity?: number | null;
+  rate?: number | null;
+  amount: number;
+  sort_order: number;
+  created_at: string;
+}
