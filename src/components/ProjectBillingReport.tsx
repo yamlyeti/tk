@@ -207,7 +207,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
 
   function calculateProjectBreakdown() {
     const projectMap = new Map<string, { name: string; hours: number; amount: number; color: string }>();
-    const colors = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899'];
+    const colors = ['#F0D060', '#D4AF37', '#C8960A', '#B8860B', '#a67c00', '#8B6508', '#e8c040'];
     
     filteredEntries.forEach(entry => {
       const projectId = entry.project_id || 'no-project';
@@ -568,7 +568,6 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
               <button
                 onClick={() => setShowInvoice(true)}
                 className="billing-button billing-button-primary"
-                style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}
               >
                 📄 Generate Invoice
               </button>
@@ -1024,7 +1023,7 @@ export function ProjectBillingReport({ onClose, asPage, initialProjectId, initia
         {showInvoice && (
           <div className="billing-entries-modal">
             <div className="billing-entries-content" style={{ maxWidth: '960px' }}>
-              <div className="billing-modal-header" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' }}>
+              <div className="billing-modal-header">
                 <h3>Invoice</h3>
                 <button onClick={() => setShowInvoice(false)} className="billing-close-button">
                   <X size={20} />

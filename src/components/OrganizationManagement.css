@@ -360,7 +360,7 @@
 
 /* Dark mode overrides */
 html.dark-mode .org-card {
-  background: #211d15;
+  background: #100e0a;
   border-color: rgba(212, 175, 55, 0.2);
 }
 
@@ -398,7 +398,7 @@ html.dark-mode .modal-overlay {
 }
 
 html.dark-mode .modal-content {
-  background: #211d15;
+  background: #100e0a;
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
 

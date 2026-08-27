@@ -47,6 +47,12 @@
   border-radius: 4px;
 }
 
+html.dark-mode .time-editor-error {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
 .time-editor-actions {
   display: flex;
   gap: 8px;
@@ -70,6 +76,10 @@
 
 .time-info strong {
   color: #333;
+}
+
+html.dark-mode .time-info strong {
+  color: #f5f0e4;
 }
 
 .edit-time-btn {

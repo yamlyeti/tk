@@ -71,6 +71,10 @@
   border-radius: 0 0 8px 0;
 }
 
+html.dark-mode .autocomplete-suggestions::-webkit-scrollbar-track {
+  background: rgba(212, 175, 55, 0.05);
+}
+
 .autocomplete-suggestions::-webkit-scrollbar-thumb {
   background: #D4AF37;
   border-radius: 4px;

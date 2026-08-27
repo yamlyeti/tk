@@ -91,7 +91,7 @@ html.dark-mode .tracker-header h1 {
 }
 
 html.dark-mode .active-timer-banner {
-  background: linear-gradient(135deg, #17150F 0%, #211d15 50%, #17150F 100%);
+  background: linear-gradient(135deg, #17150F 0%, #100e0a 50%, #17150F 100%);
   box-shadow: 0 12px 48px rgba(212, 175, 55, 0.3);
 }
 
@@ -134,7 +134,7 @@ html.dark-mode .active-timer-banner {
 }
 
 html.dark-mode .timer-section {
-  background: #211d15;
+  background: #100e0a;
   border: 1px solid rgba(212, 175, 55, 0.18);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
@@ -423,6 +423,17 @@ html.dark-mode .form-row select:focus {
   user-select: none;
 }
 
+.entry-card.entry-highlight {
+  border-color: rgba(212, 175, 55, 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25), 0 8px 32px rgba(212, 175, 55, 0.3) !important;
+  animation: entry-highlight-pulse 2s ease;
+}
+
+@keyframes entry-highlight-pulse {
+  0%, 100% { background-color: transparent; }
+  20% { background-color: rgba(212, 175, 55, 0.12); }
+}
+
 .entry-card:hover {
   box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
   transform: translateY(-2px);
@@ -533,6 +544,11 @@ html.dark-mode .drag-handle:hover {
   margin-right: 6px;
 }
 
+html.dark-mode .entry-time strong,
+html.dark-mode .entry-duration strong {
+  color: #f5f0e4;
+}
+
 .entry-actions {
   display: flex;
   gap: 8px;
@@ -623,13 +639,110 @@ html.dark-mode .drag-handle:hover {
 }
 
 html.dark-mode .card-drag-handle {
-  color: #aaa;
-  background: rgba(30, 41, 59, 0.9);
+  color: #c9bfa4;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 html.dark-mode .card-drag-handle:hover {
-  color: #fff;
-  background: rgba(30, 41, 59, 1);
+  color: #f0d060;
+  background: rgba(212, 175, 55, 0.2);
+}
+
+.card-remove-btn {
+  position: absolute;
+  top: 12px;
+  right: 48px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+  border: none;
+  opacity: 0.5;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  z-index: 10;
+  transition: color 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.card-remove-btn:hover {
+  opacity: 1;
+  color: #dc2626;
+  background: rgba(255, 255, 255, 1);
+}
+
+html.dark-mode .card-remove-btn {
+  color: #c9bfa4;
+  background: rgba(212, 175, 55, 0.1);
+}
+
+html.dark-mode .card-remove-btn:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.add-widget-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: -8px 0 24px;
+}
+
+.add-widget-btn {
+  background: transparent;
+  border: 1px dashed rgba(212, 175, 55, 0.35);
+  color: #8a7e65;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-widget-btn:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  border-style: solid;
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.add-widget-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: #100e0a;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(212, 175, 55, 0.1);
+  padding: 6px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.add-widget-option {
+  background: transparent;
+  border: none;
+  color: #f5f0e4;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.add-widget-option:hover {
+  background: rgba(212, 175, 55, 0.14);
+  color: #f0d060;
 }
 
 /* Notes input field */

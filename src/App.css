@@ -9,133 +9,151 @@
   max-width: 1600px;
   margin: 0 auto;
   padding: 20px;
+  padding-top: max(20px, env(safe-area-inset-top, 20px));
+  padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  padding-left: max(20px, env(safe-area-inset-left, 20px));
+  padding-right: max(20px, env(safe-area-inset-right, 20px));
+}
+
+@media (max-width: 768px) {
+  .nav-bar {
+    display: none;
+  }
+
+  .app-container {
+    padding-bottom: max(96px, calc(80px + env(safe-area-inset-bottom, 0px)));
+  }
 }
 
 .nav-bar {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-bottom: 28px;
-  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-  padding: 10px 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(180, 130, 10, 0.3), 0 1px 0 rgba(255,255,255,0.15) inset;
+  gap: 8px;
+  margin-bottom: 32px;
+  background: rgba(16, 14, 10, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   position: sticky;
   top: 20px;
   z-index: 100;
 }
 
-html.dark-mode .nav-bar {
-  background: #17150F !important;
-  border: 1px solid rgba(212, 175, 55, 0.25) !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212,175,55,0.1) !important;
+.nav-brand {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
 }
 
-.nav-bar button {
+.nav-logo {
+  height: 30px;
+  width: 30px;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.35));
+}
+
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.nav-tabs button {
   background: transparent;
-  color: rgba(0, 0, 0, 0.65);
+  color: #8a7e65;
   border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 0.8125rem;
+  padding: 8px 4px;
+  font-size: 0.8rem;
   font-weight: 600;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  letter-spacing: 0.01em;
-  transition: background 0.15s, color 0.15s;
   white-space: nowrap;
+  position: relative;
+  transition: color 0.15s ease;
 }
 
-html.dark-mode .nav-bar button {
-  color: rgba(212, 175, 55, 0.55);
+.nav-tabs button + button {
+  margin-left: 14px;
 }
 
-.nav-bar button:hover {
-  background: rgba(0, 0, 0, 0.08);
-  color: rgba(0, 0, 0, 0.9);
-  transform: none;
-  box-shadow: none;
+.nav-tabs button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, #D4AF37, #F0D060);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
 }
 
-html.dark-mode .nav-bar button:hover {
-  background: rgba(212, 175, 55, 0.1);
-  color: #D4AF37;
+.nav-tabs button:hover {
+  color: #c9bfa4;
 }
 
-.nav-bar button.active {
-  background: rgba(255, 255, 255, 0.3);
-  color: #1a1000;
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  transform: none;
-  border: none;
+.nav-tabs button.active {
+  color: #F0D060;
 }
 
-html.dark-mode .nav-bar button.active {
-  background: rgba(212, 175, 55, 0.15);
-  color: #D4AF37;
-  box-shadow: none;
+.nav-tabs button.active::after {
+  transform: scaleX(1);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-left: 12px;
 }
 
 .nav-user-email {
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.5);
+  color: #5a5040;
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-html.dark-mode .nav-user-email {
-  color: rgba(212, 175, 55, 0.45);
-}
-
 .nav-add-time {
-  background: rgba(0, 0, 0, 0.12) !important;
-  color: rgba(0, 0, 0, 0.75) !important;
-  border: none !important;
-  padding: 7px 14px !important;
+  background: transparent !important;
+  color: #D4AF37 !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  padding: 6px 14px !important;
   border-radius: 8px !important;
-  font-size: 0.8125rem !important;
+  font-size: 0.8rem !important;
   font-weight: 600 !important;
   cursor: pointer;
-  transition: background 0.15s !important;
+  transition: all 0.15s ease !important;
 }
 
 .nav-add-time:hover {
-  background: rgba(0, 0, 0, 0.2) !important;
-  transform: none !important;
-}
-
-html.dark-mode .nav-add-time {
-  background: rgba(212, 175, 55, 0.12) !important;
-  color: #D4AF37 !important;
-}
-
-html.dark-mode .nav-add-time:hover {
-  background: rgba(212, 175, 55, 0.2) !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  background: rgba(212, 175, 55, 0.08) !important;
+  color: #F0D060 !important;
 }
 
 .nav-signout {
   background: transparent !important;
   border: none !important;
-  font-size: 1rem !important;
+  color: #5a5040 !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
   cursor: pointer;
-  padding: 6px 8px !important;
-  border-radius: 8px !important;
-  opacity: 0.6;
-  transition: opacity 0.15s !important;
-  line-height: 1;
+  padding: 6px 4px !important;
+  transition: color 0.15s ease !important;
 }
 
 .nav-signout:hover {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.1) !important;
-  transform: none !important;
-}
-
-html.dark-mode .nav-signout:hover {
-  background: rgba(212, 175, 55, 0.1) !important;
+  color: #D4AF37 !important;
 }
 
 /* Global Editable Fields Styling */

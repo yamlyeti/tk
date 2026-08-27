@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { TimeEntry, Project, BillableTimeEntry } from '../types';
 import { ProjectBillingReport } from './ProjectBillingReport';
+import { DonutChart, TrendBarChart } from './Charts';
 import './Dashboard.css';
 
 interface TagStats {
@@ -25,18 +26,30 @@ interface DailyStats {
   duration: number;
 }
 
-export const Dashboard = () => {
+interface DashboardProps {
+  initialProjectId?: string;
+  onFocusHandled?: () => void;
+}
+
+export const Dashboard = ({ initialProjectId, onFocusHandled }: DashboardProps = {}) => {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [filterProject, setFilterProject] = useState('');
+  const [filterProject, setFilterProject] = useState(initialProjectId || '');
   const [filterTag, setFilterTag] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportType, setReportType] = useState<'overview' | 'projects' | 'tags' | 'daily' | 'billing' | 'export'>('overview');
+  const [reportType, setReportType] = useState<'overview' | 'projects' | 'tags' | 'daily' | 'billing' | 'export'>(
+    initialProjectId ? 'projects' : 'overview'
+  );
 
   // Billing state
   const [billableEntries, setBillableEntries] = useState<BillableTimeEntry[]>([]);
   const [showBillingReport, setShowBillingReport] = useState(false);
+
+  useEffect(() => {
+    if (initialProjectId) onFocusHandled?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchEntries();
@@ -419,29 +432,44 @@ export const Dashboard = () => {
 
           {/* Billing Alert */}
           {todayEntriesWithoutRate > 0 && (
-            <div style={{
-              marginTop: '20px',
-              padding: '16px',
-              backgroundColor: '#fff3cd',
-              border: '1px solid #ffc107',
-              borderRadius: '8px',
-              color: '#856404'
-            }}>
+            <div className="billing-alert">
               <strong>⚠️ Missing Rates:</strong> {todayEntriesWithoutRate} time {todayEntriesWithoutRate === 1 ? 'entry' : 'entries'} from today without billable rates.
               <button
                 onClick={() => setShowBillingReport(true)}
-                style={{
-                  marginLeft: '10px',
-                  padding: '4px 12px',
-                  backgroundColor: '#ffc107',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontWeight: '500'
-                }}
+                className="billing-alert-button"
               >
                 View Billing Report
               </button>
+            </div>
+          )}
+
+          {/* Distribution Charts */}
+          {(projectStats.length > 0 || tagStats.length > 0) && (
+            <div className="charts-row">
+              {projectStats.length > 0 && (
+                <div className="chart-card">
+                  <h3>Project Distribution</h3>
+                  <DonutChart
+                    data={projectStats.slice(0, 6).map((stat) => ({
+                      label: stat.project.name,
+                      percentage: stat.percentage,
+                      formattedValue: `${stat.percentage.toFixed(1)}%`,
+                    }))}
+                  />
+                </div>
+              )}
+              {tagStats.length > 0 && (
+                <div className="chart-card">
+                  <h3>Tag Distribution</h3>
+                  <DonutChart
+                    data={tagStats.slice(0, 6).map((stat) => ({
+                      label: stat.tag,
+                      percentage: stat.percentage,
+                      formattedValue: `${stat.percentage.toFixed(1)}%`,
+                    }))}
+                  />
+                </div>
+              )}
             </div>
           )}
 
@@ -589,6 +617,20 @@ export const Dashboard = () => {
       {reportType === 'daily' && (
         <div className="report-section">
           <h3>Time by Day</h3>
+          {dailyStats.length > 0 && (
+            <div className="chart-card" style={{ marginBottom: '24px' }}>
+              <h3>Last 14 Days</h3>
+              <TrendBarChart
+                data={[...dailyStats]
+                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                  .slice(-14)
+                  .map((stat) => ({
+                    label: stat.date.split('/').slice(0, 2).join('/'),
+                    value: stat.duration,
+                  }))}
+              />
+            </div>
+          )}
           {dailyStats.length === 0 ? (
             <p className="no-data">No daily data for selected filters</p>
           ) : (
@@ -631,85 +673,32 @@ export const Dashboard = () => {
       {reportType === 'billing' && (
         <div className="report-section">
           <h3>Billing Overview</h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '16px',
-            marginBottom: '24px'
-          }}>
-            <div style={{
-              padding: '20px',
-              backgroundColor: '#e8f4f8',
-              borderRadius: '8px',
-              border: '1px solid #b8dae6'
-            }}>
-              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Today's Hours</div>
-              <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#0066cc' }}>
-                {todayBillableHours.toFixed(2)}
-              </div>
+          <div className="billing-stats-grid">
+            <div className="billing-stat-box billing-stat-box--neutral">
+              <div className="billing-stat-label">Today's Hours</div>
+              <div className="billing-stat-value">{todayBillableHours.toFixed(2)}</div>
             </div>
-            <div style={{
-              padding: '20px',
-              backgroundColor: '#e8f5e9',
-              borderRadius: '8px',
-              border: '1px solid #a5d6a7'
-            }}>
-              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Today's Amount</div>
-              <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#2e7d32' }}>
-                ${todayBillableAmount.toFixed(2)}
-              </div>
+            <div className="billing-stat-box billing-stat-box--positive">
+              <div className="billing-stat-label">Today's Amount</div>
+              <div className="billing-stat-value">${todayBillableAmount.toFixed(2)}</div>
             </div>
-            <div style={{
-              padding: '20px',
-              backgroundColor: todayEntriesWithoutRate > 0 ? '#fff3e0' : '#e8f5e9',
-              borderRadius: '8px',
-              border: todayEntriesWithoutRate > 0 ? '1px solid #ffb74d' : '1px solid #a5d6a7'
-            }}>
-              <div style={{ fontSize: '14px', color: '#555', marginBottom: '8px' }}>Entries Without Rate</div>
-              <div style={{ fontSize: '28px', fontWeight: 'bold', color: todayEntriesWithoutRate > 0 ? '#f57c00' : '#2e7d32' }}>
-                {todayEntriesWithoutRate}
-              </div>
+            <div className={`billing-stat-box ${todayEntriesWithoutRate > 0 ? 'billing-stat-box--warning' : 'billing-stat-box--positive'}`}>
+              <div className="billing-stat-label">Entries Without Rate</div>
+              <div className="billing-stat-value">{todayEntriesWithoutRate}</div>
             </div>
           </div>
 
-          <div style={{
-            padding: '24px',
-            backgroundColor: '#f5f5f5',
-            borderRadius: '8px',
-            textAlign: 'center'
-          }}>
-            <h4 style={{ marginBottom: '16px' }}>Full Billing Report</h4>
-            <p style={{ color: '#666', marginBottom: '20px' }}>
-              View detailed billing reports with date range filters, user breakdowns, and export options.
-            </p>
-            <button
-              onClick={() => setShowBillingReport(true)}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: '#4caf50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }}
-            >
+          <div className="billing-cta">
+            <h4>Full Billing Report</h4>
+            <p>View detailed billing reports with date range filters, user breakdowns, and export options.</p>
+            <button onClick={() => setShowBillingReport(true)} className="billing-cta-button">
               Open Billing Report
             </button>
           </div>
 
           {todayEntriesWithoutRate > 0 && (
-            <div style={{
-              marginTop: '24px',
-              padding: '16px',
-              backgroundColor: '#fff3cd',
-              border: '1px solid #ffc107',
-              borderRadius: '8px',
-              color: '#856404'
-            }}>
-              <h4 style={{ marginTop: 0 }}>⚠️ Action Required</h4>
+            <div className="billing-alert" style={{ marginTop: '24px' }}>
+              <h4>⚠️ Action Required</h4>
               <p>
                 {todayEntriesWithoutRate} time {todayEntriesWithoutRate === 1 ? 'entry' : 'entries'} from today {todayEntriesWithoutRate === 1 ? 'is' : 'are'} missing billable rates.
                 Set rates in Project Team Management to ensure accurate billing calculations.

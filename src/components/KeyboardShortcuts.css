@@ -112,6 +112,17 @@
   white-space: nowrap;
 }
 
+html.dark-mode .shortcut-key {
+  background: linear-gradient(135deg, #201c11 0%, #17140d 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  color: #f0d060;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+html.dark-mode .shortcuts-list::-webkit-scrollbar-track {
+  background: rgba(212, 175, 55, 0.05);
+}
+
 .shortcut-description {
   flex: 1;
   color: #555;

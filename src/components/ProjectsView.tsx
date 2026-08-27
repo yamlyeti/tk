@@ -19,6 +19,7 @@ export const ProjectsView = () => {
   const [loading, setLoading] = useState(false);
   const [managingTeam, setManagingTeam] = useState<{ id: string; name: string } | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   // Debug logging
   useEffect(() => {
@@ -107,6 +108,7 @@ export const ProjectsView = () => {
       setDescription('');
       setGithubLink('');
       setSelectedOrgId('');
+      setShowCreateForm(false);
       fetchProjects();
     }
     setLoading(false);
@@ -175,75 +177,84 @@ export const ProjectsView = () => {
 
   return (
     <div className="projects-container">
-      <h2>Projects</h2>
-      
-      <div className="add-project-section">
-        <h3>Create New Project</h3>
-        <div className="add-project-form">
-          <div className="form-group">
-            <label>Organization (Optional)</label>
-            <select
-              value={selectedOrgId}
-              onChange={(e) => setSelectedOrgId(e.target.value)}
-            >
-              <option value="">No Organization (Personal Project)</option>
-              {organizations.map((org) => (
-                <option key={org.id} value={org.id}>
-                  {org.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Project Name *</label>
-            <input
-              type="text"
-              placeholder="Enter project name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Tags</label>
-            <input
-              type="text"
-              placeholder="Comma separated (e.g., web, frontend, react)"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              placeholder="Brief description of the project"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>GitHub Link</label>
-            <input
-              type="url"
-              placeholder="https://github.com/username/repo"
-              value={githubLink}
-              onChange={(e) => setGithubLink(e.target.value)}
-            />
-          </div>
-          
-          <button 
-            onClick={addProject} 
-            disabled={loading || !name.trim()}
-            className="add-project-button"
-          >
-            {loading ? 'Creating...' : '+ Add Project'}
-          </button>
-        </div>
+      <div className="projects-header-row">
+        <h2>Projects</h2>
+        <button
+          className="new-project-toggle"
+          onClick={() => setShowCreateForm((prev) => !prev)}
+        >
+          {showCreateForm ? '✕ Cancel' : '+ New Project'}
+        </button>
       </div>
+
+      {showCreateForm && (
+        <div className="add-project-section">
+          <div className="add-project-form">
+            <div className="form-group">
+              <label>Organization (Optional)</label>
+              <select
+                value={selectedOrgId}
+                onChange={(e) => setSelectedOrgId(e.target.value)}
+              >
+                <option value="">No Organization (Personal Project)</option>
+                {organizations.map((org) => (
+                  <option key={org.id} value={org.id}>
+                    {org.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Project Name *</label>
+              <input
+                type="text"
+                placeholder="Enter project name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Tags</label>
+              <input
+                type="text"
+                placeholder="Comma separated (e.g., web, frontend, react)"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                placeholder="Brief description of the project"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={2}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>GitHub Link</label>
+              <input
+                type="url"
+                placeholder="https://github.com/username/repo"
+                value={githubLink}
+                onChange={(e) => setGithubLink(e.target.value)}
+              />
+            </div>
+
+            <button
+              onClick={addProject}
+              disabled={loading || !name.trim()}
+              className="add-project-button"
+            >
+              {loading ? 'Creating...' : '+ Add Project'}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="projects-section">
         <h3>All Projects ({projects.length})</h3>

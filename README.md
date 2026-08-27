@@ -1,240 +1,140 @@
-# tk - Time Keeping System
+<div align="center">
 
-A modern time tracking application built with React, TypeScript, and Supabase. Track your work hours with an intuitive interface that works on web and mobile devices.
+<img src="public/tk-icon.svg" alt="tk" width="96" height="96" />
+
+# tk — Time, tracked.
+
+Dark-mode black & gold time tracking app. Vite + React + TypeScript, Supabase backend, Vercel-ready.
+
+<p>
+  <a href="https://github.com/yamlyeti/tk">GitHub</a>
+</p>
+
+</div>
+
+---
 
 ## Features
 
-- ✅ User authentication (Sign up, Sign in, Sign out)
-- ⏱️ Start/Stop timer for tracking work sessions
-- 📝 Add descriptions to time entries
-- 📊 View all time entries with start/end times and durations
-- 🗑️ Delete completed time entries
-- 📱 Responsive design for web and Android (via browser)
-- 🔐 Secure authentication via Supabase
+### Time tracking
 
-## Architecture
+- **Start/stop timer** — one active timer at a time, live `HH:MM:SS` display
+- **Pause/resume** — pause for a break or interruption and resume later; paused time is automatically tracked and excluded from the entry's duration, however many times you pause
+- **Manual time entry** — for the timer you forgot to start: duration mode (`3h 15m`) or time-range mode (`9:00 → 17:00`, duration auto-calculated)
+- **Edit any entry** — adjust start/end time on a completed entry; duration recalculates automatically, with validation that end comes after start
+- **Tags with autocomplete** — suggestions drawn from tags you've actually used before, arrow-key navigation, comma-separated for multiple
+- **Notes on entries** — optional multi-line notes, full-text search indexed in Postgres (`tsvector`/GIN)
+- **Draggable, collapsible workspace** — reorder and collapse the Timer / Goals / Pomodoro cards on the tracker page to match how you work (`@hello-pangea/dnd`)
 
-```
-┌─────────────────────────────────────────┐
-│          React Frontend (Vite)          │
-│  ┌─────────────────────────────────┐   │
-│  │  Components                      │   │
-│  │  • Auth (Login/Signup)          │   │
-│  │  • TimeTracker (Main UI)        │   │
-│  └─────────────────────────────────┘   │
-│  ┌─────────────────────────────────┐   │
-│  │  Contexts                        │   │
-│  │  • AuthContext (User state)     │   │
-│  └─────────────────────────────────┘   │
-└─────────────────────────────────────────┘
-                   │
-                   ↓ Supabase Client
-┌─────────────────────────────────────────┐
-│         Supabase (Backend)              │
-│  ┌─────────────────────────────────┐   │
-│  │  PostgreSQL Database             │   │
-│  │  • time_entries table            │   │
-│  │  • Row Level Security (RLS)      │   │
-│  └─────────────────────────────────┘   │
-│  ┌─────────────────────────────────┐   │
-│  │  Authentication                  │   │
-│  │  • Email/Password auth           │   │
-│  │  • Session management            │   │
-│  └─────────────────────────────────┘   │
-└─────────────────────────────────────────┘
-```
+### Stay focused
 
-## Tech Stack
+- **Goals** — daily and weekly time targets with animated gradient progress bars
+- **Pomodoro timer** — configurable work/break intervals, progress ring, session counter
+- **Idle detection** — auto-pauses after inactivity; when you're back, choose to keep or discard the idle time
+- **Timer notifications** — desktop alerts at 30-minute, 1h, 2h, 4h, and 8h milestones on an active timer
+- **Keyboard shortcuts** — `Alt+S` start/stop · `Alt+P` pause/resume · `Alt+N` focus new entry · `Ctrl+/` shortcuts help · `Esc` close
 
-- **Frontend**: React 19 + TypeScript
-- **Build Tool**: Vite
-- **Backend/Auth**: Supabase
-- **Runtime**: Node.js or Bun
-- **Styling**: CSS
+### Projects & organizations
 
-## Prerequisites
+- **Projects** — create, edit, delete; tags, description, GitHub link
+- **Organization hierarchy** — group projects under an organization (`Organization → Projects → Time Entries`); owner/admin/member roles, per-org stats (projects, members, total hours tracked)
+- **Project teams** — assign specific users to a project with their own owner/admin/member role, independent of organization membership
 
-- Node.js (v18+) or Bun
-- A Supabase account and project
+### Reporting
 
-## Quick Start
+- **Four report views** — Overview, By Project, By Tag, By Day — each with progress bars and percentage breakdowns
+- **Filtering** — project, tag, custom date range, plus one-click quick filters (today / yesterday / last 7 days / last 30 days / all time)
+- **CSV export** — date, description, project, tags, start/end time, duration
 
-See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed setup instructions.
+### Billing
 
-```bash
-# Install dependencies
-npm install
+- **Billable vs. non-billable** — mark time entries billable, filter by either
+- **Per-project/org/user rates** — billable amounts computed from configured hourly rates
+- **Invoice builder** — add custom line items (with a one-click "friend discount" shortcut), notes, and a live computed total
+- **Email an invoice** — sends via a Supabase Edge Function (`send-invoice`)
+- **CSV export** for billing records
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your Supabase credentials
+### Admin & access
 
-# Run development server
-npm run dev
-```
+- **Email/password auth** via Supabase, session handled automatically
+- **Admin approval workflow** — new signups land in `pending` and are blocked from the app (enforced by RLS, not just the UI) until an admin approves; denied users see a clear message on login
+- **User management** — search/filter by name, email, role, or status; role assignment (admin/member); activate/deactivate; CSV export
+- **Personal profile page**
 
-## Setup Instructions
+### PWA
 
-### 1. Clone the repository
+- Installable on Android (Chrome → Add to Home screen) and iOS (Share → Add to Home Screen)
+- Offline app shell via `vite-plugin-pwa`; Workbox caches Google Fonts (cache-first) and leaves Supabase calls network-only, so you never see stale data
+- Black-and-gold **tk** mark as the icon and OS theme color
 
-```bash
-git clone https://github.com/yamlyeti/tk.git
-cd tk
-```
+---
 
-### 2. Install dependencies
+## Stack
 
-Using npm:
+| Layer | Tech |
+|-------|------|
+| Frontend | Vite · React 19 · TypeScript |
+| Backend | Supabase (Postgres · Auth · Row Level Security · Edge Functions) |
+| Hosting | Vercel (`vercel.json` configured; not yet linked/deployed) |
+| Drag & drop | `@hello-pangea/dnd` |
+| PWA | `vite-plugin-pwa` |
+
+---
+
+## Local setup
+
+1. Install dependencies:
+
 ```bash
 npm install
 ```
 
-Or using bun:
-```bash
-bun install
-```
-
-### 3. Set up Supabase
-
-1. Create a free account at [supabase.com](https://supabase.com)
-2. Create a new project
-3. Go to Project Settings > API to get your credentials
-4. Create the database table by running this SQL in the SQL Editor:
-
-```sql
--- Create time_entries table
-create table public.time_entries (
-  id uuid default gen_random_uuid() primary key,
-  user_id uuid references auth.users not null,
-  description text not null,
-  start_time timestamp with time zone not null,
-  end_time timestamp with time zone,
-  duration integer,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Enable Row Level Security
-alter table public.time_entries enable row level security;
-
--- Create policy for users to see only their own entries
-create policy "Users can view own entries"
-  on public.time_entries for select
-  using (auth.uid() = user_id);
-
--- Create policy for users to insert their own entries
-create policy "Users can insert own entries"
-  on public.time_entries for insert
-  with check (auth.uid() = user_id);
-
--- Create policy for users to update their own entries
-create policy "Users can update own entries"
-  on public.time_entries for update
-  using (auth.uid() = user_id);
-
--- Create policy for users to delete their own entries
-create policy "Users can delete own entries"
-  on public.time_entries for delete
-  using (auth.uid() = user_id);
-
--- Create index for better performance
-create index time_entries_user_id_idx on public.time_entries(user_id);
-create index time_entries_start_time_idx on public.time_entries(start_time desc);
-```
-
-### 4. Configure environment variables
-
-1. Copy the `.env.example` file to `.env`:
+2. Copy environment variables:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
-
-2. Update `.env` with your Supabase credentials:
 
 ```
 VITE_SUPABASE_URL=your-project-url.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### 5. Run the development server
+3. In Supabase, run the schema. The base schema lives in `multi-user-setup.sql` and `supabase-setup.sql`; feature-specific tables and columns were added incrementally via the `migration-*.sql` files at the repo root (organizations, user approval, pause/resume, notes, billable rates, etc.) — each is also documented in its matching `*_FEATURE.md` file. There's no single consolidated, idempotent schema file yet (worth doing before this repo is handed to anyone else), so on a fresh Supabase project, check the migration files' `create table` statements against what's already there before running them.
 
-Using npm:
+4. Start dev:
+
 ```bash
 npm run dev
 ```
 
-Or using bun:
+Open `http://localhost:5173`.
+
+---
+
+## Vercel deploy
+
+`vercel.json` is already configured (build command, SPA rewrites for the client-side routes). Not yet linked to a Vercel project — to deploy:
+
 ```bash
-bun run dev
+vercel link
+vercel env add VITE_SUPABASE_URL
+vercel env add VITE_SUPABASE_ANON_KEY
+vercel deploy --prod
 ```
 
-The app will be available at `http://localhost:5173`
+---
 
-## Building for Production
+## Project layout
 
-```bash
-npm run build
-# or
-bun run build
+```text
+src/
+  components/   TimeTracker, Dashboard, ProjectsView, OrganizationManagement,
+                ProjectTeamManagement, ProjectBillingReport, UserApprovals,
+                Goals, PomodoroTimer, KeyboardShortcuts, Auth, …
+  contexts/     AuthContext, ThemeContext
+  lib/          supabase client
+  types/        shared TypeScript types
+public/         PWA icons — tk-icon.svg, apple-touch-icon.png, pwa-*.png
+supabase-setup.sql, multi-user-setup.sql, migration-*.sql   Schema (see Local setup)
 ```
-
-The production-ready files will be in the `dist` directory.
-
-## Usage
-
-1. **Sign Up**: Create a new account with your email and password
-2. **Sign In**: Log in with your credentials
-3. **Start Tracking**: Enter what you're working on and click "Start"
-4. **Stop Tracking**: Click "Stop" when you're done
-5. **View Entries**: See all your time entries with durations
-6. **Delete Entries**: Remove completed entries you no longer need
-
-## Mobile Usage (Android)
-
-The app is fully responsive and works great in mobile browsers:
-
-1. Open the app URL in Chrome or any modern browser on your Android device
-2. Optionally, add it to your home screen for a native app-like experience:
-   - Open the menu (three dots)
-   - Select "Add to Home screen"
-   - The app will now launch like a native app
-
-## Development
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Lint the code
-
-## Documentation
-
-- **[Testing Guide](./TESTING_GUIDE.md)** - How to test and view the application
-- **[Setup Guide](./SETUP_GUIDE.md)** - Quick setup instructions
-- **[Screenshots](./SCREENSHOTS.md)** - Visual overview of the UI
-- **[Features](./FEATURES.md)** - Detailed feature documentation
-- **[Contributing](./CONTRIBUTING.md)** - How to contribute to this project
-
-## Project Structure
-
-```
-tk/
-├── src/
-│   ├── components/      # React components (Auth, TimeTracker)
-│   ├── contexts/        # React contexts (Auth)
-│   ├── lib/            # Third-party configs (Supabase)
-│   ├── types/          # TypeScript type definitions
-│   └── App.tsx         # Main app component
-├── public/             # Static assets
-├── supabase-setup.sql  # Database schema and RLS policies
-└── README.md          # You are here
-```
-
-## Support & Contributing
-
-- 🐛 Found a bug? [Open an issue](https://github.com/yamlyeti/tk/issues)
-- 💡 Have an idea? [Open a discussion](https://github.com/yamlyeti/tk/discussions)
-- 🤝 Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md)
-
-## License
-
-MIT

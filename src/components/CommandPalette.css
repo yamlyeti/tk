@@ -1,0 +1,127 @@
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  z-index: 9999;
+  animation: cmdk-fade-in 0.15s ease;
+}
+
+@keyframes cmdk-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cmdk-modal {
+  width: 90%;
+  max-width: 560px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background: #100e0a;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 48px rgba(212, 175, 55, 0.12);
+  overflow: hidden;
+  animation: cmdk-slide-down 0.18s ease;
+}
+
+@keyframes cmdk-slide-down {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cmdk-input {
+  padding: 18px 20px;
+  border: none;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: transparent;
+  color: #f5f0e4;
+  font-size: 1.05rem;
+}
+
+.cmdk-input:focus {
+  outline: none;
+}
+
+.cmdk-input::placeholder {
+  color: #5a5040;
+}
+
+.cmdk-list {
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.cmdk-empty {
+  padding: 24px;
+  text-align: center;
+  color: #8a7e65;
+  font-size: 0.9rem;
+}
+
+.cmdk-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.cmdk-item.active {
+  background: rgba(212, 175, 55, 0.14);
+}
+
+.cmdk-item-label {
+  color: #f5f0e4;
+  font-size: 0.95rem;
+}
+
+.cmdk-item.active .cmdk-item-label {
+  color: #f0d060;
+}
+
+.cmdk-item-sublabel {
+  color: #8a7e65;
+  font-size: 0.78rem;
+}
+
+.cmdk-footer {
+  display: flex;
+  gap: 16px;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 0.75rem;
+  color: #8a7e65;
+}
+
+.cmdk-footer kbd {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: 'Courier New', monospace;
+  color: #c9bfa4;
+}

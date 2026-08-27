@@ -323,7 +323,7 @@
 
 /* Dark mode overrides */
 html.dark-mode .stat-card {
-  background: #211d15;
+  background: #100e0a;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -336,7 +336,7 @@ html.dark-mode .stat-label {
 }
 
 html.dark-mode .user-card {
-  background: #211d15;
+  background: #100e0a;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
