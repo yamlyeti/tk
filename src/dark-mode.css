@@ -1,4 +1,4 @@
-/* SmartAgent Brand — Light mode */
+/* tk — Light mode */
 :root {
   --bg-primary: #faf9f7;
   --bg-secondary: #f3f1ec;
@@ -43,31 +43,32 @@
   --shadow-colored: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
-/* SmartAgent Brand — Dark mode (full palette) */
+/* tk — Dark mode (full palette, near-black luxury) */
 html.dark-mode {
-  --bg-primary: #1c1914;
-  --bg-secondary: #221e16;
-  --bg-tertiary: #2a2419;
-  --bg-accent: #302a1e;
+  --bg-primary: #0a0906;
+  --bg-secondary: #100e0a;
+  --bg-tertiary: #17140d;
+  --bg-accent: #1e1a10;
 
-  --text-primary: #f0ead8;
-  --text-secondary: #c4b896;
+  --text-primary: #f5f0e4;
+  --text-secondary: #c9bfa4;
   --text-tertiary: #8a7e65;
 
-  --border-primary: #35301f;
-  --border-secondary: #28231a;
+  --border-primary: #2a2419;
+  --border-secondary: #1c1810;
+  --border-gold: rgba(212, 175, 55, 0.35);
 
   --primary-color: #D4AF37;
   --primary-hover: #F0D060;
-  --primary-light: #2A2618;
+  --primary-light: #201c11;
 
   --secondary-color: #C8960A;
   --secondary-hover: #E8C040;
-  --secondary-light: #3A3525;
+  --secondary-light: #2a2313;
 
   --accent-color: #D4AF37;
   --accent-hover: #F0D060;
-  --accent-light: #3A3525;
+  --accent-light: #2a2313;
 
   --success-color: #34d399;
   --success-hover: #6ee7b7;
@@ -79,12 +80,13 @@ html.dark-mode {
 
   --warning-color: #D4AF37;
   --warning-hover: #F0D060;
-  --warning-light: #3A3525;
+  --warning-light: #2a2313;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7);
-  --shadow-colored: 0 4px 20px rgba(212, 175, 55, 0.35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.8);
+  --shadow-colored: 0 4px 24px rgba(212, 175, 55, 0.28);
+  --shadow-gold-glow: 0 0 40px rgba(212, 175, 55, 0.18);
 }
 
 /* Apply dark mode globally */

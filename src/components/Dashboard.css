@@ -62,8 +62,9 @@ html.dark-mode .dashboard-header h2 {
 }
 
 html.dark-mode .dashboard-filters {
-  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: linear-gradient(135deg, rgba(16, 14, 10, 0.95) 0%, rgba(10, 9, 6, 0.9) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 32px rgba(212, 175, 55, 0.05);
 }
 
 .dashboard-filters h3 {
@@ -99,6 +100,10 @@ html.dark-mode .dashboard-filters h3 {
   font-weight: 500;
   color: #555;
   font-size: 0.9rem;
+}
+
+html.dark-mode .filter-group label {
+  color: #c9bfa4;
 }
 
 .filter-group input,
@@ -321,7 +326,7 @@ html.dark-mode .summary-card:hover {
 }
 
 html.dark-mode .summary-icon {
-  background: linear-gradient(135deg, #17150F 0%, #1a1000 100%);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.2) 100%);
 }
 
 .summary-card:hover .summary-icon {
@@ -388,8 +393,9 @@ html.dark-mode .summary-sublabel {
 }
 
 html.dark-mode .preview-section {
-  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95), rgba(33, 29, 21, 0.85));
+  background: linear-gradient(135deg, rgba(16, 14, 10, 0.95), rgba(10, 9, 6, 0.9));
   border: 2px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .preview-section:hover {
@@ -438,6 +444,10 @@ html.dark-mode .preview-section h3 {
   color: #333;
 }
 
+html.dark-mode .preview-name {
+  color: #f5f0e4;
+}
+
 .preview-time {
   color: #D4AF37;
   font-weight: 600;
@@ -450,6 +460,10 @@ html.dark-mode .preview-section h3 {
   background: #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
+}
+
+html.dark-mode .preview-bar {
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .preview-bar-fill {
@@ -466,6 +480,10 @@ html.dark-mode .preview-section h3 {
   text-align: right;
 }
 
+html.dark-mode .preview-percentage {
+  color: #c9bfa4;
+}
+
 .report-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
   backdrop-filter: blur(10px);
@@ -476,8 +494,9 @@ html.dark-mode .preview-section h3 {
 }
 
 html.dark-mode .report-section {
-  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95), rgba(33, 29, 21, 0.85));
+  background: linear-gradient(135deg, rgba(16, 14, 10, 0.95), rgba(10, 9, 6, 0.9));
   border: 2px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .report-section h3 {
@@ -504,6 +523,10 @@ html.dark-mode .report-section h3 {
   font-size: 1.1rem;
 }
 
+html.dark-mode .no-data {
+  color: #8a7e65;
+}
+
 .stats-table {
   overflow-x: auto;
 }
@@ -517,6 +540,10 @@ html.dark-mode .report-section h3 {
   background: #f5f9ff;
 }
 
+html.dark-mode .stats-table thead {
+  background: rgba(212, 175, 55, 0.08);
+}
+
 .stats-table th {
   text-align: left;
   padding: 14px 16px;
@@ -526,14 +553,28 @@ html.dark-mode .report-section h3 {
   font-size: 0.95rem;
 }
 
+html.dark-mode .stats-table th {
+  color: #d4af37;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+}
+
 .stats-table td {
   padding: 14px 16px;
   border-bottom: 1px solid #f0f0f0;
   color: #333;
 }
 
+html.dark-mode .stats-table td {
+  color: #f5f0e4;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
 .stats-table tbody tr:hover {
   background: #fafafa;
+}
+
+html.dark-mode .stats-table tbody tr:hover {
+  background: rgba(212, 175, 55, 0.06);
 }
 
 .project-name,
@@ -582,6 +623,10 @@ html.dark-mode .report-section h3 {
   max-width: 200px;
 }
 
+html.dark-mode .mini-bar {
+  background: rgba(212, 175, 55, 0.1);
+}
+
 .mini-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, #D4AF37, #C8960A, #B8860B);
@@ -596,6 +641,10 @@ html.dark-mode .report-section h3 {
   background: #e0e0e0;
   border-radius: 6px;
   overflow: hidden;
+}
+
+html.dark-mode .daily-bar {
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .daily-bar-fill {
@@ -630,4 +679,124 @@ html.dark-mode .report-section h3 {
   .stats-table td {
     padding: 10px 8px;
   }
+}
+
+.billing-alert {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  color: #f0d060;
+}
+
+.billing-alert h4 {
+  margin: 0 0 8px 0;
+  background: none;
+  -webkit-text-fill-color: #f0d060;
+  color: #f0d060;
+}
+
+.billing-alert p {
+  margin: 0;
+  color: #c9bfa4;
+  line-height: 1.5;
+}
+
+.billing-alert-button {
+  margin-left: 10px;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: box-shadow 0.2s ease;
+}
+
+.billing-alert-button:hover {
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+}
+
+.billing-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.billing-stat-box {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(16, 14, 10, 0.75);
+}
+
+.billing-stat-box--positive {
+  border-color: rgba(52, 211, 153, 0.3);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.billing-stat-box--warning {
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.billing-stat-label {
+  font-size: 14px;
+  color: #8a7e65;
+  margin-bottom: 8px;
+}
+
+.billing-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f0d060;
+}
+
+.billing-stat-box--positive .billing-stat-value {
+  color: #34d399;
+}
+
+.billing-stat-box--warning .billing-stat-value {
+  color: #fbbf24;
+}
+
+.billing-cta {
+  padding: 24px;
+  background: rgba(16, 14, 10, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.billing-cta h4 {
+  margin: 0 0 16px 0;
+  color: #f5f0e4;
+  font-size: 1.15rem;
+}
+
+.billing-cta p {
+  color: #8a7e65;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.billing-cta-button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
+  color: #1a1000;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+  transition: all 0.2s ease;
+}
+
+.billing-cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.45);
 }

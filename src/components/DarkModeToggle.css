@@ -1,22 +1,19 @@
 .dark-mode-toggle {
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: #8a7e65;
+  padding: 6px;
   border-radius: 8px;
-  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.15s ease, background 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 50px;
 }
 
 .dark-mode-toggle:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.05) rotate(15deg);
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .dark-mode-toggle:active {

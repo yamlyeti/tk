@@ -215,7 +215,7 @@ html.dark-mode .modal-actions button:not(.primary):hover:not(:disabled) {
 
 /* Dark mode adjustments */
 html.dark-mode .edit-project-modal {
-  background: var(--card-bg, #1c1914);
+  background: var(--card-bg, #0a0906);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
@@ -232,7 +232,7 @@ html.dark-mode .edit-project-modal {
 }
 
 html.dark-mode {
-  --card-bg: #1c1914;
+  --card-bg: #0a0906;
   --header-bg: #221e16;
   --input-bg: #221e16;
   --text-color: #f1f5f9;

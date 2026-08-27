@@ -4,56 +4,54 @@
   padding: 24px;
 }
 
-.projects-container h2 {
-  font-size: 2rem;
-  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 32px;
+.projects-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
 }
 
-html.dark-mode .projects-container h2 {
+.projects-container h2 {
+  font-size: 1.6rem;
   background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin: 0;
+}
+
+.new-project-toggle {
+  padding: 9px 18px;
+  background: transparent;
+  color: #D4AF37;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.new-project-toggle:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.08);
+  color: #F0D060;
 }
 
 .add-project-section {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(16, 14, 10, 0.75);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(212, 175, 55, 0.2);
-}
-
-html.dark-mode .add-project-section {
-  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-}
-
-.add-project-section h3 {
-  font-size: 1.3rem;
-  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 20px;
-}
-
-html.dark-mode .add-project-section h3 {
-  background: linear-gradient(135deg, #D4AF37 0%, #C8960A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .add-project-form {
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 .form-group {
@@ -68,6 +66,10 @@ html.dark-mode .add-project-section h3 {
   font-size: 0.95rem;
 }
 
+html.dark-mode .form-group label {
+  color: #c9bfa4;
+}
+
 .form-group input,
 .form-group textarea {
   padding: 12px 16px;
@@ -80,7 +82,7 @@ html.dark-mode .add-project-section h3 {
 
 html.dark-mode .form-group input,
 html.dark-mode .form-group textarea {
-  background: rgba(28, 25, 20, 0.6);
+  background: rgba(16, 14, 10, 0.75);
   border-color: rgba(212, 175, 55, 0.3);
   color: #e2e8f0;
 }
@@ -169,7 +171,7 @@ html.dark-mode .form-group textarea:focus {
 }
 
 html.dark-mode .project-card {
-  background: linear-gradient(135deg, rgba(28, 25, 20, 0.95) 0%, rgba(33, 29, 21, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(16, 14, 10, 0.95) 0%, rgba(10, 9, 6, 0.85) 100%);
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
@@ -278,6 +280,10 @@ html.dark-mode .project-card:hover {
   font-size: 0.85rem;
   color: #999;
   font-weight: 500;
+}
+
+html.dark-mode .stat-label {
+  color: #8a7e65;
 }
 
 .stat-value {
