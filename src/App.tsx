@@ -15,7 +15,7 @@ import { DarkModeToggle } from './components/DarkModeToggle';
 import { ProjectBillingReport } from './components/ProjectBillingReport';
 import { ManualTimeEntry } from './components/ManualTimeEntry';
 import { Issues } from './components/Issues';
-import { Invoices } from './components/Invoices';
+import Invoices from './components/Invoices';
 import { CommandPalette } from './components/CommandPalette';
 import type { View } from './components/CommandPalette';
 import { MobileNav } from './components/MobileNav';

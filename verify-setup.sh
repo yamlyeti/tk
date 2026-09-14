@@ -48,8 +48,30 @@ fi
 
 echo ""
 
+# Check invoicing migration files
+echo "3️⃣  Checking invoicing setup files..."
+if [ -f migration-billable-rates.sql ]; then
+  echo "   ✅ migration-billable-rates.sql found (hourly rates + billable_time_entries view)"
+else
+  echo "   ❌ migration-billable-rates.sql NOT found!"
+fi
+if [ -f migration-issues-and-invoices.sql ]; then
+  echo "   ✅ migration-issues-and-invoices.sql found (invoices, line items, issues)"
+else
+  echo "   ❌ migration-issues-and-invoices.sql NOT found!"
+fi
+if [ -f supabase/functions/send-invoice/index.ts ]; then
+  echo "   ✅ send-invoice edge function found"
+  echo "   📧 Deploy with: supabase functions deploy send-invoice"
+  echo "   🔑 Set secrets: GMAIL_USER, GMAIL_APP_PASSWORD (optional: GMAIL_FROM)"
+else
+  echo "   ❌ send-invoice edge function NOT found!"
+fi
+
+echo ""
+
 # Check if database setup file exists
-echo "3️⃣  Checking database setup files..."
+echo "4️⃣  Checking database setup files..."
 if [ -f robust-complete-database-setup.sql ]; then
   echo "   ✅ robust-complete-database-setup.sql found"
   echo "   📋 Have you run this in Supabase SQL Editor?"
@@ -61,7 +83,7 @@ fi
 echo ""
 
 # Check if project is in git repo
-echo "4️⃣  Checking Git repository..."
+echo "5️⃣  Checking Git repository..."
 if [ -d .git ]; then
   echo "   ✅ Git repository found"
   
@@ -85,9 +107,13 @@ echo ""
 echo "[ ] 1. Created .env file with Supabase credentials"
 echo "[ ] 2. Ran 'npm install' to install dependencies"
 echo "[ ] 3. Ran 'robust-complete-database-setup.sql' in Supabase"
-echo "[ ] 4. Restarted dev server after creating .env"
-echo "[ ] 5. Logged into the app"
-echo "[ ] 6. Checked browser console for errors"
+echo "[ ] 4. Ran migration-billable-rates.sql in Supabase (for hourly invoicing)"
+echo "[ ] 5. Ran migration-issues-and-invoices.sql in Supabase (for persisted invoices)"
+echo "[ ] 6. Deployed send-invoice edge function + set Gmail secrets"
+echo "[ ] 7. Set hourly rates on project team members (Project → Team)"
+echo "[ ] 8. Restarted dev server after creating .env"
+echo "[ ] 9. Logged into the app"
+echo "[ ] 10. Checked browser console for errors"
 echo ""
 echo "======================================"
 echo "🚀 Next Steps"

@@ -45,8 +45,6 @@ Deno.serve(async (req) => {
 
     const gmailUser = Deno.env.get('GMAIL_USER');
     const gmailAppPassword = Deno.env.get('GMAIL_APP_PASSWORD');
-    // GMAIL_FROM lets you send from an alias without changing the authenticating account.
-    // Must be configured as a "Send As" alias on the GMAIL_USER account in Gmail settings.
     const gmailFrom = Deno.env.get('GMAIL_FROM') || gmailUser;
 
     if (!gmailUser || !gmailAppPassword) {
@@ -88,58 +86,62 @@ Deno.serve(async (req) => {
   }
 });
 
+function formatAmount(amount: number): string {
+  return amount < 0 ? `-$${Math.abs(amount).toFixed(2)}` : `$${amount.toFixed(2)}`;
+}
+
 function buildInvoiceHtml(p: InvoicePayload, fromEmail: string): string {
   const invoiceDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const userRows = p.userSummaries.map(u => `
     <tr>
-      <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;">
-        <strong>${u.fullName || 'Team Member'}</strong>
-        <div style="font-size:12px;color:#6b7280;">${u.email}</div>
+      <td style="padding:10px 8px;border-bottom:1px solid #2a2419;">
+        <strong style="color:#f5f0e4;">${u.fullName || 'Team Member'}</strong>
+        <div style="font-size:12px;color:#8a7e65;">${u.email}</div>
       </td>
-      <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:right;">${u.totalHours.toFixed(2)}</td>
-      <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:right;">${u.averageRate > 0 ? `${u.currency} ${u.averageRate.toFixed(2)}/hr` : '—'}</td>
-      <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:600;">${u.currency} ${u.totalAmount.toFixed(2)}</td>
+      <td style="padding:10px 8px;border-bottom:1px solid #2a2419;text-align:right;color:#c9bfa4;">${u.totalHours.toFixed(2)}</td>
+      <td style="padding:10px 8px;border-bottom:1px solid #2a2419;text-align:right;color:#c9bfa4;">${u.averageRate > 0 ? `${u.currency} ${u.averageRate.toFixed(2)}/hr` : '—'}</td>
+      <td style="padding:10px 8px;border-bottom:1px solid #2a2419;text-align:right;font-weight:600;color:#D4AF37;">${u.currency} ${u.totalAmount.toFixed(2)}</td>
     </tr>`).join('');
 
   const lineItemRows = p.lineItems.map(item => `
     <tr>
-      <td colspan="3" style="padding:10px 8px;border-bottom:1px solid #e5e7eb;color:${item.amount < 0 ? '#ef4444' : '#111827'};">
+      <td colspan="3" style="padding:10px 8px;border-bottom:1px solid #2a2419;color:${item.amount < 0 ? '#f87171' : '#f5f0e4'};">
         ${item.description}
       </td>
-      <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:600;color:${item.amount < 0 ? '#ef4444' : '#111827'};">
-        ${item.amount < 0 ? '-' : ''}$${Math.abs(item.amount).toFixed(2)}
+      <td style="padding:10px 8px;border-bottom:1px solid #2a2419;text-align:right;font-weight:600;color:${item.amount < 0 ? '#f87171' : '#D4AF37'};">
+        ${formatAmount(item.amount)}
       </td>
     </tr>`).join('');
 
-  const subtotalRow = p.lineItems.length > 0 ? `
+  const subtotalRow = p.lineItems.length > 0 || p.userSummaries.length > 0 ? `
     <tr>
-      <td colspan="3" style="padding:10px 8px;text-align:right;color:#6b7280;font-size:14px;">Subtotal:</td>
-      <td style="padding:10px 8px;text-align:right;color:#6b7280;">$${p.subtotal.toFixed(2)}</td>
+      <td colspan="3" style="padding:10px 8px;text-align:right;color:#8a7e65;font-size:14px;">Subtotal:</td>
+      <td style="padding:10px 8px;text-align:right;color:#8a7e65;">$${p.subtotal.toFixed(2)}</td>
     </tr>` : '';
 
   const noteHtml = p.note ? `
-    <div style="margin-top:24px;padding:16px;background:#f9fafb;border-radius:8px;border-left:4px solid #10b981;">
-      <p style="margin:0;font-size:14px;color:#374151;"><strong>Note:</strong> ${p.note}</p>
+    <div style="margin-top:24px;padding:16px;background:#17140d;border-radius:8px;border-left:4px solid #D4AF37;">
+      <p style="margin:0;font-size:14px;color:#c9bfa4;"><strong style="color:#D4AF37;">Note:</strong> ${p.note}</p>
     </div>` : '';
 
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:700px;margin:40px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+<body style="margin:0;padding:0;background:#0a0906;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:700px;margin:40px auto;background:#100e0a;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.5);border:1px solid #2a2419;">
 
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#10b981 0%,#14b8a6 100%);padding:40px;color:white;">
+    <div style="background:linear-gradient(135deg,#0a0906 0%,#17140d 100%);padding:40px;color:#D4AF37;border-bottom:3px solid #D4AF37;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div>
-          <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:-1px;">INVOICE</h1>
-          <p style="margin:8px 0 0;opacity:0.85;font-size:14px;">Date: ${invoiceDate}</p>
-          <p style="margin:4px 0 0;opacity:0.85;font-size:14px;">Period: ${p.startDate} – ${p.endDate}</p>
+          <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:2px;color:#D4AF37;">INVOICE</h1>
+          <p style="margin:8px 0 0;color:#8a7e65;font-size:14px;">Date: ${invoiceDate}</p>
+          <p style="margin:4px 0 0;color:#8a7e65;font-size:14px;">Period: ${p.startDate} – ${p.endDate}</p>
         </div>
         <div style="text-align:right;">
-          <p style="margin:0;font-size:14px;opacity:0.85;">Amount Due</p>
-          <p style="margin:4px 0 0;font-size:40px;font-weight:800;">$${p.invoiceTotal.toFixed(2)}</p>
+          <p style="margin:0;font-size:14px;color:#8a7e65;text-transform:uppercase;letter-spacing:1px;">Amount Due</p>
+          <p style="margin:4px 0 0;font-size:40px;font-weight:800;color:#D4AF37;">$${p.invoiceTotal.toFixed(2)}</p>
         </div>
       </div>
     </div>
@@ -149,26 +151,26 @@ function buildInvoiceHtml(p: InvoicePayload, fromEmail: string): string {
 
       <!-- Bill To -->
       <div style="margin-bottom:32px;">
-        <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;">Bill To</p>
-        <p style="margin:0;font-size:18px;font-weight:700;color:#111827;">${p.recipientName || p.recipientEmail}</p>
-        <p style="margin:4px 0 0;color:#6b7280;">${p.recipientEmail}</p>
-        ${p.projectName ? `<p style="margin:4px 0 0;color:#6b7280;">${p.projectName}${p.orgName ? ` · ${p.orgName}` : ''}</p>` : ''}
+        <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8a7e65;">Bill To</p>
+        <p style="margin:0;font-size:18px;font-weight:700;color:#f5f0e4;">${p.recipientName || p.recipientEmail}</p>
+        <p style="margin:4px 0 0;color:#8a7e65;">${p.recipientEmail}</p>
+        ${p.projectName ? `<p style="margin:4px 0 0;color:#8a7e65;">${p.projectName}${p.orgName ? ` · ${p.orgName}` : ''}</p>` : p.orgName ? `<p style="margin:4px 0 0;color:#8a7e65;">${p.orgName}</p>` : ''}
       </div>
 
       <!-- From -->
       <div style="margin-bottom:32px;">
-        <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;">From</p>
-        <p style="margin:0;font-size:16px;font-weight:600;color:#111827;">${fromEmail}</p>
+        <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8a7e65;">From</p>
+        <p style="margin:0;font-size:16px;font-weight:600;color:#f5f0e4;">${fromEmail}</p>
       </div>
 
       <!-- Line items table -->
       <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
         <thead>
-          <tr style="background:#f9fafb;">
-            <th style="padding:10px 8px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;border-bottom:2px solid #e5e7eb;">Description</th>
-            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;border-bottom:2px solid #e5e7eb;">Hours</th>
-            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;border-bottom:2px solid #e5e7eb;">Rate</th>
-            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;border-bottom:2px solid #e5e7eb;">Amount</th>
+          <tr style="background:#17140d;">
+            <th style="padding:10px 8px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8a7e65;border-bottom:2px solid #D4AF37;">Description</th>
+            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8a7e65;border-bottom:2px solid #D4AF37;">Hours</th>
+            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8a7e65;border-bottom:2px solid #D4AF37;">Rate</th>
+            <th style="padding:10px 8px;text-align:right;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8a7e65;border-bottom:2px solid #D4AF37;">Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -177,9 +179,9 @@ function buildInvoiceHtml(p: InvoicePayload, fromEmail: string): string {
         </tbody>
         <tfoot>
           ${subtotalRow}
-          <tr style="background:#f0fdf4;">
-            <td colspan="3" style="padding:16px 8px;text-align:right;font-size:18px;font-weight:700;color:#111827;border-top:2px solid #10b981;">Total Due:</td>
-            <td style="padding:16px 8px;text-align:right;font-size:22px;font-weight:800;color:#10b981;border-top:2px solid #10b981;">$${p.invoiceTotal.toFixed(2)}</td>
+          <tr style="background:#17140d;">
+            <td colspan="3" style="padding:16px 8px;text-align:right;font-size:18px;font-weight:700;color:#f5f0e4;border-top:2px solid #D4AF37;">Total Due:</td>
+            <td style="padding:16px 8px;text-align:right;font-size:22px;font-weight:800;color:#D4AF37;border-top:2px solid #D4AF37;">$${p.invoiceTotal.toFixed(2)}</td>
           </tr>
         </tfoot>
       </table>
@@ -187,8 +189,8 @@ function buildInvoiceHtml(p: InvoicePayload, fromEmail: string): string {
       ${noteHtml}
 
       <!-- Footer -->
-      <div style="margin-top:40px;padding-top:24px;border-top:1px solid #e5e7eb;text-align:center;">
-        <p style="margin:0;font-size:12px;color:#9ca3af;">Thank you for your business.</p>
+      <div style="margin-top:40px;padding-top:24px;border-top:1px solid #2a2419;text-align:center;">
+        <p style="margin:0;font-size:12px;color:#8a7e65;">Thank you for your business.</p>
       </div>
     </div>
   </div>
