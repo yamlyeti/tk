@@ -31,10 +31,11 @@ export const ProjectsView = () => {
   }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     fetchProjects();
     fetchOrganizations();
     fetchEntries();
-  }, []);
+  }, [user]);
 
   const fetchOrganizations = async () => {
     const { data } = await supabase
@@ -63,7 +64,8 @@ export const ProjectsView = () => {
   };
 
   const fetchEntries = async () => {
-    const { data } = await supabase.from('time_entries').select('*');
+    const { data, error } = await supabase.from('time_entries').select('*');
+    if (error) console.error('Failed to fetch time entries:', error);
     setEntries(data || []);
   };
 
